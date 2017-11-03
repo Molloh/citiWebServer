@@ -24,6 +24,6 @@ public interface CashFlowService {
 	 * @param company_id  公司id
 	 * @param time        yyyy-mm
 	 * @param path        
-	 */
-	public void CreateCashFlowTable(String company_id, String time, String path);
+	 *
+	public void CreateCashFlowTable(String company_id, String time, String path);*/
 }

@@ -24,14 +24,16 @@ public class ProfitTableImpl implements ProfitTableService{
 	
 	
 	public List<Pro_and_CashVo> ProfitTable_Info(String time, String company_id) {
-		if(hasRecord(time,company_id)){
-			//直接调用数据库返回
-		}
 		
 		return null;
 	}
+	
+	
+	private List<Pro_and_CashVo> CalProByPeriod(String time, String company_id){
+		return null;
+	}
 
-	public void CreateProfitTable(String company_id, String time, String path) {
+	/*public void CreateProfitTable(String company_id, String time, String path) {
 		
 		List<Pro_and_CashVo> list=ProfitTable_Info(time,company_id);
 		
@@ -91,5 +93,5 @@ public class ProfitTableImpl implements ProfitTableService{
 	
 	private boolean hasRecord(String time, String company_id){
 		return false;
-	}
+	}*/
 }

@@ -24,6 +24,6 @@ public interface ProfitTableService {
 	 * @param company_id
 	 * @param time yyyy-mm
 	 * @param path
-	 */
-	public void CreateProfitTable(String company_id,String time,String path);
+	 *
+	public void CreateProfitTable(String company_id,String time,String path);*/
 }

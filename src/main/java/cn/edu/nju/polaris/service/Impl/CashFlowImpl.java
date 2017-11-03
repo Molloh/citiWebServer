@@ -26,7 +26,7 @@ public class CashFlowImpl implements CashFlowService{
 		return null;
 	}
 	
-	public void CreateCashFlowTable(String company_id, String time, String path) {
+	/*public void CreateCashFlowTable(String company_id, String time, String path) {
 		List<Pro_and_CashVo> list=CashFlowTable_Info(time,company_id);
 		
 		// 创建一个Excel文件
@@ -81,5 +81,5 @@ public class CashFlowImpl implements CashFlowService{
         } catch (IOException e) {
             e.printStackTrace();
         }
-	}
+	}*/
 }
