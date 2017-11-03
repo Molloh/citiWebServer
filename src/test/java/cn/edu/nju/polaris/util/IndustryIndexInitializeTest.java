@@ -1,7 +1,5 @@
-package cn.edu.nju.polaris.repository;
+package cn.edu.nju.polaris.util;
 
-import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
-import cn.edu.nju.polaris.entity.Voucher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,21 +7,18 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Table;
-import java.util.List;
+import java.io.IOException;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @SpringBootTest
-public class VoucherRepositoryTest {
-
+public class IndustryIndexInitializeTest {
 
     @Autowired
-    private VoucherRepository voucherRepository;
+    private IndustryIndexInitialize industryIndexInitialize;
 
-
-
-
+    @Test
+    public void test() throws IOException {
+        industryIndexInitialize.initialize();
+    }
 }

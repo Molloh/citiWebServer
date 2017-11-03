@@ -5,11 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import cn.edu.nju.polaris.service.ProfitTableService;
 import cn.edu.nju.polaris.vo.Pro_and_CashVo;
@@ -27,8 +22,13 @@ public class ProfitTableImpl implements ProfitTableService{
 		
 		return null;
 	}
-	
-	
+
+	@Override
+	public double getIncome(String time, String company_id) {
+		return 0;
+	}
+
+
 	private List<Pro_and_CashVo> CalProByPeriod(String time, String company_id){
 		return null;
 	}
