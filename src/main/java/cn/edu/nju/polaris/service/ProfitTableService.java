@@ -21,6 +21,13 @@ public interface ProfitTableService {
 	
 	/**
 	 * 
+	 * @param time       时间yyyy-mm
+	 * @param company_id 公司id
+	 * @return           营业收入
+	 */
+	public double getIncome(String time,String company_id);
+	/**
+	 * 
 	 * @param company_id
 	 * @param time yyyy-mm
 	 * @param path
