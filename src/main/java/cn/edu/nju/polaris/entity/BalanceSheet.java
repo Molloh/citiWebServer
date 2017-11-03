@@ -16,6 +16,9 @@ public class BalanceSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "company_id")
+    private String companyId;  // 名称
+
     @Column(name = "period")
     private String period; // 期数 格式为 yyyy-mm
 
@@ -57,10 +60,19 @@ public class BalanceSheet {
         this.balance = balance;
     }
 
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
     @Override
     public String toString() {
         return "BalanceSheet{" +
                 "id=" + id +
+                ", companyId='" + companyId + '\'' +
                 ", period='" + period + '\'' +
                 ", name='" + name + '\'' +
                 ", balance=" + balance +

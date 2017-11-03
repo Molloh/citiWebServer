@@ -14,6 +14,9 @@ public class CashflowSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "company_id")
+    private String companyId;  // 名称
+
     @Column(name = "period")
     private String period; // 期数 格式为 yyyy-mm
 
@@ -51,14 +54,23 @@ public class CashflowSheet {
         return balance;
     }
 
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
     public void setBalance(Double balance) {
         this.balance = balance;
     }
 
     @Override
     public String toString() {
-        return "BalanceSheet{" +
+        return "CashflowSheet{" +
                 "id=" + id +
+                ", companyId='" + companyId + '\'' +
                 ", period='" + period + '\'' +
                 ", name='" + name + '\'' +
                 ", balance=" + balance +
