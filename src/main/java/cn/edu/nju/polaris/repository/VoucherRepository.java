@@ -10,5 +10,20 @@ import java.util.List;
 
 public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKeysClass>{
 
-    List<Voucher> findByVoucherIdAndCompanyId(String voucherId,String companyId);
+    /**
+     * 根据凭证号和公司id 获得一个凭证
+     * @param voucherId
+     * @param companyId
+     * @return
+     */
+    Voucher findByVoucherIdAndCompanyId(String voucherId,String companyId);
+
+    /**
+     * 获得一个公司全部的凭证
+     * @param compamyId
+     * @return
+     */
+    List<Voucher> findByCompanyId(String compamyId);
+
+
 }

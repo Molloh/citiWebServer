@@ -23,10 +23,10 @@ public class SupportItem1 implements Serializable{
     private String voucherId; // 凭证号
 
     @Id
-    private Integer voucherItemLines; // 凭证行数
+    private Integer voucherLines; // 凭证行数
 
     @Id
-    private Integer supportItemLines; // 辅助信息行数
+    private Integer supportLines; // 辅助信息行数
 
     @Column(name = "subjects")
     private String subjects; // 会计科目
@@ -84,20 +84,20 @@ public class SupportItem1 implements Serializable{
         this.voucherId = voucherId;
     }
 
-    public Integer getVoucherItemLines() {
-        return voucherItemLines;
+    public Integer getVoucherLines() {
+        return voucherLines;
     }
 
-    public void setVoucherItemLines(Integer voucherItemLines) {
-        this.voucherItemLines = voucherItemLines;
+    public void setVoucherLines(Integer voucherLines) {
+        this.voucherLines = voucherLines;
     }
 
-    public Integer getSupportItemLines() {
-        return supportItemLines;
+    public Integer getSupportLines() {
+        return supportLines;
     }
 
-    public void setSupportItemLines(Integer supportItemLines) {
-        this.supportItemLines = supportItemLines;
+    public void setSupportLines(Integer supportLines) {
+        this.supportLines = supportLines;
     }
 
     public String getSubjects() {
@@ -209,8 +209,8 @@ public class SupportItem1 implements Serializable{
         return "SupportItem1{" +
                 "companyId='" + companyId + '\'' +
                 ", voucherId='" + voucherId + '\'' +
-                ", voucherItemLines=" + voucherItemLines +
-                ", supportItemLines=" + supportItemLines +
+                ", voucherLines=" + voucherLines +
+                ", supportLines=" + supportLines +
                 ", subjects='" + subjects + '\'' +
                 ", variety='" + variety + '\'' +
                 ", date=" + date +

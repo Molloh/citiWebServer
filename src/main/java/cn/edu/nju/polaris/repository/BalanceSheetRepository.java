@@ -24,4 +24,6 @@ public interface BalanceSheetRepository extends JpaRepository<BalanceSheet,Long>
      * @return
      */
     List<BalanceSheet> findByCompanyIdAndPeriod(String companyId,String period);
+
+
 }
