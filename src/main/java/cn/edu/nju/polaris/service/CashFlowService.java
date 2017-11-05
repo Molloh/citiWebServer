@@ -20,6 +20,22 @@ public interface CashFlowService {
 	public List<Pro_and_CashVo> CashFlowTable_Info(String time,String company_id);
 	
 	/**
+	 * 得到经营现金净流量
+	 * @param time yyyy-xx 某年某月
+	 * @param company_id 公司id
+	 * @return =
+	 */
+	public double getNetcashflow (String time, String company_id);
+
+	/**
+	 * 得到现金流量表里的 现金流入、现金流出、现金池内留存的现金
+	 * @param company_id
+	 * @param time yyyy-mm
+	 * @return
+	 */
+	public double[] getCashFlow(String time, String company_id);
+	
+	/**
 	 * 
 	 * @param company_id  公司id
 	 * @param time        yyyy-mm
