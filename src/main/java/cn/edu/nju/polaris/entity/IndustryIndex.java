@@ -11,7 +11,7 @@ public class IndustryIndex {
     private Long id;
 
     @Column(name = "category")
-    private String category;
+    private String category; //财务预警、现金管理、供应链绩效评价
 
     @Column(name = "first_industry")
     private String firstIndustry;

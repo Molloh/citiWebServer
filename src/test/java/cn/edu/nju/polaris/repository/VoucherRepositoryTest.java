@@ -23,7 +23,18 @@ public class VoucherRepositoryTest {
     @Autowired
     private VoucherRepository voucherRepository;
 
+    @Test
+    public void testFindByVoucherIdAndCompanyId(){
+        Voucher voucher = voucherRepository.findByVoucherIdAndCompanyId("记-2","001");
+        System.out.println(voucher.toString());
+    }
 
 
-
+    @Test
+    public void testFindByCompanyId(){
+        List<Voucher> list = voucherRepository.findByCompanyId("001");
+        for (Voucher voucher : list){
+            System.out.println(voucher.toString());
+        }
+    }
 }
