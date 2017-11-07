@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,10 +31,10 @@ public class Voucher implements Serializable{
     @Column(name = "voucher_maker")
     private String voucherMaker;    //制单人
 
-
     public Long getCompanyId() {
         return companyId;
     }
+
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;

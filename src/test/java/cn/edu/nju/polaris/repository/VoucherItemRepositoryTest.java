@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -32,5 +34,15 @@ public class VoucherItemRepositoryTest {
         for (VoucherItem item : list){
             System.out.println(item.toString());
         }
+    }
+
+    @Test
+    public void testFindByYear() throws Exception {
+        List<VoucherItem> list = voucherItemRepository.findByYear("2017",1L);
+    }
+
+    @Test
+    public void testFindByPeriod() throws Exception {
+        List<VoucherItem> list = voucherItemRepository.findByPeriod("2017-09",1L);
     }
 }

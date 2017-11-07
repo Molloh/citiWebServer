@@ -30,8 +30,8 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return
      */
-    @Query("")
-    List<VoucherItem> findByYear(String date,String companyId);
+    @Query("select VoucherItem from VoucherItem where voucherId in(select v.voucherId from Voucher v where function('year',v.date)=?1  and v.companyId=?2)")
+    List<VoucherItem> findByYear(String date,Long companyId);
 
     /**
      * 根据凭证日期和公司id获得凭证信息
@@ -39,8 +39,8 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return
      */
-    @Query("")
-    List<VoucherItem> findByPeriod(String date,String companyId);
+    @Query("select VoucherItem from VoucherItem where voucherId in (select v.voucherId from Voucher v where function('year',v.date)=?1 and function('month',v.date)=?1 and v.companyId=?2)")
+    List<VoucherItem> findByPeriod(String date,Long companyId);
 
     /**
      *
@@ -51,7 +51,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @return 获取凭证中借方含有科目ID=id1，贷方含有科目ID=id2的项目，取该两个科目对应金额中的较小值
      */
     @Query("")
-    List<Double> getGivenVourchers(String time, String id1, String id2,String companyId);
+    List<Double> getGivenVourchers(String time, String id1, String id2,Long companyId);
 
     /**
      *
@@ -62,5 +62,5 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @return 获取凭证中借方含有科目ID=id1，贷方含有科目ID=id2的项目，取该两个科目对应金额中的较小值
      */
     @Query("")
-    List<Double> getGivenVourchersByYear(String time, String id1, String id2,String companyId);
+    List<Double> getGivenVourchersByYear(String time, String id1, String id2,Long companyId);
 }

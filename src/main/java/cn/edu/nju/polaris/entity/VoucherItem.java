@@ -32,6 +32,7 @@ public class VoucherItem implements Serializable{
     private double creditAmount;  //贷方金额
 
 
+
     public Long getCompanyId() {
         return companyId;
     }
