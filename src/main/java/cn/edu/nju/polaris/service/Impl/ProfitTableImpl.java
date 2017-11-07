@@ -29,7 +29,7 @@ public class ProfitTableImpl implements ProfitTableService{
     }
 	
 	
-	public List<Pro_and_CashVo> ProfitTable_Info(String time, String company_id) {
+	public List<Pro_and_CashVo> ProfitTable_Info(String time, long company_id) {
 		List<ProfitSheet> list=psr.findByCompanyIdAndPeriod(company_id, time);
 		
 		List<Pro_and_CashVo> res=new ArrayList<Pro_and_CashVo>();
@@ -66,7 +66,7 @@ public class ProfitTableImpl implements ProfitTableService{
 	
 
 	@Override
-	public double getIncome(String time, String company_id) {
+	public double getIncome(String time, long company_id) {
 		ProfitSheet p=psr.findByCompanyIdAndPeriodAndName(company_id, time, "一、营业收入");
 		if(p==null){
 			return 0;
@@ -77,20 +77,20 @@ public class ProfitTableImpl implements ProfitTableService{
 	}
 
 
-	private List<Pro_and_CashVo> CalProByPeriod(String time, String company_id){
+	private List<Pro_and_CashVo> CalProByPeriod(String time, long company_id){
 		return null;
 	}
 
 
 	@Override
-	public double getProfit(String time, String company_id) {
+	public double getProfit(String time, long company_id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 	@Override
-	public double[] getValues(String company_id, String time) {
+	public double[] getValues(long company_id, String time) {
 		// TODO Auto-generated method stub
 		return null;
 	}

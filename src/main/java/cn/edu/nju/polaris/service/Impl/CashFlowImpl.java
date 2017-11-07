@@ -29,7 +29,7 @@ public class CashFlowImpl implements CashFlowService{
         this.helper=new TableHelper();
     }
 
-	public List<Pro_and_CashVo> CashFlowTable_Info(String time, String company_id) {
+	public List<Pro_and_CashVo> CashFlowTable_Info(String time, long company_id) {
 		List<CashflowSheet> list=cfsr.findByPeriodAndCompanyId(time, company_id);
 		
 		List<Pro_and_CashVo> res=new ArrayList<Pro_and_CashVo>();
@@ -64,15 +64,22 @@ public class CashFlowImpl implements CashFlowService{
 	}
 
 	@Override
-	public double getNetcashflow(String time, String company_id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getNetcashflow(String time, long company_id) {
+		CashflowSheet cf=cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "经营活动产生的现金流量净额");
+		if(cf==null){
+			return 0;
+		}else{
+			return cf.getBalance();
+		}
 	}
 
 	@Override
-	public double[] getCashFlow(String time, String company_id) {
-		// TODO Auto-generated method stub
-		return null;
+	public double[] getCashFlow(String time, long company_id) {
+		double[]res=new double[3];
+		CashflowSheet cf=cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "");
+		
+		
+		return res;
 	}
 	
 	/*public void CreateCashFlowTable(String company_id, String time, String path) {
