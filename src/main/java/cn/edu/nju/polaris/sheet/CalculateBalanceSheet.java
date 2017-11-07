@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 @Service
 public class CalculateBalanceSheet {
-    private BalanceSheetRepository balanceSheetRepository;
+    private final BalanceSheetRepository balanceSheetRepository;
 
     private ArrayList<String> list;
 
@@ -22,7 +22,7 @@ public class CalculateBalanceSheet {
     }
 
 
-    public void UpdateBalanceSheet(String company_id,String phase){
+    public void UpdateBalanceSheet(long company_id,String phase){
         //1.1货币资金=其他货币资金+库存现金+银行存款
         double balance1_1 = getMoneyByCourseId("1012", true) + getMoneyByCourseId("1001", true) + getMoneyByCourseId("1002", true);
         BalanceSheet item1_1 = new BalanceSheet(company_id,phase,"货币资金",balance1_1);
