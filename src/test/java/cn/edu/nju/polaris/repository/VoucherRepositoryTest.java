@@ -25,14 +25,14 @@ public class VoucherRepositoryTest {
 
     @Test
     public void testFindByVoucherIdAndCompanyId(){
-        Voucher voucher = voucherRepository.findByVoucherIdAndCompanyId("记-2","001");
+        Voucher voucher = voucherRepository.findByVoucherIdAndCompanyId("记-2",1L);
         System.out.println(voucher.toString());
     }
 
 
     @Test
     public void testFindByCompanyId(){
-        List<Voucher> list = voucherRepository.findByCompanyId("001");
+        List<Voucher> list = voucherRepository.findByCompanyId(1L);
         for (Voucher voucher : list){
             System.out.println(voucher.toString());
         }

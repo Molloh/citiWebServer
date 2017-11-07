@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,8 +24,8 @@ public class VoucherServiceTest {
     @Test
     public void testSave(){
         Voucher voucher = new Voucher();
-        voucher.setCompanyId("001");
-        voucher.setDate(Date.valueOf("2017-10-01"));
+        voucher.setCompanyId(1L);
+        voucher.setDate(Timestamp.valueOf("2017-10-10"));
         voucher.setRemark("note");
         voucher.setVoucherId("记-2");
         voucher.setVoucherMaker("loo");
