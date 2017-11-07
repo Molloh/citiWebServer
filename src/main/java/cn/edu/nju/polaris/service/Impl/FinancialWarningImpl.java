@@ -72,18 +72,18 @@ public class FinancialWarningImpl implements FinancialWarningService {
         double[] unallowed_value = new double[12];
 
         //净资产收益率
-        average_value[0] = getAverageIndex("净资产收益率");
+        average_value[0] = getAverageIndex("净资产收益率（％）");
         if(actual_value[0]<average_value[0]){
-            unallowed_value[0] = getUnallowedIndex("净资产收益率");
+            unallowed_value[0] = getUnallowedIndex("净资产收益率（％）");
             rate[0] = 40*(actual_value[0]-unallowed_value[0])/(average_value[0]-unallowed_value[0])+60;
         }else{
             rate[0] = 100;
         }
 
         //总资产报酬率
-        average_value[1] = getAverageIndex("总资产报酬率");
+        average_value[1] = getAverageIndex("总资产报酬率（％）");
         if(actual_value[1]<average_value[1]){
-            unallowed_value[1] = getUnallowedIndex("总资产报酬率");
+            unallowed_value[1] = getUnallowedIndex("总资产报酬率（％）");
             rate[1] = 40*(actual_value[1]-unallowed_value[1])/(average_value[1]-unallowed_value[1])+60;
         }else{
             rate[1] = 100;
@@ -99,18 +99,18 @@ public class FinancialWarningImpl implements FinancialWarningService {
         }
 
         //成本费用利润率
-        average_value[3] = getAverageIndex("成本费用利润率");
+        average_value[3] = getAverageIndex("成本费用利润率（％）");
         if(actual_value[3]<average_value[3]){
-            unallowed_value[3] = getUnallowedIndex("成本费用利润率");
+            unallowed_value[3] = getUnallowedIndex("成本费用利润率（％）");
             rate[3] = 40*(actual_value[3]-unallowed_value[3])/(average_value[3]-unallowed_value[3])+60;
         }else{
             rate[3] = 100;
         }
 
         //资产负债率
-        average_value[4] = getAverageIndex("资产负债率");
-        double fine_value1 = getFineIndex("资产负债率");
-        double bad_value1 = getBadIndex("资产负债率");
+        average_value[4] = getAverageIndex("资产负债率（％）");
+        double fine_value1 = getFineIndex("资产负债率（％）");
+        double bad_value1 = getBadIndex("资产负债率（％）");
         if(actual_value[4]<average_value[4]){
             rate[4] = 40*(actual_value[4]-bad_value1)/(average_value[4]-bad_value1)+60;
         }else if(actual_value[4]>=bad_value1&&actual_value[4]<=fine_value1){
@@ -120,9 +120,9 @@ public class FinancialWarningImpl implements FinancialWarningService {
         }
 
         //速动比率
-        average_value[5] = getAverageIndex("速动比率");
-        double fine_value2 = getFineIndex("速动比率");
-        double bad_value2 = getBadIndex("速动比率");
+        average_value[5] = getAverageIndex("速动比率（％）");
+        double fine_value2 = getFineIndex("速动比率（％）");
+        double bad_value2 = getBadIndex("速动比率（％）");
         if(actual_value[5]<average_value[5]){
             rate[5] = 40*(actual_value[5]-bad_value2)/(average_value[5]-bad_value2)+60;
         }else{
@@ -130,9 +130,9 @@ public class FinancialWarningImpl implements FinancialWarningService {
         }
 
         //现金流动负债比率
-        average_value[6] = getAverageIndex("现金流动负债比率");
-        double fine_value3 = getFineIndex("现金流动负债比率");
-        double bad_value3 = getBadIndex("现金流动负债比率");
+        average_value[6] = getAverageIndex("现金流动负债比率（％）");
+        double fine_value3 = getFineIndex("现金流动负债比率（％）");
+        double bad_value3 = getBadIndex("现金流动负债比率（％）");
         if(actual_value[6]<average_value[6]){
             rate[6] = 40*(actual_value[6]-bad_value3)/(average_value[6]-bad_value3)+60;
         }else if(actual_value[6]>=bad_value3&&actual_value[6]<=fine_value3){
@@ -142,45 +142,45 @@ public class FinancialWarningImpl implements FinancialWarningService {
         }
 
         //总资产周转率
-        average_value[7] = getAverageIndex("总资产周转率");
+        average_value[7] = getAverageIndex("总资产周转率（次）");
         if(actual_value[7]<average_value[7]){
-            unallowed_value[7] = getUnallowedIndex("总资产周转率");
+            unallowed_value[7] = getUnallowedIndex("总资产周转率（次）");
             rate[7] = 40*(actual_value[7]-unallowed_value[7])/(average_value[7]-unallowed_value[7])+60;
         }else{
             rate[7] = 100;
         }
 
         //应收帐款周转率
-        average_value[8] = getAverageIndex("应收帐款周转率");
+        average_value[8] = getAverageIndex("应收帐款周转率（次）");
         if(actual_value[8]<average_value[8]){
-            unallowed_value[8] = getUnallowedIndex("应收帐款周转率");
+            unallowed_value[8] = getUnallowedIndex("应收帐款周转率（次）");
             rate[8] = 40*(actual_value[8]-unallowed_value[8])/(average_value[8]-unallowed_value[8])+60;
         }else{
             rate[8] = 100;
         }
 
         //存货周转率
-        average_value[9] = getAverageIndex("存货周转率");
+        average_value[9] = getAverageIndex("存货周转率（次）");
         if(actual_value[9]<average_value[9]){
-            unallowed_value[9] = getUnallowedIndex("存货周转率");
+            unallowed_value[9] = getUnallowedIndex("存货周转率（次）");
             rate[9] = 40*(actual_value[9]-unallowed_value[9])/(average_value[9]-unallowed_value[9])+60;
         }else{
             rate[9] = 100;
         }
 
         //销售增长率
-        average_value[10] = getAverageIndex("销售增长率");
+        average_value[10] = getAverageIndex("销售（营业）增长率（％）");
         if(actual_value[10]<average_value[10]){
-            unallowed_value[10] = getUnallowedIndex("销售增长率");
+            unallowed_value[10] = getUnallowedIndex("销售（营业）增长率（％）");
             rate[10] = 40*(actual_value[10]-unallowed_value[10])/(average_value[10]-unallowed_value[10])+60;
         }else{
             rate[10] = 100;
         }
 
         //资本积累率
-        average_value[11] = getAverageIndex("资本积累率");
+        average_value[11] = getAverageIndex("资本积累率（％）");
         if(actual_value[11]<average_value[11]){
-            unallowed_value[11] = getUnallowedIndex("资本积累率");
+            unallowed_value[11] = getUnallowedIndex("资本积累率（％）");
             rate[11] = 40*(actual_value[11]-unallowed_value[11])/(average_value[11]-unallowed_value[11])+60;
         }else{
             rate[11] = 100;
