@@ -78,4 +78,11 @@ public class BalanceSheet {
                 ", balance=" + balance +
                 '}';
     }
+
+    public BalanceSheet(String companyId, String period, String name, Double balance) {
+        this.companyId = companyId;
+        this.period = period;
+        this.name = name;
+        this.balance = balance;
+    }
 }
