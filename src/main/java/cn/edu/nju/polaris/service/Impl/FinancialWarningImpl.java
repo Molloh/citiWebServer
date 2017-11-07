@@ -31,7 +31,7 @@ public class FinancialWarningImpl implements FinancialWarningService {
     }
 
     @Override
-    public double getWarningMessage(String company_id, String phase) {
+    public double[] getWarningMessage(String company_id, String phase) {
         BalanceSheetService service = new BalanceSheetImpl(balanceSheetRepository);
         double[] data1 = service.getValue(company_id,phase);
         double[] data2 = new double[10];
@@ -186,9 +186,20 @@ public class FinancialWarningImpl implements FinancialWarningService {
             rate[11] = 100;
         }
 
-        double Rate = rate[0]*0.16+rate[1]*0.09+rate[2]*0.07+rate[3]*0.06+rate[4]*0.12+rate[5]*0.1+rate[6]*0.12+rate[7]*0.05+rate[8]*0.08+rate[9]*0.05+rate[10]*0.05+rate[11]*0.05;
+        double[] result = new double[5];
 
-        return Rate;
+        //盈利能力
+        result[0] = (rate[1]*0.09+rate[0]*0.16+rate[2]*0.07+rate[3]*0.06)/0.38;
+        //偿债能力
+        result[1] = (rate[4]*0.12+rate[6]*0.12+rate[5]*0.1)/0.34;
+        //营运能力
+        result[2] = (rate[7]*0.05+rate[9]*0.05+rate[8]*0.08)/0.18;
+        //成长能力
+        result[3] = (rate[10]*0.05+rate[11]*0.05)/0.1;
+        //总评分
+        result[4] = rate[0]*0.16+rate[1]*0.09+rate[2]*0.07+rate[3]*0.06+rate[4]*0.12+rate[5]*0.1+rate[6]*0.12+rate[7]*0.05+rate[8]*0.08+rate[9]*0.05+rate[10]*0.05+rate[11]*0.05;
+
+        return result;
     }
 
     /**

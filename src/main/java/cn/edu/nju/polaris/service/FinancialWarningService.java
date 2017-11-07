@@ -8,7 +8,7 @@ public interface FinancialWarningService {
      * 得到财务预警信息
      * @param company_id 公司id
      * @param phase 时间
-     * @return
+     * @return [盈利能力、偿债能力、营运能力、成长能力、总评分]
      */
-    public double getWarningMessage(String company_id, String phase);
+    public double[] getWarningMessage(String company_id, String phase);
 }
