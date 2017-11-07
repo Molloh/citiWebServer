@@ -6,6 +6,9 @@ import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.service.VoucherService;
+import cn.edu.nju.polaris.vo.voucher.ItemTotalVo;
+import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
+import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +36,12 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
     @Override
-    public boolean deleteOneVoucher(String voucherId, String factoryId) {
+    public boolean deleteOneVoucher(String voucherId, long factoryId) {
         return false;
     }
 
     @Override
-    public boolean deleteOneFactoryAllVoucher(String factoryId) {
+    public boolean deleteOneFactoryAllVoucher(long factoryId) {
         return false;
     }
 
@@ -58,17 +61,49 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
     @Override
-    public boolean deleteOneVoucherItems(String voucherId, String factoryId) {
+    public boolean deleteOneVoucherItems(String voucherId, long factoryId) {
         return false;
     }
 
     @Override
-    public boolean deleteOneItem(String voucherId, String factoryId, int line) {
+    public boolean deleteOneItem(String voucherId, long factoryId, int line) {
         return false;
     }
 
     @Override
-    public boolean modifyOneAmountAllItems(String voucherId, String factoryId, ArrayList<VoucherItem> itemList) {
+    public boolean modifyOneAmountAllItems(String voucherId, long factoryId, ArrayList<VoucherItem> itemList) {
         return false;
     }
+
+    @Override
+    public boolean saveOneVoucher(VoucherVO voucherVO) {
+        return false;
+    }
+
+    @Override
+    public ItemTotalVo getVoucherTotal(ArrayList<VoucherItem> itemList) {
+        return null;
+    }
+
+    @Override
+    public double getOneSubjectBalance(String subjectId, long factoryId) {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<VoucherVO> getCurrentPeriodAllVoucher(long factoryId) {
+        return null;
+    }
+
+    @Override
+    public VoucherVO getOneVoucher(String voucherId, long factoryId) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<VoucherVO> getSearchedVoucher(VoucherSearchVo searchVo, long factoryId) {
+        return null;
+    }
+
+
 }
