@@ -1,6 +1,7 @@
 package cn.edu.nju.polaris.util;
 
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
+import cn.edu.nju.polaris.repository.ProfitSheetRepository;
 import cn.edu.nju.polaris.service.BalanceSheetService;
 import cn.edu.nju.polaris.service.Impl.BalanceSheetImpl;
 import cn.edu.nju.polaris.service.Impl.ProfitTableImpl;
@@ -16,15 +17,17 @@ import java.time.LocalDate;
 @Service
 public class Industry {
     private final BalanceSheetRepository balanceSheetRepository;
+    private final ProfitSheetRepository profitSheetRepository;
 
     @Autowired
-    public Industry(BalanceSheetRepository balanceSheetRepository) {
+    public Industry(BalanceSheetRepository balanceSheetRepository, ProfitSheetRepository profitSheetRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
+        this.profitSheetRepository = profitSheetRepository;
     }
 
     public void setIndustrySize(String comapny_id){
         String phase = LocalDate.now().toString().substring(0,7);
-        ProfitTableService service1 = new ProfitTableImpl();
+        ProfitTableService service1 = new ProfitTableImpl(profitSheetRepository);
         double income = service1.getIncome(phase,comapny_id);
         BalanceSheetService service2 = new BalanceSheetImpl(balanceSheetRepository);
         double asset = service2.getTotalAsset(comapny_id,phase);

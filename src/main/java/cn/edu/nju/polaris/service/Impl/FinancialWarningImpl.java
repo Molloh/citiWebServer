@@ -1,12 +1,15 @@
 package cn.edu.nju.polaris.service.Impl;
 
+import cn.edu.nju.polaris.entity.IndustryIndex;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
+import cn.edu.nju.polaris.repository.IndustryIndexRepository;
 import cn.edu.nju.polaris.service.BalanceSheetService;
 import cn.edu.nju.polaris.service.FinancialWarningService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 费慧通 on 2017/11/3.
@@ -17,9 +20,14 @@ import java.util.ArrayList;
 public class FinancialWarningImpl implements FinancialWarningService {
     private final BalanceSheetRepository balanceSheetRepository;
 
+    private final IndustryIndexRepository industryIndexRepository;
+
+    private List<IndustryIndex> list;
+
     @Autowired
-    public FinancialWarningImpl(BalanceSheetRepository balanceSheetRepository) {
+    public FinancialWarningImpl(BalanceSheetRepository balanceSheetRepository, IndustryIndexRepository industryIndexRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
+        this.industryIndexRepository = industryIndexRepository;
     }
 
     @Override
@@ -28,7 +36,10 @@ public class FinancialWarningImpl implements FinancialWarningService {
         double[] data1 = service.getValue(company_id,phase);
         double[] data2 = new double[10];
         double data3 = 0.0;
-        ArrayList<String> list = null;
+
+        //此处需要得到企业的第一行业、第二行业以及企业规模
+
+        list = industryIndexRepository.findByCategoryAndFirstIndustryAndSecondIndustryAndScale("财务预警","","","");
         //实际值
         double[] actual_value = new double[12];
         //净资产收益率  （净利润／所有者权益）＊12
@@ -187,9 +198,9 @@ public class FinancialWarningImpl implements FinancialWarningService {
      */
     private double getAverageIndex(String index_name){
         for(int i=0;i<list.size();i++){
-            IndexPo po = list.get(i);
-            if(po.getIndex_name().equals(index_name)){
-                return po.getAverage_value();
+            IndustryIndex po = list.get(i);
+            if(po.getIndexName().equals(index_name)){
+                return po.getAverageIndex();
             }
         }
         return 0;
@@ -202,9 +213,9 @@ public class FinancialWarningImpl implements FinancialWarningService {
      */
     private double getUnallowedIndex(String index_name){
         for(int i=0;i<list.size();i++){
-            IndexPo po = list.get(i);
-            if(po.getIndex_name().equals(index_name)){
-                return po.getLow_value();
+            IndustryIndex po = list.get(i);
+            if(po.getIndexName().equals(index_name)){
+                return po.getLowIndex();
             }
         }
         return 0;
@@ -217,9 +228,9 @@ public class FinancialWarningImpl implements FinancialWarningService {
      */
     private double getFineIndex(String index_name){
         for(int i=0;i<list.size();i++){
-            IndexPo po = list.get(i);
-            if(po.getIndex_name().equals(index_name)){
-                return po.getFine_value();
+            IndustryIndex po = list.get(i);
+            if(po.getIndexName().equals(index_name)){
+                return po.getFineIndex();
             }
         }
         return 0;
@@ -232,9 +243,9 @@ public class FinancialWarningImpl implements FinancialWarningService {
      */
     private double getBadIndex(String index_name){
         for(int i=0;i<list.size();i++){
-            IndexPo po = list.get(i);
-            if(po.getIndex_name().equals(index_name)){
-                return po.getBad_value();
+            IndustryIndex po = list.get(i);
+            if(po.getIndexName().equals(index_name)){
+                return po.getBadIndex();
             }
         }
         return 0;
