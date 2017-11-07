@@ -1,5 +1,7 @@
 package cn.edu.nju.polaris.util;
 
+import cn.edu.nju.polaris.entity.Account;
+import cn.edu.nju.polaris.repository.AccountRepository;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.ProfitSheetRepository;
 import cn.edu.nju.polaris.service.BalanceSheetService;
@@ -18,22 +20,24 @@ import java.time.LocalDate;
 public class IndustryScale {
     private final BalanceSheetRepository balanceSheetRepository;
     private final ProfitSheetRepository profitSheetRepository;
-
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public IndustryScale(BalanceSheetRepository balanceSheetRepository, ProfitSheetRepository profitSheetRepository) {
+    public IndustryScale(BalanceSheetRepository balanceSheetRepository, ProfitSheetRepository profitSheetRepository, AccountRepository accountRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.profitSheetRepository = profitSheetRepository;
+        this.accountRepository = accountRepository;
     }
 
-    public void setIndustrySize(String comapny_id){
+    public void setIndustrySize(long comapny_id){
         String phase = LocalDate.now().toString().substring(0,7);
         ProfitTableService service1 = new ProfitTableImpl(profitSheetRepository);
         double income = service1.getIncome(phase,comapny_id);
         BalanceSheetService service2 = new BalanceSheetImpl(balanceSheetRepository);
         double asset = service2.getTotalAsset(comapny_id,phase);
 
-        String industry = "";   //此处需要修改为根据company_id从数据库得到企业的一级行业
+        Account account = accountRepository.findById(comapny_id);
+        String industry = account.getFirstIndustry();
         String size = "";
         switch (industry){
             case "农林牧渔业":
@@ -148,5 +152,7 @@ public class IndustryScale {
         }
 
         //需要将行业类型划分保存进数据库
+        account.setScale(size);
+        accountRepository.save(account);
     }
 }

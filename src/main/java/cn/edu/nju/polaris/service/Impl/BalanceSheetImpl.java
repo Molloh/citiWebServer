@@ -27,7 +27,7 @@ public class BalanceSheetImpl implements BalanceSheetService {
     }
 
     @Override
-    public ArrayList<BalanceSheetItemVo> getBalanceSheet(String company_id, String phase) {
+    public ArrayList<BalanceSheetItemVo> getBalanceSheet(long company_id, String phase) {
         List<BalanceSheet> list1 = balanceSheetRepository.findByCompanyIdAndPeriod(company_id, phase);
         List<BalanceSheet> list2 = balanceSheetRepository.findByCompanyIdAndPeriod(company_id, getLastYear(phase));
 
@@ -51,7 +51,7 @@ public class BalanceSheetImpl implements BalanceSheetService {
 
     @Override
     //得到上一期期末的总资产、本期期末总资产、总负债、流动资产、流动负债、上一期期末应收帐款、本期期末应收帐款、上期期末存货、本期期末存货、本期所有者权益、上一期所有者权益
-    public double[] getValue(String company_id, String phase) {
+    public double[] getValue(long company_id, String phase) {
         double[] value = new double[11];
         String last = getLastPhase(phase);
         value[0] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"资产合计").getBalance();
@@ -69,27 +69,27 @@ public class BalanceSheetImpl implements BalanceSheetService {
     }
 
     @Override
-    public double[] getValue2(String company_id, String phase) {
+    public double[] getValue2(long company_id, String phase) {
         return new double[0];
     }
 
     @Override
-    public double getTotalAsset(String comany_id, String phase) {
+    public double getTotalAsset(long comany_id, String phase) {
         return balanceSheetRepository.findByCompanyIdAndPeriodAndName(comany_id,phase,"资产合计").getBalance();
     }
 
     @Override
-    public int getVoucherNumber(String company_id) {
+    public int getVoucherNumber(long company_id) {
         return 0;
     }
 
     @Override
-    public String getEarliestTime(String company_id) {
+    public String getEarliestTime(long company_id) {
         return null;
     }
 
     @Override
-    public String getLatestTime(String company_id) {
+    public String getLatestTime(long company_id) {
         return null;
     }
 

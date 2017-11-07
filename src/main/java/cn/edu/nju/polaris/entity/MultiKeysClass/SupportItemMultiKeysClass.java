@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class SupportItemMultiKeysClass implements Serializable{
 
     @Column(name = "company_id")
-    private String companyId;
+    private Long companyId;
 
     @Column(name = "voucher_id")
     private String voucherId;
@@ -22,18 +22,20 @@ public class SupportItemMultiKeysClass implements Serializable{
     public SupportItemMultiKeysClass() {
     }
 
-    public SupportItemMultiKeysClass(String companyId, String voucherId, Integer voucherLines, Integer supportLines) {
+
+    public SupportItemMultiKeysClass(Long companyId, String voucherId, Integer voucherLines, Integer supportLines) {
+
         this.companyId = companyId;
         this.voucherId = voucherId;
         this.voucherLines = voucherLines;
         this.supportLines = supportLines;
     }
 
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 

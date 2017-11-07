@@ -10,5 +10,5 @@ public interface FinancialWarningService {
      * @param phase 时间
      * @return [盈利能力、偿债能力、营运能力、成长能力、总评分]
      */
-    public double[] getWarningMessage(String company_id, String phase);
+    public double[] getWarningMessage(long company_id, String phase);
 }

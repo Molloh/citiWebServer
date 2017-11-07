@@ -15,7 +15,7 @@ public interface BalanceSheetRepository extends JpaRepository<BalanceSheet,Long>
      * @param name
      * @return
      */
-    BalanceSheet findByCompanyIdAndPeriodAndName(String companyId,String period,String name);
+    BalanceSheet findByCompanyIdAndPeriodAndName(Long companyId,String period,String name);
 
     /**
      * 根据 公司id、期数 获得资产负债表实体
@@ -23,7 +23,7 @@ public interface BalanceSheetRepository extends JpaRepository<BalanceSheet,Long>
      * @param period
      * @return
      */
-    List<BalanceSheet> findByCompanyIdAndPeriod(String companyId,String period);
+    List<BalanceSheet> findByCompanyIdAndPeriod(Long companyId,String period);
 
 
 }

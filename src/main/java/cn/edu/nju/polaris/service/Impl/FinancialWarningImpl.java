@@ -1,14 +1,15 @@
 package cn.edu.nju.polaris.service.Impl;
 
+import cn.edu.nju.polaris.entity.Account;
 import cn.edu.nju.polaris.entity.IndustryIndex;
-import cn.edu.nju.polaris.repository.BalanceSheetRepository;
-import cn.edu.nju.polaris.repository.IndustryIndexRepository;
+import cn.edu.nju.polaris.repository.*;
 import cn.edu.nju.polaris.service.BalanceSheetService;
+import cn.edu.nju.polaris.service.CashFlowService;
 import cn.edu.nju.polaris.service.FinancialWarningService;
+import cn.edu.nju.polaris.service.ProfitTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,27 +20,37 @@ import java.util.List;
 @Service
 public class FinancialWarningImpl implements FinancialWarningService {
     private final BalanceSheetRepository balanceSheetRepository;
-
     private final IndustryIndexRepository industryIndexRepository;
+    private final AccountRepository accountRepository;
+    private final CashflowSheetRepository cashflowSheetRepository;
+    private final ProfitSheetRepository profitSheetRepository;
 
     private List<IndustryIndex> list;
 
     @Autowired
-    public FinancialWarningImpl(BalanceSheetRepository balanceSheetRepository, IndustryIndexRepository industryIndexRepository) {
+    public FinancialWarningImpl(BalanceSheetRepository balanceSheetRepository, IndustryIndexRepository industryIndexRepository, AccountRepository accountRepository, CashflowSheetRepository cashflowSheetRepository, ProfitSheetRepository profitSheetRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.industryIndexRepository = industryIndexRepository;
+        this.accountRepository = accountRepository;
+        this.cashflowSheetRepository = cashflowSheetRepository;
+        this.profitSheetRepository = profitSheetRepository;
     }
 
     @Override
-    public double[] getWarningMessage(String company_id, String phase) {
+    public double[] getWarningMessage(long company_id, String phase) {
         BalanceSheetService service = new BalanceSheetImpl(balanceSheetRepository);
+        CashFlowService service1 = new CashFlowImpl(cashflowSheetRepository);
+        ProfitTableService service2 = new ProfitTableImpl(profitSheetRepository);
+        //上一期期末的总资产、本期期末总资产、总负债、流动资产、流动负债、上一期期末应收帐款、本期期末应收帐款、上期期末存货、本期期末存货、本期所有者权益、上一期所有者权益
         double[] data1 = service.getValue(company_id,phase);
-        double[] data2 = new double[10];
-        double data3 = 0.0;
+        //净利润、利润总额、主营业务成本、销售费用、管理费用、财务费用、营业成本、其他业务收入、本期主营业务收入、上一期主营业务收入
+        double[] data2 = service2.getValues(company_id, phase);
+        //经营现金净流量
+        double data3 = service1.getNetcashflow(phase,company_id);
 
-        //此处需要得到企业的第一行业、第二行业以及企业规模
+        Account account = accountRepository.findById(company_id);
 
-        list = industryIndexRepository.findByCategoryAndFirstIndustryAndSecondIndustryAndScale("财务预警","","","");
+        list = industryIndexRepository.findByCategoryAndFirstIndustryAndSecondIndustryAndScale("财务预警",account.getFirstIndustry(),account.getSecondIndustry(),account.getScale());
         //实际值
         double[] actual_value = new double[12];
         //净资产收益率  （净利润／所有者权益）＊12

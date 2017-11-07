@@ -20,7 +20,7 @@ public class VoucherItemRepositoryTest {
 
     @Test
     public void testFindByCompanyIdAndVoucherId(){
-        List<VoucherItem> list = voucherItemRepository.findByCompanyIdAndVoucherId("001","记-1");
+        List<VoucherItem> list = voucherItemRepository.findByCompanyIdAndVoucherId(1L,"记-1");
         for (VoucherItem item : list){
             System.out.println(item.toString());
         }
@@ -28,7 +28,7 @@ public class VoucherItemRepositoryTest {
 
     @Test
     public void testFindByCompanyId(){
-        List<VoucherItem> list = voucherItemRepository.findByCompanyId("001");
+        List<VoucherItem> list = voucherItemRepository.findByCompanyId(1L);
         for (VoucherItem item : list){
             System.out.println(item.toString());
         }

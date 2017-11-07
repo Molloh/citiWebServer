@@ -14,7 +14,7 @@ public interface ProfitSheetRepository extends JpaRepository<ProfitSheet,Long>{
      * @param name
      * @return
      */
-    ProfitSheet findByCompanyIdAndPeriodAndName(String companyId,String period,String name);
+    ProfitSheet findByCompanyIdAndPeriodAndName(Long companyId,String period,String name);
 
     /**
      * 根据 公司id、期数 获得利润表实体
@@ -22,5 +22,5 @@ public interface ProfitSheetRepository extends JpaRepository<ProfitSheet,Long>{
      * @param period
      * @return
      */
-    List<ProfitSheet> findByCompanyIdAndPeriod(String companyId,String period);
+    List<ProfitSheet> findByCompanyIdAndPeriod(Long companyId,String period);
 }

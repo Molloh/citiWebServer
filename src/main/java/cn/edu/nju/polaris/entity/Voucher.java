@@ -5,6 +5,7 @@ import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,13 +16,13 @@ public class Voucher implements Serializable{
 
 
     @Id
-    private String companyId;       //公司id
+    private Long companyId;       //公司id
 
     @Id
     private String voucherId;       //凭证号
 
     @Column(name = "date")
-    private Date date;            //日期
+    private Timestamp date;            //日期
 
     @Column(name = "remark")
     private String remark;          //备注
@@ -30,12 +31,11 @@ public class Voucher implements Serializable{
     private String voucherMaker;    //制单人
 
 
-
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
@@ -47,11 +47,11 @@ public class Voucher implements Serializable{
         this.voucherId = voucherId;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

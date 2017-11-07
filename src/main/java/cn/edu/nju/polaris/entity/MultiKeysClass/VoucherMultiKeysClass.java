@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class VoucherMultiKeysClass implements Serializable{
 
     @Column(name = "company_id")
-    private String companyId;
+    private Long companyId;
 
     @Column(name = "voucher_id")
     private String voucherId;
@@ -18,16 +18,16 @@ public class VoucherMultiKeysClass implements Serializable{
     public VoucherMultiKeysClass() {
     }
 
-    public VoucherMultiKeysClass(String companyId, String voucherId) {
+    public VoucherMultiKeysClass(Long companyId, String voucherId) {
         this.companyId = companyId;
         this.voucherId = voucherId;
     }
 
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
