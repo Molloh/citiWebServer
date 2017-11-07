@@ -15,12 +15,13 @@ import java.time.LocalDate;
  * Created by 费慧通 on 2017/11/3.
  */
 @Service
-public class Industry {
+public class IndustryScale {
     private final BalanceSheetRepository balanceSheetRepository;
     private final ProfitSheetRepository profitSheetRepository;
 
+
     @Autowired
-    public Industry(BalanceSheetRepository balanceSheetRepository, ProfitSheetRepository profitSheetRepository) {
+    public IndustryScale(BalanceSheetRepository balanceSheetRepository, ProfitSheetRepository profitSheetRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.profitSheetRepository = profitSheetRepository;
     }

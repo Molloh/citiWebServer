@@ -14,31 +14,31 @@ public class IndustryIndex {
     private String category; //财务预警、现金管理、供应链绩效评价
 
     @Column(name = "first_industry")
-    private String firstIndustry;
+    private String firstIndustry; // 一级行业
 
     @Column(name = "second_industry")
-    private String secondIndustry;
+    private String secondIndustry;// 二级行业
 
     @Column(name = "scale")
-    private String scale;
+    private String scale;// 企业规模
 
     @Column(name = "index_name")
-    private String indexName;
+    private String indexName; // 指标名称
 
     @Column(name = "excellent_index")
-    private Double excellentIndex;
+    private Double excellentIndex; // 优秀值
 
     @Column(name = "fine_index")
-    private Double fineIndex;
+    private Double fineIndex;// 良好值
 
     @Column(name = "average_index")
-    private Double averageIndex;
+    private Double averageIndex;// 平均值
 
     @Column(name = "low_index")
-    private Double lowIndex;
+    private Double lowIndex;// 较低值
 
     @Column(name = "bad_index")
-    private Double badIndex;
+    private Double badIndex;// 较差值
 
     public Long getId() {
         return id;
