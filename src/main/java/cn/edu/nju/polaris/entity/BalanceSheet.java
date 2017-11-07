@@ -17,7 +17,7 @@ public class BalanceSheet {
     private Long id;
 
     @Column(name = "company_id")
-    private String companyId;  // 名称
+    private Long companyId;  // 名称
 
     @Column(name = "period")
     private String period; // 期数 格式为 yyyy-mm
@@ -60,11 +60,11 @@ public class BalanceSheet {
         this.balance = balance;
     }
 
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
@@ -79,7 +79,7 @@ public class BalanceSheet {
                 '}';
     }
 
-    public BalanceSheet(String companyId, String period, String name, Double balance) {
+    public BalanceSheet(Long companyId, String period, String name, Double balance) {
         this.companyId = companyId;
         this.period = period;
         this.name = name;

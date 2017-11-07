@@ -15,7 +15,7 @@ public class ProfitSheet {
     private Long id;
 
     @Column(name = "company_id")
-    private String companyId;  // 名称
+    private Long companyId;  // 名称
 
     @Column(name = "period")
     private String period; // 期数 格式为 yyyy-mm
@@ -58,11 +58,11 @@ public class ProfitSheet {
         this.balance = balance;
     }
 
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 

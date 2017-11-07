@@ -16,14 +16,14 @@ public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKey
      * @param companyId
      * @return
      */
-    Voucher findByVoucherIdAndCompanyId(String voucherId,String companyId);
+    Voucher findByVoucherIdAndCompanyId(String voucherId,Long companyId);
 
     /**
      * 获得一个公司全部的凭证
      * @param compamyId
      * @return
      */
-    List<Voucher> findByCompanyId(String compamyId);
+    List<Voucher> findByCompanyId(Long compamyId);
 
 
 }

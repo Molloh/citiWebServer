@@ -15,7 +15,7 @@ public interface CashflowSheetRepository extends JpaRepository<CashflowSheet,Lon
      * @param name
      * @return
      */
-    CashflowSheet findByPeriodAndCompanyIdAndName(String peroid,String companyId,String name);
+    CashflowSheet findByPeriodAndCompanyIdAndName(String peroid,Long companyId,String name);
 
     /**
      * 根据 期数、公司id 获得所有的CashflowSheet实体
@@ -23,7 +23,7 @@ public interface CashflowSheetRepository extends JpaRepository<CashflowSheet,Lon
      * @param companyId
      * @return
      */
-    List<CashflowSheet> findByPeriodAndCompanyId(String peroid, String companyId);
+    List<CashflowSheet> findByPeriodAndCompanyId(String peroid, Long companyId);
 
 
 

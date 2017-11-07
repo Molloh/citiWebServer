@@ -14,12 +14,15 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param voucherId
      * @return
      */
-    List<VoucherItem> findByCompanyIdAndVoucherId(String companyId,String voucherId);
+    List<VoucherItem> findByCompanyIdAndVoucherId(Long companyId,String voucherId);
 
     /**
      * 根据 公司id 获得VoucherItem实体
      * @param companyId
      * @return
      */
-    List<VoucherItem> findByCompanyId(String companyId);
+    List<VoucherItem> findByCompanyId(Long companyId);
+
+    //TODO
+//    List<VoucherItem>
 }

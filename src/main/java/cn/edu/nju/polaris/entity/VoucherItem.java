@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class VoucherItem implements Serializable{
 
     @Id
-    private String companyId;     //公司id
+    private Long companyId;     //公司id
 
     @Id
     private String voucherId;     //凭证号
@@ -32,12 +32,11 @@ public class VoucherItem implements Serializable{
     private double creditAmount;  //贷方金额
 
 
-
-    public String getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
