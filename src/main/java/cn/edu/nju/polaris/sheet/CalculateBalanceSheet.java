@@ -1,11 +1,14 @@
 package cn.edu.nju.polaris.sheet;
 
 import cn.edu.nju.polaris.entity.BalanceSheet;
+import cn.edu.nju.polaris.entity.SubjectsBalance;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
+import cn.edu.nju.polaris.repository.SubjectsBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 费慧通 on 2017/11/7.
@@ -13,16 +16,24 @@ import java.util.ArrayList;
 @Service
 public class CalculateBalanceSheet {
     private final BalanceSheetRepository balanceSheetRepository;
+    private final SubjectsBalanceRepository subjectsBalanceRepository;
 
-    private ArrayList<String> list;
+    private List<SubjectsBalance> list;
 
     @Autowired
-    public CalculateBalanceSheet(BalanceSheetRepository balanceSheetRepository) {
+    public CalculateBalanceSheet(BalanceSheetRepository balanceSheetRepository, SubjectsBalanceRepository subjectsBalanceRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
+        this.subjectsBalanceRepository = subjectsBalanceRepository;
     }
 
-
+    /**
+     * 向数据库保存/更新资产负债表的数据
+     * @param company_id
+     * @param phase
+     */
     public void UpdateBalanceSheet(long company_id,String phase){
+        list = subjectsBalanceRepository.findByCompanyId(company_id);
+
         //1.1货币资金=其他货币资金+库存现金+银行存款
         double balance1_1 = getMoneyByCourseId("1012", true) + getMoneyByCourseId("1001", true) + getMoneyByCourseId("1002", true);
         BalanceSheet item1_1 = new BalanceSheet(company_id,phase,"货币资金",balance1_1);
@@ -249,7 +260,16 @@ public class CalculateBalanceSheet {
      * @return
      */
     public double getMoneyByCourseId(String course_id, boolean IsDebit){
-        //待完成
+        for(int i=0;i<list.size();i++){
+            SubjectsBalance subjectsBalance = list.get(i);
+            if(subjectsBalance.getSubjectsId().equals(course_id)){
+                if(IsDebit){
+                    return subjectsBalance.getDebitAmount();
+                }else {
+                    return subjectsBalance.getCreditAmount();
+                }
+            }
+        }
         return 0.0;
     }
 
@@ -260,7 +280,17 @@ public class CalculateBalanceSheet {
      * @return
      */
     public double getMoneyLikeCourseId(String course_id, boolean IsDebit){
-        //
-        return 0.0;
+        double result = 0.0;
+        for(int i=0;i<list.size();i++){
+            SubjectsBalance subjectsBalance = list.get(i);
+            if(subjectsBalance.getSubjectsId().substring(0,4).equals(course_id)){
+                if(IsDebit){
+                    result = result+subjectsBalance.getDebitAmount();
+                }else {
+                    result = result+subjectsBalance.getCreditAmount();
+                }
+            }
+        }
+        return result;
     }
 }

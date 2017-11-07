@@ -29,14 +29,14 @@ public class IndustryScale {
         this.accountRepository = accountRepository;
     }
 
-    public void setIndustrySize(long comapny_id){
+    public void setIndustrySize(long company_id){
         String phase = LocalDate.now().toString().substring(0,7);
         ProfitTableService service1 = new ProfitTableImpl(profitSheetRepository);
-        double income = service1.getIncome(phase,comapny_id);
+        double income = service1.getIncome(phase,company_id);
         BalanceSheetService service2 = new BalanceSheetImpl(balanceSheetRepository);
-        double asset = service2.getTotalAsset(comapny_id,phase);
+        double asset = service2.getTotalAsset(company_id,phase);
 
-        Account account = accountRepository.findById(comapny_id);
+        Account account = accountRepository.findById(company_id);
         String industry = account.getFirstIndustry();
         String size = "";
         switch (industry){
