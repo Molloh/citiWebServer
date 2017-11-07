@@ -40,7 +40,7 @@ public interface BalanceSheetService {
      * @param phase 时期 YYYY-MM
      * @return
      */
-    public double getTotalAsset(String comany_id,String phase);
+    public double getTotalAsset(String company_id,String phase);
 
     /**
      * 得到所有凭证数量
