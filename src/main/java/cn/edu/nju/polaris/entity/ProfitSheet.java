@@ -26,7 +26,14 @@ public class ProfitSheet {
     @Column(name = "balance")
     private Double balance; // 余额
 
-    public Long getId() {
+    public ProfitSheet(long company_id, String time, String string, double balance) {
+		this.companyId=company_id;
+		this.period=time;
+		this.name=string;
+		this.balance=balance;
+	}
+
+	public Long getId() {
         return id;
     }
 

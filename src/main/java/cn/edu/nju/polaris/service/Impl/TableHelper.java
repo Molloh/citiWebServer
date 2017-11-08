@@ -1,7 +1,11 @@
 package cn.edu.nju.polaris.service.Impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import cn.edu.nju.polaris.entity.VoucherItem;
 
 /**
  * 
@@ -26,6 +30,108 @@ public class TableHelper {
 			"购建固定资产、无形资产和其他非流动资产支付的现金","投资活动产生的现金流量净额","取得借款收到的现金",
 			"吸收投资者投资收到的现金","偿还借款本金支付的现金","偿还借款利息支付的现金","分配利润支付的现金",
 			"筹资活动产生的现金流量净额","四、现金净增加额","加：期初现金余额","五、期末现金余额"};
+	
+	
+	/**
+	 * 
+	 * @param list
+	 * @return  key科目id，double[借,贷]
+	 */
+	public Map<String,double[]> tempCal(List<VoucherItem> list){
+		Map<String,double[]> res=new HashMap<String,double[]>();
+		for(VoucherItem v:list){
+			if(!res.containsKey(v.getSubjects())){
+				res.put(v.getSubjects(), new double[]{v.getDebitAmount(),v.getCreditAmount()});
+			}else{
+				double[] t=res.get(v.getSubjects());
+				t[0]+=v.getDebitAmount();
+				t[1]+=v.getCreditAmount();
+				res.put(v.getSubjects(), t);
+			}
+		}
+		
+		return res;
+	}
+	
+	public double[] specificSubject(String subject,Map<String,double[]> map){
+		double res[]=new double[2];
+		for(Map.Entry<String,double[]> entry:map.entrySet()){
+			if(entry.getKey().startsWith(subject)){
+				double temp[]=entry.getValue();
+				res[0]+=temp[0];
+				res[1]+=temp[1];
+			}
+		}
+		return res;
+	}
+	
+	
+	/**
+	 * 
+	 * @param list
+	 * @return 借方
+	 */
+	public double DebitCal(String subject,Map<String,double[]> map){
+		if(!map.containsKey(subject))
+			return 0;
+		double[] r=map.get(subject);
+		return r[0];
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @return 贷方
+	 */
+	public double CreditCal(String subject,Map<String,double[]> map){
+		if(!map.containsKey(subject))
+			return 0;
+		double[] r=map.get(subject);
+		return r[1];
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @return 贷-借
+	 */
+	public double Cal(String subject,Map<String,double[]> map) {
+		if(!map.containsKey(subject))
+			return 0;
+		double[] r=map.get(subject);
+		return r[1]-r[0];
+	}
+
+	/**
+	 * 
+	 * @param list
+	 * @return 贷-借
+	 */
+	public double Cal(double[] r) {
+		return r[1]-r[0];
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @return 借-贷
+	 */
+	public double Cal2(double[] r) {
+		return r[0]-r[1];
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @return 借-贷
+	 */
+	public double Cal2(String subject,Map<String,double[]> map) {
+		if(!map.containsKey(subject))
+			return 0;
+		double[] r=map.get(subject);
+		return r[0]-r[1];
+	}
+	
 
 	/**
 	 * 

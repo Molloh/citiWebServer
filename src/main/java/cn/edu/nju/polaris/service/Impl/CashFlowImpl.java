@@ -76,8 +76,27 @@ public class CashFlowImpl implements CashFlowService{
 	@Override
 	public double[] getCashFlow(String time, long company_id) {
 		double[]res=new double[3];
-		CashflowSheet cf=cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "");
+		double r1=cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "销售产成品、商品、提供劳务收到的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "收到其他与经营活动有关的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "收回短期投资、长期债券投资和长期股权投资收到的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "取得投资收益收到的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "处置固定资产、无形资产和其他非流动资产收回的现金净额").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "取得借款收到的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "吸收投资者投资收到的现金").getBalance();
+		double r2=cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "购买原材料、商品、接受劳务支付的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "支付的税费").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "支付的职工薪酬").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "支付其他与经营活动有关的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "短期投资、长期债券投资和长期股权投资支付的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "购建固定资产、无形资产和其他非流动资产支付的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "偿还借款本金支付的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "偿还借款利息支付的现金").getBalance()+
+				cfsr.findByPeriodAndCompanyIdAndName(time, company_id, "分配利润支付的现金").getBalance();
+		double r3=0;//待补完******************************************************************************************
 		
+		res[0]=r1;
+		res[1]=r2;
+		res[2]=r3;
 		
 		return res;
 	}
