@@ -31,10 +31,22 @@ public class Voucher implements Serializable{
     @Column(name = "voucher_maker")
     private String voucherMaker;    //制单人
 
+    @OneToMany(mappedBy = "voucher")
+    private List<VoucherItem> itemList;
+
+
+
+    public List<VoucherItem> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<VoucherItem> itemList) {
+        this.itemList = itemList;
+    }
+
     public Long getCompanyId() {
         return companyId;
     }
-
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;

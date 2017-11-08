@@ -9,10 +9,9 @@ import java.util.List;
 public interface SubjectsBalanceRepository extends JpaRepository<SubjectsBalance,Long>{
 
     /**
-     *
      * @param companyId
+     * @param date
      * @return
      */
-    @Query("")
-    List<SubjectsBalance> findNewestByCompanyId(Long companyId);
+    List<SubjectsBalance> findByCompanyIdAndDate(Long companyId, String date);
 }

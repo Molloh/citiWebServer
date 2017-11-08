@@ -38,11 +38,17 @@ public class VoucherItemRepositoryTest {
 
     @Test
     public void testFindByYear() throws Exception {
-        List<VoucherItem> list = voucherItemRepository.findByYear("2017",1L);
+        List<VoucherItem> list = voucherItemRepository.getListThroughYear("2017",1L);
+        for (VoucherItem item : list){
+            System.out.println(item.toString());
+        }
     }
 
     @Test
     public void testFindByPeriod() throws Exception {
-        List<VoucherItem> list = voucherItemRepository.findByPeriod("2017-09",1L);
+        List<VoucherItem> list = voucherItemRepository.getListThroughPeriod("2017-09",1L);
+        for (VoucherItem item : list){
+            System.out.println(item.toString());
+        }
     }
 }

@@ -31,7 +31,20 @@ public class VoucherItem implements Serializable{
     @Column(name = "credit_amount")
     private double creditAmount;  //贷方金额
 
+    @ManyToOne(optional = false)
+    @JoinColumns({
+            @JoinColumn(name = "company_id",referencedColumnName = "company_id",insertable = false,updatable = false),
+            @JoinColumn(name = "voucher_id",referencedColumnName = "voucher_id",insertable = false,updatable = false)
+    })
+    private Voucher voucher;
 
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
+    }
 
     public Long getCompanyId() {
         return companyId;
