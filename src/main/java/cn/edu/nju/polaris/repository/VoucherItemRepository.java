@@ -51,7 +51,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的贷方金额不为0的条目
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from voucher_item t1 where t1.voucher_id in (select voucher_id from voucher t2 where year(t2.date)=?1 and t2.company_id=?3) and t1.company_id=?3 and t1.subjects=?2 and t1.credit_amount<>0",nativeQuery = true)
     List<VoucherItem> getCreditVoucherItemByYear(String time, String subjectId,Long companyId);
 
     /**
@@ -61,7 +61,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的借方金额不为0的条目
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from voucher_item t1 where t1.voucher_id in (select voucher_id from voucher t2 where year(t2.date)=?1 and t2.company_id=?3) and t1.company_id=?3 and t1.subjects=?2 and t1.debit_amount<>0",nativeQuery = true)
     List<VoucherItem> getDebitVoucherItemByYear(String time, String subjectId,Long companyId);
 
     /**
@@ -71,7 +71,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的贷方金额不为0的条目
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from voucher_item t1 where t1.voucher_id in (select voucher_id from voucher t2 where date_format(t2.date,'%Y-%m')=?1 and t2.company_id=?3) and t1.company_id=?3 and t1.subjects=?2 and t1.credit_amount<>0",nativeQuery = true)
     List<VoucherItem> getCreditVoucherItemByPeriod(String time,String subjectId,Long companyId);
 
     /**
@@ -81,6 +81,6 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的借方金额不为0的条目
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from voucher_item t1 where t1.voucher_id in (select voucher_id from voucher t2 where date_format(t2.date,'%Y-%m')=?1 and t2.company_id=?3) and t1.company_id=?3 and t1.subjects=?2 and t1.debit_amount<>0",nativeQuery = true)
     List<VoucherItem> getDebitVoucherItemByPeriod(String time,String subjectId,Long companyId);
 }
