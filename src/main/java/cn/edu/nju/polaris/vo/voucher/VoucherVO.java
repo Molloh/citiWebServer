@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class VoucherVO {
-    private String company_id;  //公司编号
+    private long company_id;  //公司编号
     private String voucher_id;  //凭证编号
     private String date;  //凭证日期
     private String remark;  //备注
@@ -30,11 +30,11 @@ public class VoucherVO {
                 '}';
     }
 
-    public String getCompany_id() {
+    public long getCompany_id() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompany_id(long company_id) {
         this.company_id=company_id;
     }
 

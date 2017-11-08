@@ -32,7 +32,7 @@ public class CalculateBalanceSheet {
      * @param phase
      */
     public void UpdateBalanceSheet(long company_id,String phase){
-        list = subjectsBalanceRepository.findByCompanyId(company_id);
+        list = subjectsBalanceRepository.findNewestByCompanyId(company_id);
 
         //1.1货币资金=其他货币资金+库存现金+银行存款
         double balance1_1 = getMoneyByCourseId("1012", true) + getMoneyByCourseId("1001", true) + getMoneyByCourseId("1002", true);

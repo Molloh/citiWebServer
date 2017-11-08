@@ -77,6 +77,14 @@ public class VoucherServiceImpl implements VoucherService{
 
     @Override
     public boolean saveOneVoucher(VoucherVO voucherVO) {
+        //对于voucher和voucherItem需要进行分别处理
+        Voucher voucher=new Voucher();
+        voucher.setCompanyId(voucherVO.getCompany_id());
+
+
+
+
+
         return false;
     }
 
@@ -102,6 +110,31 @@ public class VoucherServiceImpl implements VoucherService{
 
     @Override
     public ArrayList<VoucherVO> getSearchedVoucher(VoucherSearchVo searchVo, long factoryId) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteSelectedVoucher(ArrayList<String> voucherIdList, long factoryId) {
+        return false;
+    }
+
+    @Override
+    public boolean amendOneVoucher(VoucherVO voucherVO, String beforeVoucherId) {
+        return false;
+    }
+
+    @Override
+    public int getCurrentNumber(String voucherCharacter, long factoryId) {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<String> getAllPeriod(long factoryId) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> getAllVoucherMaker(long factoryId) {
         return null;
     }
 
