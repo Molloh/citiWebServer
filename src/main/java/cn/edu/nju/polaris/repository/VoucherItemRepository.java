@@ -46,23 +46,41 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
 
     /**
      *
-     * @param time
-     * @param id1
-     * @param id2
+     * @param time  yyyy
+     * @param subjectId
      * @param companyId
-     * @return 获取凭证中借方含有科目ID=id1，贷方含有科目ID=id2的项目，取该两个科目对应金额中的较小值
+     * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的贷方金额不为0的条目
      */
-    @Query(value = "")
-    List<Double> getGivenVourchers(String time, String id1, String id2,Long companyId);
+    @Query(value = "",nativeQuery = true)
+    List<VoucherItem> getCreditVoucherItemByYear(String time, String subjectId,Long companyId);
 
     /**
      *
-     * @param time
-     * @param id1
-     * @param id2
+     * @param time yyyy
+     * @param subjectId
      * @param companyId
-     * @return 获取凭证中借方含有科目ID=id1，贷方含有科目ID=id2的项目，取该两个科目对应金额中的较小值
+     * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的借方金额不为0的条目
      */
-    @Query("")
-    List<Double> getGivenVourchersThoughYear(String time, String id1, String id2,Long companyId);
+    @Query(value = "",nativeQuery = true)
+    List<VoucherItem> getDebitVoucherItemByYear(String time, String subjectId,Long companyId);
+
+    /**
+     *
+     * @param time yyyy-mm
+     * @param subjectId
+     * @param companyId
+     * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的贷方金额不为0的条目
+     */
+    @Query(value = "",nativeQuery = true)
+    List<VoucherItem> getCreditVoucherItemByPeriod(String time,String subjectId,Long companyId);
+
+    /**
+     *
+     * @param time yyyy-mm
+     * @param subjectId
+     * @param companyId
+     * @return 获取凭证中时间为time、科目id为subjectId，公司id为companyId的借方金额不为0的条目
+     */
+    @Query(value = "",nativeQuery = true)
+    List<VoucherItem> getDebitVoucherItemByPeriod(String time,String subjectId,Long companyId);
 }
