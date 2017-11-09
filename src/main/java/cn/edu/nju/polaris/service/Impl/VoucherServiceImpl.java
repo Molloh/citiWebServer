@@ -7,11 +7,13 @@ import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.service.VoucherService;
 import cn.edu.nju.polaris.vo.voucher.ItemTotalVo;
+import cn.edu.nju.polaris.vo.voucher.VoucherItemVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Service
@@ -80,7 +82,14 @@ public class VoucherServiceImpl implements VoucherService{
         //对于voucher和voucherItem需要进行分别处理
         Voucher voucher=new Voucher();
         voucher.setCompanyId(voucherVO.getCompany_id());
+        voucher.setVoucherId(voucherVO.getVoucher_id());
+        voucher.setDate(Timestamp.valueOf(voucherVO.getDate()));
+        //TODO 时间戳的转换可能会出问题
+        voucher.setRemark(voucherVO.getRemark());
+        voucher.setVoucherMaker(voucherVO.getVoucher_maker());
 
+        ArrayList<VoucherItemVo> itemVoList=voucherVO.getItemList();
+        ArrayList<VoucherItem> itemList=new ArrayList<>();
 
 
 
