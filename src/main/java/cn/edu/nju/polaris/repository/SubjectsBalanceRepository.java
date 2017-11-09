@@ -10,7 +10,7 @@ public interface SubjectsBalanceRepository extends JpaRepository<SubjectsBalance
 
     /**
      * @param companyId
-     * @param date
+     * @param date  yyyy-mm
      * @return
      */
     List<SubjectsBalance> findByCompanyIdAndDate(Long companyId, String date);
