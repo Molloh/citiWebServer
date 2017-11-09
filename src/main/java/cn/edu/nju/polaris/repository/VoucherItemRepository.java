@@ -27,6 +27,13 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
     List<VoucherItem> findByCompanyId(Long companyId);
 
     /**
+     *
+     * @param companyId
+     * @param voucherId
+     */
+    void deleteAllByCompanyIdAndVoucherId(Long companyId, String voucherId);
+
+    /**
      * 根据凭证日期和公司id获得凭证信息
      * @param date  yyyy
      * @param companyId

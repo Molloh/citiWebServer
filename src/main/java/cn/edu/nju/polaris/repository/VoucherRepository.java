@@ -20,10 +20,17 @@ public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKey
 
     /**
      * 获得一个公司全部的凭证
-     * @param compamyId
+     * @param companyId
      * @return
      */
-    List<Voucher> findByCompanyId(Long compamyId);
+    List<Voucher> findByCompanyId(Long companyId);
+
+
+    /**
+     * 删除一个公司的全部凭证
+     * @param companyId
+     */
+    void deleteAllByCompanyId(Long companyId);
 
 
 }

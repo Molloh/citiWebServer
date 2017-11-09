@@ -21,14 +21,14 @@ public class VoucherServiceTest {
     @Autowired
     VoucherService voucherService;
 
-    @Test
-    public void testSave(){
-        Voucher voucher = new Voucher();
-        voucher.setCompanyId(1L);
-        voucher.setDate(Timestamp.valueOf("2017-10-10"));
-        voucher.setRemark("note");
-        voucher.setVoucherId("记-2");
-        voucher.setVoucherMaker("loo");
-        voucherService.saveVoucher(voucher);
-    }
+//    @Test
+//    public void testSave(){
+//        Voucher voucher = new Voucher();
+//        voucher.setCompanyId(1L);
+//        voucher.setDate(Timestamp.valueOf("2017-10-10"));
+//        voucher.setRemark("note");
+//        voucher.setVoucherId("记-2");
+//        voucher.setVoucherMaker("loo");
+//        voucherService.saveVoucher(voucher);
+//    }
 }
