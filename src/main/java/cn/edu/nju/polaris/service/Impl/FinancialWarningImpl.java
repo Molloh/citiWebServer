@@ -24,23 +24,25 @@ public class FinancialWarningImpl implements FinancialWarningService {
     private final AccountRepository accountRepository;
     private final CashflowSheetRepository cashflowSheetRepository;
     private final ProfitSheetRepository profitSheetRepository;
+    private final VoucherItemRepository voucherItemRepository;
 
     private List<IndustryIndex> list;
 
     @Autowired
-    public FinancialWarningImpl(BalanceSheetRepository balanceSheetRepository, IndustryIndexRepository industryIndexRepository, AccountRepository accountRepository, CashflowSheetRepository cashflowSheetRepository, ProfitSheetRepository profitSheetRepository) {
+    public FinancialWarningImpl(BalanceSheetRepository balanceSheetRepository, IndustryIndexRepository industryIndexRepository, AccountRepository accountRepository, CashflowSheetRepository cashflowSheetRepository, ProfitSheetRepository profitSheetRepository, VoucherItemRepository voucherItemRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.industryIndexRepository = industryIndexRepository;
         this.accountRepository = accountRepository;
         this.cashflowSheetRepository = cashflowSheetRepository;
         this.profitSheetRepository = profitSheetRepository;
+        this.voucherItemRepository = voucherItemRepository;
     }
 
     @Override
     public double[] getWarningMessage(long company_id, String phase) {
         BalanceSheetService service = new BalanceSheetImpl(balanceSheetRepository);
         CashFlowService service1 = new CashFlowImpl(cashflowSheetRepository);
-        ProfitTableService service2 = new ProfitTableImpl(profitSheetRepository);
+        ProfitTableService service2 = new ProfitTableImpl(profitSheetRepository,voucherItemRepository);
         //上一期期末的总资产、本期期末总资产、总负债、流动资产、流动负债、上一期期末应收帐款、本期期末应收帐款、上期期末存货、本期期末存货、本期所有者权益、上一期所有者权益
         double[] data1 = service.getValue(company_id,phase);
         //净利润、利润总额、主营业务成本、销售费用、管理费用、财务费用、营业成本、其他业务收入、本期主营业务收入、上一期主营业务收入
