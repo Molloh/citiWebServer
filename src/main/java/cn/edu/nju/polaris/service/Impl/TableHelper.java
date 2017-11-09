@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.edu.nju.polaris.entity.VoucherItem;
+import cn.edu.nju.polaris.service.BalanceSheetService;
 
 /**
  * 
@@ -13,6 +14,7 @@ import cn.edu.nju.polaris.entity.VoucherItem;
  *
  */
 public class TableHelper {
+	
 	
 	static final String Profit[]={"一、营业收入","减：营业成本","营业税金及附加","其中：消费税",
 			"营业税","城市维护建设税","资源税","土地增值税","城镇土地使用税、房产税、车船税、印花税",
@@ -81,12 +83,30 @@ public class TableHelper {
 	/**
 	 * 
 	 * @param list
+	 * @return 借方
+	 */
+	public double DebitCal(double[] r){
+		return r[0];
+	}
+	
+	/**
+	 * 
+	 * @param list
 	 * @return 贷方
 	 */
 	public double CreditCal(String subject,Map<String,double[]> map){
 		if(!map.containsKey(subject))
 			return 0;
 		double[] r=map.get(subject);
+		return r[1];
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @return 贷方
+	 */
+	public double CreditCal(double[] r){
 		return r[1];
 	}
 	
@@ -156,4 +176,6 @@ public class TableHelper {
 		}
 		return res;
 	}
+	
+	
 }

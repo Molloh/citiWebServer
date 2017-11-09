@@ -26,7 +26,14 @@ public class CashflowSheet {
     @Column(name = "balance")
     private Double balance; // 余额
 
-    public Long getId() {
+    public CashflowSheet(long company_id, String time, String string, double d) {
+		this.companyId=company_id;
+		this.period=time;
+		this.name=string;
+		this.balance=d;
+	}
+
+	public Long getId() {
         return id;
     }
 
