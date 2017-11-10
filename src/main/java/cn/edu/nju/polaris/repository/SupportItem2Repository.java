@@ -4,6 +4,7 @@ import cn.edu.nju.polaris.entity.MultiKeysClass.SupportItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.SupportItem1;
 import cn.edu.nju.polaris.entity.SupportItem2;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface SupportItem2Repository extends JpaRepository<SupportItem2,Suppo
      * @param voucherId
      * @param voucherLines
      */
+    @Query(value = "",nativeQuery = true)
     void deleteAllItemTwo(Long companyId,String voucherId,int voucherLines);
 
     /**
@@ -33,6 +35,7 @@ public interface SupportItem2Repository extends JpaRepository<SupportItem2,Suppo
      * @param voucherLines
      * @param supportLines
      */
+    @Query(value = "",nativeQuery = true)
     void deleteItemOne(Long companyId,String voucherId,int voucherLines,int supportLines);
 
 

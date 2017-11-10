@@ -2,6 +2,7 @@ package cn.edu.nju.polaris.repository;
 
 import cn.edu.nju.polaris.entity.SubjectsRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param companyId
      * @param voucherId
      */
+    @Query(value = "delete from subjects_record where company_id=?1 and voucher_id=?2",nativeQuery = true)
     void deleteOneVoucherAllRecord(Long companyId,String voucherId);
 
     /**
@@ -20,6 +22,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param subjectId
      * @return
      */
+    @Query(value = "",nativeQuery = true)
     SubjectsRecord findNewestSubjectRecord(Long companyId,String subjectId);
 
     /**
@@ -28,6 +31,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param month "2010-08"
      * @return
      */
+    @Query(value = "",nativeQuery = true)
     List<SubjectsRecord> findAllThroughOneMonth(Long companyId,String month);
 
     /**
@@ -36,6 +40,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param year  "2010"
      * @return
      */
+    @Query(value = "",nativeQuery = true)
     List<SubjectsRecord> findAllThroughOneYear(Long companyId,String year);
 
     /**
