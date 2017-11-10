@@ -11,7 +11,8 @@ public class VoucherVO {
     private String voucher_maker;   //制单人
     private ArrayList<VoucherItemVo> itemList;  //凭证条目的列表
     private ItemTotalVo totalVo;    //条目总计
-
+    private SupportItemOneVo supportOneVo;  //辅助信息一 不存在则为null
+    private SupportItemTwoVo supportItemTwoVo;  //辅助信息二 存不存在则为null
 
     public VoucherVO(){
         super();
@@ -20,13 +21,15 @@ public class VoucherVO {
     @Override
     public String toString() {
         return "VoucherVO{" +
-                "company_id='" + company_id + '\'' +
+                "company_id=" + company_id +
                 ", voucher_id='" + voucher_id + '\'' +
                 ", date='" + date + '\'' +
                 ", remark='" + remark + '\'' +
                 ", voucher_maker='" + voucher_maker + '\'' +
                 ", itemList=" + itemList +
                 ", totalVo=" + totalVo +
+                ", supportOneVo=" + supportOneVo +
+                ", supportItemTwoVo=" + supportItemTwoVo +
                 '}';
     }
 
@@ -85,5 +88,24 @@ public class VoucherVO {
     public void setTotalVo(ItemTotalVo totalVo) {
         this.totalVo=totalVo;
     }
+
+    public SupportItemOneVo getSupportOneVo() {
+        return supportOneVo;
+    }
+
+    public void setSupportOneVo(SupportItemOneVo supportOneVo) {
+        this.supportOneVo=supportOneVo;
+    }
+
+    public SupportItemTwoVo getSupportItemTwoVo() {
+        return supportItemTwoVo;
+    }
+
+    public void setSupportItemTwoVo(SupportItemTwoVo supportItemTwoVo) {
+        this.supportItemTwoVo=supportItemTwoVo;
+    }
+
+
+
 
 }
