@@ -12,7 +12,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param companyId
      * @param voucherId
      */
-    void deleteOneVoucherAllRecord(String companyId,String voucherId);
+    void deleteOneVoucherAllRecord(Long companyId,String voucherId);
 
     /**
      * 获得一个科目的最新一条科目记录
@@ -20,37 +20,37 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param subjectId
      * @return
      */
-    SubjectsRecord findNewestSubjectRecord(String companyId,String subjectId);
+    SubjectsRecord findNewestSubjectRecord(Long companyId,String subjectId);
 
     /**
      * 查找一个月的全部的科目记录
-     * @param factoryId
+     * @param companyId
      * @param month "2010-08"
      * @return
      */
-    List<SubjectsRecord> findAllByOneMonth(String factoryId,String month);
+    List<SubjectsRecord> findAllThroughOneMonth(Long companyId,String month);
 
     /**
      * 查找一年的全部的科目记录
-     * @param factoryId
+     * @param companyId
      * @param year  "2010"
      * @return
      */
-    List<SubjectsRecord> findAllByOneYear(String factoryId,String year);
+    List<SubjectsRecord> findAllThroughOneYear(Long companyId,String year);
 
     /**
      * 获得一个公司全部的科目记录信息
-     * @param factoryId
+     * @param companyId
      * @return
      */
-    List<SubjectsRecord> findAllByFactoryId(String factoryId);
+    List<SubjectsRecord> findAllByCompanyId(Long companyId);
 
     /**
      * 获得一个科目全部的科目记录信息
-     * @param factoryId
+     * @param companyId
      * @param subjectId
      * @return
      */
-    List<SubjectsRecord> findAllBySubjectId(String factoryId,String subjectId);
+    List<SubjectsRecord> findAllByCompanyIdAndSubjectsId(Long companyId,String subjectId);
 
 }

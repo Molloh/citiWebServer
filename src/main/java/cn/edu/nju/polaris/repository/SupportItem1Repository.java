@@ -15,7 +15,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param voucherLines
      * @return
      */
-    List<SupportItem1> findByVoucherLines(String companyId,String voucherId,int voucherLines);
+    List<SupportItem1> findAllByCompanyIdAndVoucherIdAndVoucherLines(String companyId, String voucherId, int voucherLines);
 
     /**
      * 删除一个凭证行数对应的全部辅助信息一
@@ -23,7 +23,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param voucherId
      * @param voucherLines
      */
-    void deleteAllItemOne(String companyId,String voucherId,int voucherLines);
+    void deleteAllItemOne(Long companyId,String voucherId,int voucherLines);
 
     /**
      * 删除辅助信息一种的一行
@@ -32,7 +32,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param voucherLines
      * @param supportLines
      */
-    void deleteItemOne(String companyId,String voucherId,int voucherLines,int supportLines);
+    void deleteItemOne(Long companyId,String voucherId,int voucherLines,int supportLines);
 
 
 }
