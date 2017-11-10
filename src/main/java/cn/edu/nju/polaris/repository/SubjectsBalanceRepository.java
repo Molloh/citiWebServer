@@ -14,4 +14,5 @@ public interface SubjectsBalanceRepository extends JpaRepository<SubjectsBalance
      * @return
      */
     List<SubjectsBalance> findByCompanyIdAndDate(Long companyId, String date);
+
 }
