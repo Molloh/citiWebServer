@@ -15,7 +15,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param voucherLines
      * @return
      */
-    List<SupportItem1> findAllByCompanyIdAndVoucherIdAndVoucherLines(String companyId, String voucherId, int voucherLines);
+    List<SupportItem1> findAllByCompanyIdAndVoucherIdAndVoucherLines(Long companyId, String voucherId, int voucherLines);
 
     /**
      * 删除一个凭证行数对应的全部辅助信息一
