@@ -1,15 +1,11 @@
 package cn.edu.nju.polaris.service.Impl;
 
+import cn.edu.nju.polaris.entity.*;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
-import cn.edu.nju.polaris.entity.Subjects;
-import cn.edu.nju.polaris.entity.Voucher;
-import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
-import cn.edu.nju.polaris.repository.SubjectsRepository;
-import cn.edu.nju.polaris.repository.VoucherItemRepository;
-import cn.edu.nju.polaris.repository.VoucherRepository;
+import cn.edu.nju.polaris.repository.*;
 import cn.edu.nju.polaris.service.VoucherService;
 import cn.edu.nju.polaris.vo.voucher.ItemTotalVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherItemVo;
@@ -17,6 +13,8 @@ import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import cn.edu.nju.polaris.util.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -29,12 +27,16 @@ public class VoucherServiceImpl implements VoucherService{
     private final VoucherRepository voucherRepository;
     private final VoucherItemRepository voucherItemRepository;
     private final SubjectsRepository subjectsRepository;
+    private final SubjectsBalanceRepository subjectsBalanceRepository;
+    private final SubjectsRecordRepository subjectsRecordRepository;
 
     @Autowired
-    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository) {
+    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectsRecordRepository subjectsRecordRepository) {
         this.voucherRepository = voucherRepository;
         this.voucherItemRepository = voucherItemRepository;
         this.subjectsRepository=subjectsRepository;
+        this.subjectsBalanceRepository=subjectsBalanceRepository;
+        this.subjectsRecordRepository=subjectsRecordRepository;
     }
 
     private boolean addVoucher(Voucher voucher) {
@@ -177,14 +179,27 @@ public class VoucherServiceImpl implements VoucherService{
             for(int count=0;count<itemVoList.size();count++){
                 VoucherItemVo oneItemVo=itemVoList.get(count);
                 VoucherItem oneItem=new VoucherItem();
+                //TODO 修改余额 根据主键
+
 
                 String subjectId=oneItemVo.getSubjectId();
+                SubjectsBalance beforeBalance=subjectsBalanceRepository.findBySubjectsId(voucherVO.getCompany_id(),subjectId);
 
+                SubjectsRecord newRecord=new SubjectsRecord();
+                double debitAmount=oneItem.getDebitAmount();
+                double creditAmount=oneItem.getCreditAmount();
+                double newBalance=beforeBalance.getBalance()+SubjectBalanceHelper.getDirection(subjectId)*(debitAmount-creditAmount);
 
+                newRecord.setCompanyId(voucherVO.getCompany_id());
+                newRecord.setVoucherId(voucherVO.getVoucher_id());
+                newRecord.setSubjectsId(subjectId);
+                newRecord.setDate(Timestamp.valueOf(voucherVO.getDate()));
+                newRecord.setDebitAmount(debitAmount);
+                newRecord.setCreditAmount(creditAmount);
 
+                subjectsRecordRepository.save(newRecord);
 
-
-
+//                itemList.add()
 
             }
 
