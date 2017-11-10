@@ -1,13 +1,13 @@
 package cn.edu.nju.polaris.service.Impl;
 
-import cn.edu.nju.polaris.entity.BalanceSheet;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
+import cn.edu.nju.polaris.entity.Subjects;
 import cn.edu.nju.polaris.entity.Voucher;
 import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
-import cn.edu.nju.polaris.repository.BalanceSheetRepository;
+import cn.edu.nju.polaris.repository.SubjectsRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
 import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.service.VoucherService;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -27,11 +28,13 @@ public class VoucherServiceImpl implements VoucherService{
 
     private final VoucherRepository voucherRepository;
     private final VoucherItemRepository voucherItemRepository;
+    private final SubjectsRepository subjectsRepository;
 
     @Autowired
-    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository) {
+    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository) {
         this.voucherRepository = voucherRepository;
         this.voucherItemRepository = voucherItemRepository;
+        this.subjectsRepository=subjectsRepository;
     }
 
     private boolean addVoucher(Voucher voucher) {
@@ -143,8 +146,11 @@ public class VoucherServiceImpl implements VoucherService{
     }
 
 
-
-
+    /**
+     * 需要对凭证 凭证条目 余额 辅助信息进行修改
+     * @param voucherVO
+     * @return
+     */
     @Override
     public boolean saveOneVoucher(VoucherVO voucherVO) {
         //对于voucher和voucherItem需要进行分别处理
@@ -155,11 +161,34 @@ public class VoucherServiceImpl implements VoucherService{
         //TODO 时间戳的转换可能会出问题
         voucher.setRemark(voucherVO.getRemark());
         voucher.setVoucherMaker(voucherVO.getVoucher_maker());
+        //凭证赋值完成
 
         ArrayList<VoucherItemVo> itemVoList=voucherVO.getItemList();
         ArrayList<VoucherItem> itemList=new ArrayList<>();
 
+        HashMap<String,String> subjectIdToNameMap=new HashMap<>();
+        List<Subjects> allSubjectList=subjectsRepository.findAll();
+        for(int count=0;count<allSubjectList.size();count++){
+            Subjects oneSubject=allSubjectList.get(count);
+            subjectIdToNameMap.put(oneSubject.getSubjectsId(),oneSubject.getSubjectsName());
+        }
 
+        if(itemVoList.size()!=0){
+            for(int count=0;count<itemVoList.size();count++){
+                VoucherItemVo oneItemVo=itemVoList.get(count);
+                VoucherItem oneItem=new VoucherItem();
+
+                String subjectId=oneItemVo.getSubjectId();
+
+
+
+
+
+
+
+            }
+
+        }
 
 
         return false;

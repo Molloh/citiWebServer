@@ -15,4 +15,12 @@ public interface SubjectsBalanceRepository extends JpaRepository<SubjectsBalance
      */
     List<SubjectsBalance> findByCompanyIdAndDate(Long companyId, String date);
 
+
+    /**
+     * 获取一个会计科目最新的余额信息
+     * @param companyId
+     * @param subjectId
+     * @return
+     */
+    SubjectsBalance findBySubjectsId(Long companyId,String subjectId);
 }
