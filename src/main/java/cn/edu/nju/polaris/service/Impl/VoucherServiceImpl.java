@@ -183,7 +183,7 @@ public class VoucherServiceImpl implements VoucherService{
 
 
                 String subjectId=oneItemVo.getSubjectId();
-                SubjectsBalance beforeBalance=subjectsBalanceRepository.findBySubjectsId(voucherVO.getCompany_id(),subjectId);
+                SubjectsBalance beforeBalance=subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(voucherVO.getCompany_id(),subjectId,"");
 
                 SubjectsRecord newRecord=new SubjectsRecord();
                 double debitAmount=oneItem.getDebitAmount();
