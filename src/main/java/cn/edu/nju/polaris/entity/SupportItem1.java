@@ -29,7 +29,7 @@ public class    SupportItem1 implements Serializable{
     @Id
     private Integer supportLines; // 辅助信息行数
 
-    @Column
+    @Column(name = "end_side")
     private String EndSide; // 收入/发出方
 
     @Column(name = "subjects")
