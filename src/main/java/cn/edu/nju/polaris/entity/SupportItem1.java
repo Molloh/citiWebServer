@@ -6,6 +6,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 当输入凭证中的会计科目是“材料采购、在途物资、原材料、库存商品、委托加工物资、工程物资“时
@@ -14,7 +15,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "support_item1")
 @IdClass(SupportItemMultiKeysClass.class)
-public class SupportItem1 implements Serializable{
+public class    SupportItem1 implements Serializable{
 
     @Id
     private String companyId; //公司id
@@ -35,7 +36,7 @@ public class SupportItem1 implements Serializable{
     private String variety; // 种类
 
     @Column(name = "date")
-    private Date date; // 时间
+    private Timestamp date; // 时间
 
     @Column(name = "is_new")
     private Boolean isNew; // 是否属于新产品
@@ -116,11 +117,11 @@ public class SupportItem1 implements Serializable{
         this.variety = variety;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

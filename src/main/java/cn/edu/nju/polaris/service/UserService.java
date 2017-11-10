@@ -33,4 +33,12 @@ public interface UserService {
      * @param newPassword
      */
     void modifyPassword(String userName,String oldPassword,String newPassword);
+
+
+    /**
+     * 根据
+     * @param userName
+     * @return
+     */
+    UserInfoVO getUserInfo(String userName);
 }

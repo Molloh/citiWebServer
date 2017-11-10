@@ -72,4 +72,18 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public UserInfoVO getUserInfo(String userName) {
+        User user = userRepository.findByUserName(userName);
+        if (user == null){
+            throw new ResourceNotFoundException("用户名不存在!");
+        }
+        UserInfoVO vo = new UserInfoVO();
+        vo.setUserName(user.getUserName());
+        vo.setCompanyId(user.getCompanyId());
+        vo.setType(user.getType());
+
+        return vo;
+    }
+
 }

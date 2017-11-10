@@ -5,6 +5,7 @@ import cn.edu.nju.polaris.entity.MultiKeysClass.SupportItemMultiKeysClass;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 当输入凭证中的会计科目时“应收账款、应付账款“时
@@ -34,10 +35,10 @@ public class SupportItem2 implements Serializable{
     private String companyName; // 公司名称
 
     @Column(name = "debit_date")
-    private Date debitDate; // 借款时间
+    private Timestamp debitDate; // 借款时间
 
     @Column(name = "repayment_ddl")
-    private Date repaymentDDL; // 还款期限
+    private Timestamp repaymentDDL; // 还款期限
 
     @Column(name = "amount")
     private Double amount; // 应收/付账款金额 (根据会计科目是'应收账款'还是'应付账款'来定)
@@ -46,7 +47,7 @@ public class SupportItem2 implements Serializable{
     private String discountPolicy; // 折扣政策
 
     @Column(name = "discount_ddl")
-    private Date discountDDL; // 折扣期限
+    private Timestamp discountDDL; // 折扣期限
 
     @Column(name = "remark")
     private String remark; // 备注
@@ -99,22 +100,6 @@ public class SupportItem2 implements Serializable{
         this.companyName = companyName;
     }
 
-    public Date getDebitDate() {
-        return debitDate;
-    }
-
-    public void setDebitDate(Date debitDate) {
-        this.debitDate = debitDate;
-    }
-
-    public Date getRepaymentDDL() {
-        return repaymentDDL;
-    }
-
-    public void setRepaymentDDL(Date repaymentDDL) {
-        this.repaymentDDL = repaymentDDL;
-    }
-
     public Double getAmount() {
         return amount;
     }
@@ -131,11 +116,27 @@ public class SupportItem2 implements Serializable{
         this.discountPolicy = discountPolicy;
     }
 
-    public Date getDiscountDDL() {
+    public Timestamp getDebitDate() {
+        return debitDate;
+    }
+
+    public void setDebitDate(Timestamp debitDate) {
+        this.debitDate = debitDate;
+    }
+
+    public Timestamp getRepaymentDDL() {
+        return repaymentDDL;
+    }
+
+    public void setRepaymentDDL(Timestamp repaymentDDL) {
+        this.repaymentDDL = repaymentDDL;
+    }
+
+    public Timestamp getDiscountDDL() {
         return discountDDL;
     }
 
-    public void setDiscountDDL(Date discountDDL) {
+    public void setDiscountDDL(Timestamp discountDDL) {
         this.discountDDL = discountDDL;
     }
 
