@@ -5,7 +5,7 @@ package cn.edu.nju.polaris.vo.voucher;
  * Created by zhangzy on 2017/11/10 上午8:11
  */
 public class SupportItemTwoVo {
-    private String companyId;   //公司编号
+    private long companyId;   //公司编号
     private String voucherId;   //凭证编号
     private int voucherLines;   //凭证行数
     private int supportLines;   //辅助信息行数
@@ -22,11 +22,10 @@ public class SupportItemTwoVo {
 
     }
 
-
     @Override
     public String toString() {
         return "SupportItemTwoVo{" +
-                "companyId='" + companyId + '\'' +
+                "companyId=" + companyId +
                 ", voucherId='" + voucherId + '\'' +
                 ", voucherLines=" + voucherLines +
                 ", supportLines=" + supportLines +
@@ -41,11 +40,11 @@ public class SupportItemTwoVo {
                 '}';
     }
 
-    public String getCompanyId() {
+    public long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(long companyId) {
         this.companyId=companyId;
     }
 
@@ -136,4 +135,7 @@ public class SupportItemTwoVo {
     public void setRemark(String remark) {
         this.remark=remark;
     }
+
+
+
 }

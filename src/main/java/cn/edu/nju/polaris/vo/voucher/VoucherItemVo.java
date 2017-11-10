@@ -6,7 +6,7 @@ package cn.edu.nju.polaris.vo.voucher;
  */
 public class VoucherItemVo {
 
-    private String company_id;  //公司编号
+    private long company_id;  //公司编号
     private String voucher_id;  //凭证编号
     private int lines;  //凭证中的行数
     private String abstracts;   //摘要
@@ -17,11 +17,11 @@ public class VoucherItemVo {
     public VoucherItemVo(){
         super();
     }
-    
+
     @Override
     public String toString() {
         return "VoucherItemVo{" +
-                "company_id='" + company_id + '\'' +
+                "company_id=" + company_id +
                 ", voucher_id='" + voucher_id + '\'' +
                 ", lines=" + lines +
                 ", abstracts='" + abstracts + '\'' +
@@ -31,11 +31,11 @@ public class VoucherItemVo {
                 '}';
     }
 
-    public String getCompany_id() {
+    public long getCompany_id() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompany_id(long company_id) {
         this.company_id=company_id;
     }
 
@@ -86,7 +86,6 @@ public class VoucherItemVo {
     public void setCreditAmount(double creditAmount) {
         this.creditAmount=creditAmount;
     }
-
 
 
 }

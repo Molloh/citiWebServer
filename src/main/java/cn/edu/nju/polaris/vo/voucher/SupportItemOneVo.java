@@ -6,7 +6,7 @@ package cn.edu.nju.polaris.vo.voucher;
  */
 public class SupportItemOneVo {
 
-    private String companyId;   //公司编号
+    private long companyId;   //公司编号
     private String voucherId;   //凭证编号
     private int voucherLines;   //凭证行数
     private int supportLines;   //辅助信息行数
@@ -32,7 +32,7 @@ public class SupportItemOneVo {
     @Override
     public String toString() {
         return "SupportItemOneVo{" +
-                "companyId='" + companyId + '\'' +
+                "companyId=" + companyId +
                 ", voucherId='" + voucherId + '\'' +
                 ", voucherLines=" + voucherLines +
                 ", supportLines=" + supportLines +
@@ -53,11 +53,11 @@ public class SupportItemOneVo {
                 '}';
     }
 
-    public String getCompanyId() {
+    public long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(String companyId) {
+    public void setCompanyId(long companyId) {
         this.companyId=companyId;
     }
 
@@ -196,6 +196,8 @@ public class SupportItemOneVo {
     public void setEndingStocks(double endingStocks) {
         this.endingStocks=endingStocks;
     }
+
+
 
 
 
