@@ -22,5 +22,5 @@ public interface SubjectsBalanceRepository extends JpaRepository<SubjectsBalance
      * @param subjectId
      * @return
      */
-    SubjectsBalance findBySubjectsId(Long companyId,String subjectId);
+    SubjectsBalance findByCompanyIdAndSubjectsIdAndDate(Long companyId,String subjectId,String period);
 }

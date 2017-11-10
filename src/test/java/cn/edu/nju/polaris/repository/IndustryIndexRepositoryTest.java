@@ -27,7 +27,7 @@ public class IndustryIndexRepositoryTest {
 
     @Test
     public void testFindMore(){
-        List<IndustryIndex> indexs = industryIndexRepository.findByCategoryAndFirstIndustryAndSecondIndustryAndScale("财务预警","工业","煤炭工业","中型企业");
+        List<IndustryIndex> indexs = industryIndexRepository.findByCategoryAndFirstIndustryAndSecondIndustryAndScale("供应链绩效评价","工业","煤炭工业","中型企业");
         for (IndustryIndex index : indexs){
             System.out.println(index.toString());
         }

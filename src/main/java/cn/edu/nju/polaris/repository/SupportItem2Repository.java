@@ -16,7 +16,7 @@ public interface SupportItem2Repository extends JpaRepository<SupportItem2,Suppo
      * @param voucherId
      * @param voucherLines
      * @return
-     */
+  x   */
     List<SupportItem2> findAllByCompanyIdAndVoucherIdAndVoucherLines(Long companyId, String voucherId, int voucherLines);
 
     /**
