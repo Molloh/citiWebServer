@@ -36,7 +36,7 @@ public interface UserService {
 
 
     /**
-     * 根据
+     * 根据用户名获得用户基本信息
      * @param userName
      * @return
      */

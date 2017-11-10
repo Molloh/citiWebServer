@@ -29,6 +29,9 @@ public class    SupportItem1 implements Serializable{
     @Id
     private Integer supportLines; // 辅助信息行数
 
+    @Column
+    private String EndSide; // 收入/发出方
+
     @Column(name = "subjects")
     private String subjects; // 会计科目
 
@@ -68,6 +71,13 @@ public class    SupportItem1 implements Serializable{
     @Column(name = "ending_stocks")
     private Double endingStocks; // 结存量
 
+    public String getEndSide() {
+        return EndSide;
+    }
+
+    public void setEndSide(String endSide) {
+        EndSide = endSide;
+    }
 
     public String getCompanyId() {
         return companyId;
@@ -212,6 +222,7 @@ public class    SupportItem1 implements Serializable{
                 ", voucherId='" + voucherId + '\'' +
                 ", voucherLines=" + voucherLines +
                 ", supportLines=" + supportLines +
+                ", EndSide='" + EndSide + '\'' +
                 ", subjects='" + subjects + '\'' +
                 ", variety='" + variety + '\'' +
                 ", date=" + date +
