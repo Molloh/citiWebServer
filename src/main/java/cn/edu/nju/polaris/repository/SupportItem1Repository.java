@@ -24,8 +24,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param voucherId
      * @param voucherLines
      */
-    @Query(value = "",nativeQuery = true)
-    void deleteAllItemOne(Long companyId,String voucherId,int voucherLines);
+    void deleteAllByCompanyIdAndVoucherIdAndVoucherLines(Long companyId,String voucherId,int voucherLines);
 
     /**
      * 删除辅助信息一种的一行
@@ -34,8 +33,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param voucherLines
      * @param supportLines
      */
-    @Query(value = "",nativeQuery = true)
-    void deleteItemOne(Long companyId,String voucherId,int voucherLines,int supportLines);
+    void deleteByCompanyIdAndVoucherIdAndVoucherLinesAndSupportLines(Long companyId,String voucherId,int voucherLines,int supportLines);
 
 
 }

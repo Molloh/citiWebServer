@@ -22,7 +22,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param subjectId
      * @return
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from subjects_record t1 where t1.date = (select max(t2.date) from subjects_record t2 where t2.company_id =?1 and t2.subjects_id=?2) and t1.company_id=?1 and t1.subjects_id=?2",nativeQuery = true)
     SubjectsRecord findNewestSubjectRecord(Long companyId,String subjectId);
 
     /**
@@ -31,7 +31,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param month "2010-08"
      * @return
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from subjects_record where company_id=?1 and date_format(date,'%Y-%m')=?2",nativeQuery = true)
     List<SubjectsRecord> findAllThroughOneMonth(Long companyId,String month);
 
     /**
@@ -40,7 +40,7 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param year  "2010"
      * @return
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "select * from subjects_record where company_id=?1 and year(date)=?2",nativeQuery = true)
     List<SubjectsRecord> findAllThroughOneYear(Long companyId,String year);
 
     /**
