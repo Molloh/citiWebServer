@@ -4,6 +4,7 @@ import cn.edu.nju.polaris.entity.SubjectsRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,Long>{
@@ -13,8 +14,8 @@ public interface SubjectsRecordRepository extends JpaRepository<SubjectsRecord,L
      * @param companyId
      * @param voucherId
      */
-    @Query(value = "delete from subjects_record where company_id=?1 and voucher_id=?2",nativeQuery = true)
-    void deleteOneVoucherAllRecord(Long companyId,String voucherId);
+    @Transactional
+    void deleteAllByCompanyIdAndVoucherId(Long companyId,String voucherId);
 
     /**
      * 获得一个科目的最新一条科目记录

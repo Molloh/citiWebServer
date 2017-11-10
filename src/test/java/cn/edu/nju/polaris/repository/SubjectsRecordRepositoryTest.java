@@ -21,10 +21,10 @@ public class SubjectsRecordRepositoryTest {
     @Autowired
     private SubjectsRecordRepository subjectsRecordRepository;
 
-//    @Test
-//    public void testDeleteOneVoucherAllRecord() throws Exception {
-//        subjectsRecordRepository.deleteOneVoucherAllRecord(1L,"记-2");
-//    }
+    @Test
+    public void testDeleteOneVoucherAllRecord() throws Exception {
+        subjectsRecordRepository.deleteAllByCompanyIdAndVoucherId(1L,"记-2");
+    }
 
 
     @Test
