@@ -1,7 +1,7 @@
 package cn.edu.nju.polaris.vo.voucher;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhangzy on 2017/11/7 下午3:44
@@ -15,8 +15,9 @@ public class VoucherItemVo {
     private String subjectId;   //会计科目编号
     private double debitAmount;    //借方金额
     private double creditAmount;   //贷方金额
-    private ArrayList<SupportItemOneVo> supportOneList; //辅助信息一的列表
-    private ArrayList<SupportItemTwoVo> supportTwoList; //辅助信息二的列表
+    private List<SupportItemOneVo> supportOneList; //辅助信息一的列表
+    private List<SupportItemTwoVo> supportTwoList; //辅助信息二的列表
+
 
     public VoucherItemVo(){
         super();
@@ -93,19 +94,19 @@ public class VoucherItemVo {
         this.creditAmount=creditAmount;
     }
 
-    public ArrayList<SupportItemOneVo> getSupportOneList() {
+    public List<SupportItemOneVo> getSupportOneList() {
         return supportOneList;
     }
 
-    public void setSupportOneList(ArrayList<SupportItemOneVo> supportOneList) {
+    public void setSupportOneList(List<SupportItemOneVo> supportOneList) {
         this.supportOneList=supportOneList;
     }
 
-    public ArrayList<SupportItemTwoVo> getSupportTwoList() {
+    public List<SupportItemTwoVo> getSupportTwoList() {
         return supportTwoList;
     }
 
-    public void setSupportTwoList(ArrayList<SupportItemTwoVo> supportTwoList) {
+    public void setSupportTwoList(List<SupportItemTwoVo> supportTwoList) {
         this.supportTwoList=supportTwoList;
     }
 

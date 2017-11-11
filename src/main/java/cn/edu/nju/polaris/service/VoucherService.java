@@ -52,12 +52,13 @@ public interface VoucherService {
     public ItemTotalVo getVoucherTotal(ArrayList<VoucherItem> itemList);
 
     /**
-     * 获得当前的会计科目的余额
+     * 获得当前月份的会计科目的余额
      * @param subjectId
      * @param factoryId
+     * @param month "2010-10"
      * @return
      */
-    public double getOneSubjectBalance(String subjectId,long factoryId);
+    public double getOneSubjectBalance(String subjectId,long factoryId,String month);
 
     /**
      * 获得当前时期的全部凭证信息
