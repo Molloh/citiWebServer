@@ -44,4 +44,20 @@ public class UserController {
     public void addUser(@RequestBody UserVO userVO){
         userService.addUser(userVO);
     }
+
+
+
+    @ApiOperation(value = "修改用户密码",notes = "需要输入用户的旧密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userName",value = "用户名",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "oldPassword",value = "旧密码",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "newPassword",value = "新密码",required = true,dataType = "String")
+    })
+    @PutMapping("/{userName}")
+    public void modifyPassword(@PathVariable String userName,
+                               @RequestParam String oldPassword,
+                               @RequestParam String newPassword){
+        userService.modifyPassword(userName,oldPassword,newPassword);
+    }
+
 }

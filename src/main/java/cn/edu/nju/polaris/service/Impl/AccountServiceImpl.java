@@ -57,6 +57,7 @@ public class AccountServiceImpl implements AccountService {
             infoVO.setFirstIndustry(account.getFirstIndustry());
             infoVO.setSecondIndustry(account.getSecondIndustry());
             infoVO.setEmail(account.getEmail());
+            infoVO.setActiveTime(account.getActiveTime());
             return infoVO;
         }
         throw new ResourceNotFoundException("不存在此公司的账套");
@@ -79,6 +80,7 @@ public class AccountServiceImpl implements AccountService {
         account.setFirstIndustry(vo.getFirstIndustry());
         account.setSecondIndustry(vo.getSecondIndustry());
         account.setEmail(vo.getEmail());
+        account.setActiveTime(vo.getActiveTime());
         return account;
     }
 
