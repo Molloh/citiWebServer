@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
     public UserInfoVO signIn(String userName, String password) {
         User user = userRepository.findByUserName(userName);
         if (user == null){
-            throw new ResourceNotFoundException("用户名不存在!");
+            throw new ResourceNotFoundException("用户名不存在");
         }
         if (!user.getPassword().equals(MD5.encrypt(password))){
             throw new ResourceNotFoundException("密码错误");
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService{
     public UserInfoVO getUserInfo(String userName) {
         User user = userRepository.findByUserName(userName);
         if (user == null){
-            throw new ResourceNotFoundException("用户名不存在!");
+            throw new ResourceNotFoundException("用户名不存在");
         }
         UserInfoVO vo = new UserInfoVO();
         vo.setUserName(user.getUserName());

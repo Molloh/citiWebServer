@@ -47,7 +47,7 @@ public class VoucherServiceImpl implements VoucherService{
         }else {
             Voucher tempVoucher = voucherRepository.findByVoucherIdAndCompanyId(voucher.getVoucherId(),voucher.getCompanyId());
             if (tempVoucher != null){
-                throw new ResourceConflictException("该凭证已存在!");
+                throw new ResourceConflictException("该凭证已存在");
             }
             voucherRepository.save(voucher);
             return true;
@@ -61,7 +61,7 @@ public class VoucherServiceImpl implements VoucherService{
 
         Voucher voucher = voucherRepository.findOne(key);
         if (voucher == null){
-            throw new ResourceNotFoundException("该凭证不存在!");
+            throw new ResourceNotFoundException("该凭证不存在");
         }
 
         voucherRepository.delete(key);
@@ -76,7 +76,7 @@ public class VoucherServiceImpl implements VoucherService{
     private boolean modifyOneVoucher(Voucher voucher) {
         Voucher tempVoucher = voucherRepository.findByVoucherIdAndCompanyId(voucher.getVoucherId(),voucher.getCompanyId());
         if (tempVoucher == null){
-            throw new ResourceNotFoundException("该凭证不存在!");
+            throw new ResourceNotFoundException("该凭证不存在");
         }else{
             voucherRepository.save(voucher);
         }
@@ -94,7 +94,7 @@ public class VoucherServiceImpl implements VoucherService{
 
             VoucherItem tempItem = voucherItemRepository.findOne(key);
             if (tempItem != null){
-                throw new ResourceConflictException("该凭证条目已存在!");
+                throw new ResourceConflictException("该凭证条目已存在");
             }
             voucherItemRepository.save(voucherItem);
         }
@@ -110,7 +110,7 @@ public class VoucherServiceImpl implements VoucherService{
 
             VoucherItem tempItem = voucherItemRepository.findOne(key);
             if (tempItem != null){
-                throw new ResourceConflictException("该凭证条目已存在!");
+                throw new ResourceConflictException("该凭证条目已存在");
             }
         }
         voucherItemRepository.save(itemList);
@@ -120,7 +120,7 @@ public class VoucherServiceImpl implements VoucherService{
     private boolean deleteOneVoucherItems(String voucherId, long factoryId) {
         Voucher voucher = voucherRepository.findByVoucherIdAndCompanyId(voucherId,factoryId);
         if (voucher == null){
-            throw new ResourceNotFoundException("该凭证不存在!");
+            throw new ResourceNotFoundException("该凭证不存在");
         }
         voucherItemRepository.deleteAllByCompanyIdAndVoucherId(factoryId,voucherId);
         return true;
@@ -134,7 +134,7 @@ public class VoucherServiceImpl implements VoucherService{
 
         VoucherItem item = voucherItemRepository.findOne(key);
         if (item != null){
-            throw new ResourceConflictException("该凭证条目已存在!");
+            throw new ResourceConflictException("该凭证条目已存在");
         }
         voucherItemRepository.delete(key);
         return true;
@@ -143,7 +143,7 @@ public class VoucherServiceImpl implements VoucherService{
     private boolean modifyOneAmountAllItems(String voucherId, long factoryId, ArrayList<VoucherItem> itemList) {
         List<VoucherItem> list = voucherItemRepository.findByCompanyIdAndVoucherId(factoryId,voucherId);
         if (list == null) {
-            throw new ResourceNotFoundException("该凭证不存在!");
+            throw new ResourceNotFoundException("该凭证不存在");
         }
         voucherItemRepository.save(itemList);
         return true;
