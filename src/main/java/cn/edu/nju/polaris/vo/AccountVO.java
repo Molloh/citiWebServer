@@ -13,6 +13,8 @@ public class AccountVO {
 
     private String scale;
 
+    private String supplyChainIndex;
+
     private Timestamp activeTime;
 
     private String firstIndustry;
@@ -24,11 +26,12 @@ public class AccountVO {
     public AccountVO() {
     }
 
-    public AccountVO(Long id, String companyName, String location, String scale, Timestamp activeTime, String firstIndustry, String secondIndustry, String email) {
+    public AccountVO(Long id, String companyName, String location, String scale, String supplyChainIndex, Timestamp activeTime, String firstIndustry, String secondIndustry, String email) {
         this.id = id;
         this.companyName = companyName;
         this.location = location;
         this.scale = scale;
+        this.supplyChainIndex = supplyChainIndex;
         this.activeTime = activeTime;
         this.firstIndustry = firstIndustry;
         this.secondIndustry = secondIndustry;
@@ -65,6 +68,14 @@ public class AccountVO {
 
     public void setActiveTime(Timestamp activeTime) {
         this.activeTime = activeTime;
+    }
+
+    public String getSupplyChainIndex() {
+        return supplyChainIndex;
+    }
+
+    public void setSupplyChainIndex(String supplyChainIndex) {
+        this.supplyChainIndex = supplyChainIndex;
     }
 
     public String getScale() {

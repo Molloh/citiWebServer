@@ -6,6 +6,8 @@ public class AccountInfoVO {
 
     private String scale;
 
+    private String supplyChainIndex;
+
     private String firstIndustry;
 
     private String secondIndustry;
@@ -15,9 +17,10 @@ public class AccountInfoVO {
     public AccountInfoVO() {
     }
 
-    public AccountInfoVO(String location, String scale, String firstIndustry, String secondIndustry, String email) {
+    public AccountInfoVO(String location, String scale, String supplyChainIndex, String firstIndustry, String secondIndustry, String email) {
         this.location = location;
         this.scale = scale;
+        this.supplyChainIndex = supplyChainIndex;
         this.firstIndustry = firstIndustry;
         this.secondIndustry = secondIndustry;
         this.email = email;
@@ -37,6 +40,14 @@ public class AccountInfoVO {
 
     public void setScale(String scale) {
         this.scale = scale;
+    }
+
+    public String getSupplyChainIndex() {
+        return supplyChainIndex;
+    }
+
+    public void setSupplyChainIndex(String supplyChainIndex) {
+        this.supplyChainIndex = supplyChainIndex;
     }
 
     public String getFirstIndustry() {
