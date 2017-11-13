@@ -49,5 +49,7 @@ public class DateHelper {
         System.out.println(DateToMonth("2009-10-11"));
         System.out.println(Timestamp.valueOf("2010-02-03 18:00:00"));
         System.out.println(DateToTimeStamp("2010-10-11"));
+        String date="2017-11-01";
+        System.out.println(date.contains(getCurrentMonth()));
     }
 }
