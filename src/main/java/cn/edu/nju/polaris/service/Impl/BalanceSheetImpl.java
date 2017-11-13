@@ -62,35 +62,27 @@ public class BalanceSheetImpl implements BalanceSheetService {
         value[5] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"应收账款").getBalance();
         value[6] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"应收账款").getBalance();
         value[7] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"存货").getBalance();
-        value[8] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"存货").getBalance();
+        value[8] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"存货").getBalance();
         value[9] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"所有者权益合计").getBalance();
         value[10] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"所有者权益合计").getBalance();
         return value;
     }
 
     @Override
+    //得到本期期末总资产、流动资产、流动负债、本期期末应收帐款、本期期末存货
     public double[] getValue2(long company_id, String phase) {
-        return new double[0];
+        double[] value = new double[5];
+        value[0] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"资产合计").getBalance();
+        value[1] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"流动资产合计").getBalance();
+        value[2] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"流动负债合计").getBalance();
+        value[3] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"应收账款").getBalance();
+        value[4] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"存货").getBalance();
+        return value;
     }
 
     @Override
     public double getTotalAsset(long comany_id, String phase) {
         return balanceSheetRepository.findByCompanyIdAndPeriodAndName(comany_id,phase,"资产合计").getBalance();
-    }
-
-    @Override
-    public int getVoucherNumber(long company_id) {
-        return 0;
-    }
-
-    @Override
-    public String getEarliestTime(long company_id) {
-        return null;
-    }
-
-    @Override
-    public String getLatestTime(long company_id) {
-        return null;
     }
 
     /**

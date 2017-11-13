@@ -41,25 +41,4 @@ public interface BalanceSheetService {
      * @return
      */
     public double getTotalAsset(long company_id,String phase);
-
-    /**
-     * 得到所有凭证数量
-     * @param company_id 公司id
-     * @return
-     */
-    public int getVoucherNumber(long company_id);
-
-    /**
-     * 得到凭证最早时间
-     * @param company_id 公司id
-     * @return
-     */
-    public String getEarliestTime(long company_id);
-
-    /**
-     * 得到凭证最晚时间
-     * @param company_id 公司id
-     * @return
-     */
-    public String getLatestTime(long company_id);
 }
