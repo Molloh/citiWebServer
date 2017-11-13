@@ -36,6 +36,25 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      */
     void deleteByCompanyIdAndVoucherIdAndVoucherLinesAndSupportLines(Long companyId,String voucherId,int voucherLines,int supportLines);
 
+    /**
+     * 根据公司id，收入/发出方名称，日期为期数
+     * @param compangId
+     * @param companyName 当companyId所代表公司为发出方时，companyName为收入方名称   当companyId所代表公司为收入方时，companyName为发出方名称
+     * @param date yyyy-mm
+     * @return
+     */
+    @Query(value = "select * from support_item1 where company_id=?1 and date_format(date,'%Y-%m')=?3 and end_side=?2",nativeQuery = true)
+    List<SupportItem1> findAllByCompanyIdAndEndSideAndDate(Long compangId,String companyName,String date);
+
+    /**
+     * 根据公司id和时间 获得当期辅助信息
+     * @param companyId
+     * @param date 期数
+     * @return
+     */
+    @Query(value = "select * from support_item1 where company_id=?1 and date_format(date,'%Y-%m')=?2",nativeQuery = true)
+    List<SupportItem1> findAllItemByDate(Long companyId,String date);
+
 
     /**
      * 根据公司id和时间之后 获得原材料辅助信息
