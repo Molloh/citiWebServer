@@ -1,7 +1,6 @@
 package cn.edu.nju.polaris.entity;
 
 import cn.edu.nju.polaris.entity.MultiKeysClass.SupportItemMultiKeysClass;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.*;
 import java.io.Serializable;

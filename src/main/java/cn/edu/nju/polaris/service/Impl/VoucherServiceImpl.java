@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 import cn.edu.nju.polaris.util.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
 
 @Service
 public class VoucherServiceImpl implements VoucherService{
@@ -151,8 +149,8 @@ public class VoucherServiceImpl implements VoucherService{
 
 
     /**
-     * 需要对凭证 凭证条目 余额 辅助信息！！！进行修改
-     * 这边传入的date的格式需要是时间戳的格式 "yyyy-mm-dd hh:mm:ss"
+     * 需要对凭证 凭证条目 科目余额  科目记录 辅助信息！！！这五项属性进行修改
+     * 这边传入的date的格式需要是日期的格式 "yyyy-mm-dd" 在进行凭证属性设置的时候会把转换为时间戳的格式
      * @param voucherVO
      * @return
      */
@@ -163,7 +161,6 @@ public class VoucherServiceImpl implements VoucherService{
         voucher.setCompanyId(voucherVO.getCompany_id());
         voucher.setVoucherId(voucherVO.getVoucher_id());
         voucher.setDate(DateHelper.DateToTimeStamp(voucherVO.getDate()));
-        //TODO 时间戳的转换可能会出问题
         voucher.setRemark(voucherVO.getRemark());
         voucher.setVoucherMaker(voucherVO.getVoucher_maker());
         //凭证赋值完成
@@ -213,6 +210,68 @@ public class VoucherServiceImpl implements VoucherService{
                 subjectsBalanceRepository.save(afterBalance);
 
                 itemList.add(oneItem);
+
+                int voucherLine=count+1;
+                if(oneItemVo.getSupportOneList().size()!=0&&oneItemVo.getSupportOneList()!=null){
+                    List<SupportItemOneVo> itemOneVoList=oneItemVo.getSupportOneList();
+                    for(int i=0;i<itemOneVoList.size();i++){
+                        int supportLine=i+1;
+                        SupportItemOneVo itemOneVo=itemOneVoList.get(i);
+                        SupportItem1 item1=new SupportItem1();
+
+                        try{
+                            item1.setCompanyId(itemOneVo.getCompanyId());
+                            item1.setVoucherId(itemOneVo.getVoucherId());
+                            item1.setVoucherLines(itemOneVo.getVoucherLines());
+                            item1.setSupportLines(itemOneVo.getSupportLines());
+                            item1.setEndSide(itemOneVo.getEndSide());
+                            item1.setSubjects(itemOneVo.getSubjectId());
+                            item1.setVariety(itemOneVo.getVariety());
+                            item1.setDate(DateHelper.DateToTimeStamp(itemOneVo.getDate()));
+                            item1.setNew(itemOneVo.getNew());
+                            item1.setDispatchOntime(itemOneVo.getDispatchOnTime());
+                            item1.setReturnedPurchase(itemOneVo.getReturnedPurchase());
+                            item1.setInputNum(itemOneVo.getInputNum());
+                            item1.setInputUnitPrice(itemOneVo.getInputUnitPrice());
+                            item1.setInputAmount(itemOneVo.getInputAmount());
+                            item1.setOutputNum(itemOneVo.getOutputNum());
+                            item1.setOutputUnitPrice(itemOneVo.getOutputUnitPrice());
+                            item1.setOutputAmount(itemOneVo.getOutputAmount());
+                            item1.setEndingStocks(itemOneVo.getEndingStocks());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        supportItem1Repository.save(item1);
+                    }
+
+                }
+                if(oneItemVo.getSupportTwoList().size()!=0&&oneItemVo.getSupportTwoList()!=null){
+                    List<SupportItemTwoVo> itemTwoVoList=oneItemVo.getSupportTwoList();
+                    for(int i=0;i<itemTwoVoList.size();i++){
+                        int supportLine=i+1;
+                        SupportItemTwoVo itemTwoVo=itemTwoVoList.get(i);
+                        SupportItem2 item2=new SupportItem2();
+
+                        try{
+                            item2.setCompanyId(itemTwoVo.getCompanyId());
+                            item2.setVoucherId(itemTwoVo.getVoucherId());
+                            item2.setVoucherLines(itemTwoVo.getVoucherLines());
+                            item2.setSupportLines(itemTwoVo.getSupportLines());
+                            item2.setSubjects(itemTwoVo.getSubjectId());
+                            item2.setCompanyName(itemTwoVo.getCompanyName());
+                            item2.setDebitDate(DateHelper.DateToTimeStamp(itemTwoVo.getDebitDate()));
+                            item2.setRepaymentDDL(DateHelper.DateToTimeStamp(itemTwoVo.getRepayLimit()));
+                            item2.setAmount(itemTwoVo.getAmount());
+                            item2.setDiscountPolicy(itemTwoVo.getDiscountPolicy());
+                            item2.setDiscountDDL(DateHelper.DateToTimeStamp(itemTwoVo.getDiscountLimit()));
+                            item2.setRemark(itemTwoVo.getRemark());
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        supportItem2Repository.save(item2);
+                    }
+                }
             }
         }
         //先添加凭证再添加凭证条目
@@ -281,12 +340,53 @@ public class VoucherServiceImpl implements VoucherService{
         }
     }
 
+    /**
+     * 需要取出voucher voucherItem SupportOne SupportTwo
+     * TODO 效率可能会很慢
+     * @param factoryId
+     * @return
+     */
     @Override
     public ArrayList<VoucherVO> getCurrentPeriodAllVoucher(long factoryId) {
         String currentMonth=DateHelper.getCurrentMonth();
-        //TODO
 
-        return null;
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+        ArrayList<VoucherVO> resultVoList=new ArrayList<>();
+
+        for(int count=0;count<allVoucherList.size();count++){
+            String currentDate=String.valueOf(allVoucherList.get(count).getDate()).substring(0,10);
+
+            if(!currentDate.contains(currentMonth)){
+                continue;
+            }else{
+                VoucherVO oneVoucherVo=voucherToVoucherVo(allVoucherList.get(count));
+                //条目 辅助信息一 辅助信息二
+                List<VoucherItem> itemList=voucherItemRepository.findByCompanyIdAndVoucherId(factoryId,allVoucherList.get(count).getVoucherId());
+                List<VoucherItemVo> itemVoList=new ArrayList<>();
+                for(int i=0;i<itemList.size();i++){
+                    itemVoList.add(voucherItemToItemVo(itemList.get(i)));
+                }
+
+                for(int i=0;i<itemVoList.size();i++){
+                    List<SupportItem1> item1List=supportItem1Repository.findAllByCompanyIdAndVoucherIdAndVoucherLines(factoryId,allVoucherList.get(count).getVoucherId(),itemVoList.get(i).getLines());
+                    List<SupportItemOneVo> itemOneVoList=supportOneListToVoList(item1List);
+                    List<SupportItem2> item2List=supportItem2Repository.findAllByCompanyIdAndVoucherIdAndVoucherLines(factoryId,allVoucherList.get(count).getVoucherId(),itemVoList.get(i).getLines());
+                    List<SupportItemTwoVo> itemTwoVoList=supportTwoListToVoList(item2List);
+
+                    itemVoList.get(i).setSupportOneList(itemOneVoList);
+                    itemVoList.get(i).setSupportTwoList(itemTwoVoList);
+                }
+
+                oneVoucherVo.setItemList((ArrayList<VoucherItemVo>) itemVoList);
+                oneVoucherVo.setTotalVo(getVoucherTotal((ArrayList<VoucherItem>) itemList));
+
+                resultVoList.add(oneVoucherVo);
+            }
+
+        }
+
+
+        return resultVoList;
     }
 
     @Override
@@ -482,7 +582,206 @@ public class VoucherServiceImpl implements VoucherService{
 
     @Override
     public ArrayList<VoucherVO> getSearchedVoucher(VoucherSearchVo searchVo, long factoryId) {
-        return null;
+        //存储最终结果
+        ArrayList<VoucherVO> resultList=new ArrayList<>();
+        //存储最终结果的凭证编号
+        ArrayList<String> resultVoucherIdList=new ArrayList<>();
+
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+        List<VoucherVO> allVoucherVoList=new ArrayList<>();
+
+
+        for(int count=0;count<allVoucherList.size();count++){
+            VoucherVO oneVoucherVo=voucherToVoucherVo(allVoucherList.get(count));
+            List<VoucherItem> itemList=voucherItemRepository.findByCompanyIdAndVoucherId(factoryId,allVoucherList.get(count).getVoucherId());
+            List<VoucherItemVo> itemVoList=new ArrayList<>();
+            for(int i=0;i<itemList.size();i++){
+                itemVoList.add(voucherItemToItemVo(itemList.get(i)));
+            }
+            oneVoucherVo.setItemList((ArrayList<VoucherItemVo>) itemVoList);
+            oneVoucherVo.setTotalVo(getVoucherTotal((ArrayList<VoucherItem>) itemList));
+
+            allVoucherVoList.add(oneVoucherVo);
+        }
+
+
+        for(int count=0;count<allVoucherVoList.size();count++){
+
+            if(isOneVoucherVoSearched(searchVo,allVoucherVoList.get(count))){
+                resultVoucherIdList.add(allVoucherVoList.get(count).getVoucher_id());
+
+            }
+
+        }
+
+
+        if(resultVoucherIdList.size()==0){
+            return null;
+        }else{
+            for(int count=0;count<resultVoucherIdList.size();count++){
+                resultList.add(getOneVoucher(resultVoucherIdList.get(count),factoryId));
+
+
+            }
+            return resultList;
+        }
+
+
+    }
+
+    /**
+     * 用来判断一个VoucherVo是否符合搜索条件
+     * @param searchVo
+     * @param vo
+     * @return
+     */
+    private boolean isOneVoucherVoSearched(VoucherSearchVo searchVo,VoucherVO vo){
+        boolean result=true;
+
+        //有一个条件不满足就返回false 全部满足才能返回true
+
+        //处理会计期间
+        if(searchVo.getStartPeriod().equals(searchVo.getEndPeriod())){
+            String period=searchVo.getStartPeriod();
+            String oneMonth= DateConvert.periodToMonth(period);
+
+            //月份不包含搜索的月就直接返回false
+            if(!vo.getDate().contains(oneMonth)){
+                return false;
+            }
+        }else{
+            String startMonth=DateConvert.periodToMonth(searchVo.getStartPeriod());
+            String endMonth=DateConvert.periodToMonth(searchVo.getEndPeriod());
+            HashSet<String> betweenMonthSet= null;
+            try {
+                betweenMonthSet = DateConvert.getBetweenMonth(startMonth,endMonth);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            String currentMonth=vo.getDate().substring(0,vo.getDate().lastIndexOf("-"));
+
+            if(!betweenMonthSet.contains(currentMonth)){
+                return false;
+            }
+        }
+
+        //处理凭证字
+        String searchCharacter=searchVo.getCharacter();
+        if(!searchCharacter.equals("全部")){
+            if(!searchCharacter.equals(vo.getVoucher_id().split("-")[0])){
+                return false;
+            }
+        }
+
+        //处理制单人
+        String searchMaker=searchVo.getMaker();
+        if(!searchMaker.equals("全部")){
+            if(!searchMaker.equals(vo.getVoucher_maker())){
+                return false;
+            }
+        }
+
+        //处理摘要和科目id 摘要和科目id都是包含的关系
+        String searchAbstract=searchVo.getAbstracts();
+        String searchSubject=searchVo.getSubjectId();
+
+        ArrayList<VoucherItemVo> itemVoArrayList=vo.getItemList();
+
+        //每一行都没有摘要 每一行都没有科目id才返回false
+
+        //需要分别处理摘要和科目id
+
+        boolean abstractResult=false;
+        if(!(searchAbstract==null||searchAbstract.length()<=0)){
+            for(int count=0;count<itemVoArrayList.size();count++){
+                VoucherItemVo oneItemVo=itemVoArrayList.get(count);
+                boolean result1;
+                String oneAbstract=oneItemVo.getAbstracts();
+
+                if(searchAbstract.indexOf(oneAbstract)!=-1||oneAbstract.indexOf(searchAbstract)!=-1){
+                    result1=true;
+                }else{
+                    result1=false;
+                }
+
+                abstractResult=abstractResult||result1;
+            }
+
+            if(abstractResult==false){
+                return false;
+            }
+        }
+
+        boolean subjectResult=false;
+        if(!(searchSubject==null||searchSubject.length()<=0)){
+            for(int count=0;count<itemVoArrayList.size();count++){
+                VoucherItemVo oneItemVo=itemVoArrayList.get(count);
+                boolean result2;
+                String oneSubject=oneItemVo.getSubjectId();
+
+                if(searchSubject.indexOf(oneSubject)!=-1||oneSubject.indexOf(searchSubject)!=-1){
+                    result2=true;
+                }else{
+                    result2=false;
+                }
+
+                subjectResult=subjectResult||result2;
+            }
+
+            if(subjectResult==false){
+                return false;
+            }
+        }
+
+        //处理金额
+        double searchLowPrice=searchVo.getLowPrice();
+        double searchHighPrice=searchVo.getHighPrice();
+
+        if(!(searchLowPrice==-1.0&&searchHighPrice==-1.0)){
+            double currentPrice=vo.getTotalVo().getCreditAmount();
+            if(searchLowPrice==-1.0){
+                if(currentPrice>searchHighPrice){
+                    return false;
+                }
+            }else if(searchHighPrice==-1.0){
+                if(currentPrice<searchLowPrice){
+                    return false;
+                }
+
+
+            }else{
+                if(currentPrice<searchLowPrice||currentPrice>searchHighPrice){
+                    return false;
+                }
+            }
+        }
+
+        //处理凭证号
+        int searchLowNumber=searchVo.getLowVoucherNumber();
+        int searchHighNumber=searchVo.getHighVoucherNumber();
+
+        if(!(searchLowNumber==-1&&searchHighNumber==-1)){
+            int currentNumber=Integer.valueOf(vo.getVoucher_id().split("-")[1]);
+            if(searchLowNumber==-1){
+                if(currentNumber>searchHighNumber){
+                    return false;
+                }
+            }else if(searchHighNumber==-1){
+
+                if(currentNumber<searchLowNumber){
+                    return false;
+                }
+
+            }else{
+                if(currentNumber<searchLowNumber||currentNumber>searchHighNumber){
+                    return false;
+                }
+            }
+        }
+
+
+        return result;
     }
 
     @Override
