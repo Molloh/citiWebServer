@@ -1,6 +1,5 @@
 package cn.edu.nju.polaris.vo;
 
-import javafx.beans.property.*;
 
 /**
  * Created by 费慧通 on 2017/8/7.

@@ -1,9 +1,6 @@
 package cn.edu.nju.polaris.entity;
 
 
-import org.springframework.context.annotation.Configuration;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import sun.rmi.runtime.Log;
 
 import javax.persistence.*;
 
