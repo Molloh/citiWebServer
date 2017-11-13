@@ -7,12 +7,12 @@ package cn.edu.nju.polaris.vo.Inventory;
  */
 public class InventoryMonitorItemVo {
     private String variety;     //种类
-    private int inventory;      //库存量
-    private int safe_inventory;     //安全库存量
+    private double inventory;      //库存量
+    private double safe_inventory;     //安全库存量
     private String punctual_delivery_rate;      //准时交货率(百分比形式)
     private String refund_rate;     //退货率（百分比形式）
 
-    public InventoryMonitorItemVo(String variety, int inventory, int safe_inventory, String punctual_delivery_rate, String refund_rate) {
+    public InventoryMonitorItemVo(String variety, double inventory, double safe_inventory, String punctual_delivery_rate, String refund_rate) {
         this.variety = variety;
         this.inventory = inventory;
         this.safe_inventory = safe_inventory;
@@ -28,19 +28,19 @@ public class InventoryMonitorItemVo {
         this.variety = variety;
     }
 
-    public int getInventory() {
+    public double getInventory() {
         return inventory;
     }
 
-    public void setInventory(int inventory) {
+    public void setInventory(double inventory) {
         this.inventory = inventory;
     }
 
-    public int getSafe_inventory() {
+    public double getSafe_inventory() {
         return safe_inventory;
     }
 
-    public void setSafe_inventory(int safe_inventory) {
+    public void setSafe_inventory(double safe_inventory) {
         this.safe_inventory = safe_inventory;
     }
 

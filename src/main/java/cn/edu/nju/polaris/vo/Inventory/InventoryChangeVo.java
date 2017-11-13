@@ -5,9 +5,9 @@ package cn.edu.nju.polaris.vo.Inventory;
  */
 public class InventoryChangeVo {
     private String time; //YYYY-MM-DD
-    private int inventory; //库存量
+    private double inventory; //库存量
 
-    public InventoryChangeVo(String time, int inventory){
+    public InventoryChangeVo(String time, double inventory) {
         this.time = time;
         this.inventory = inventory;
     }
@@ -16,15 +16,15 @@ public class InventoryChangeVo {
         return time;
     }
 
-    public int getInventory() {
-        return inventory;
-    }
-
     public void setTime(String time) {
         this.time = time;
     }
 
-    public void setInventory(int inventory) {
+    public double getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(double inventory) {
         this.inventory = inventory;
     }
 }

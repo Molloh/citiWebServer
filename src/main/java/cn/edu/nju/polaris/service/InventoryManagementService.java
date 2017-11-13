@@ -56,7 +56,14 @@ public interface InventoryManagementService {
      * @param company_id 公司id
      * @return
      */
-    public ArrayList<SafeInventoryRateVo> getSafeInventoryRate(long company_id);
+    public ArrayList<SafeInventoryRateVo> getRawMaterialSafeInventoryRate(long company_id);
+
+    /**
+     * 产品库存量与安全库存量的关系
+     * @param company_id 公司id
+     * @return
+     */
+    public ArrayList<SafeInventoryRateVo> getProductSafeInventoryRate(long company_id);
 
     /**
      * @param company_id1 供应商
