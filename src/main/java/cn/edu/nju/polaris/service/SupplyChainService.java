@@ -31,9 +31,9 @@ public interface SupplyChainService {
 	 * @param Manufacturer_id
 	 * @param Distributor_id
 	 * @param time
-	 * @return 供应链成员绩效评价(模块一)平均值
+	 * @return 供应链成员绩效评价(模块一)平均值、优秀值、较高值
 	 */
-	public List<SupplyModuleOne> getSupplyChainMemberAverage(long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
+	public List<List<SupplyModuleOne>> getSupplyChainMemberReference(long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
 	
 	/**
 	 * 
@@ -59,7 +59,7 @@ public interface SupplyChainService {
 	 * @param Manufacturer_id 生产商
 	 * @param Distributor_id  分销商
 	 * @param time yyyy-mm
-	 * @return 模块三：供应链整体绩效评价
+	 * @return 模块三：供应链整体绩效评价(10个数据)
 	 */
 	public double[] getSupplyChainTotal(long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
 
