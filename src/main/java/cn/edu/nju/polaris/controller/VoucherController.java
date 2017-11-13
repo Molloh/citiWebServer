@@ -2,6 +2,7 @@ package cn.edu.nju.polaris.controller;
 
 import cn.edu.nju.polaris.service.VoucherService;
 import cn.edu.nju.polaris.vo.SubjectVO;
+import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,4 +25,9 @@ public class VoucherController {
         return voucherService.getOneVoucher(voucherId,companyId);
     }
 
+    @PutMapping(value = "/search")
+    public List<VoucherVO> getSearchedVoucher(@RequestBody VoucherSearchVo vo,
+                                              @RequestParam Long companyId){
+        return voucherService.getSearchedVoucher(vo,companyId);
+    }
 }

@@ -2,6 +2,8 @@ package cn.edu.nju.polaris.repository;
 
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.VoucherItem;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
+@CacheConfig(cacheNames = "voucherItems")
 public interface VoucherItemRepository extends JpaRepository<VoucherItem,VoucherItemMultiKeysClass>{
 
     /**
@@ -17,6 +20,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param voucherId
      * @return
      */
+    @Cacheable
     List<VoucherItem> findByCompanyIdAndVoucherId(Long companyId,String voucherId);
 
     /**

@@ -4,10 +4,14 @@ import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
 import cn.edu.nju.polaris.entity.Voucher;
 import cn.edu.nju.polaris.entity.VoucherItem;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+@CacheConfig(cacheNames = "vouchers")
 public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKeysClass>{
 
     /**
@@ -16,6 +20,7 @@ public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKey
      * @param companyId
      * @return
      */
+    @Cacheable
     Voucher findByVoucherIdAndCompanyId(String voucherId,Long companyId);
 
     /**
