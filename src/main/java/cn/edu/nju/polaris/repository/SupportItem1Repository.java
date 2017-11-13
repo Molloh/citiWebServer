@@ -37,6 +37,22 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
     void deleteByCompanyIdAndVoucherIdAndVoucherLinesAndSupportLines(Long companyId,String voucherId,int voucherLines,int supportLines);
 
     /**
+     * 得到一个公司所有原材料的最新一条记录
+     * @param companyId
+     * @return
+     */
+    @Query(value = "",nativeQuery = true)
+    List<SupportItem1> findNewestRawMaterial(Long companyId);
+
+    /**
+     * 得到一个公司所有产品的最新一条记录
+     * @param companyId
+     * @return
+     */
+    @Query(value = "",nativeQuery = true)
+    List<SupportItem1>findNewestProduct(Long companyId);
+
+    /**
      * 根据公司id，收入/发出方名称，日期为期数
      * @param compangId
      * @param companyName 当companyId所代表公司为发出方时，companyName为收入方名称   当companyId所代表公司为收入方时，companyName为发出方名称
