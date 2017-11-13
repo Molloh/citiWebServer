@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.edu.nju.polaris.entity.VoucherItem;
-import cn.edu.nju.polaris.service.BalanceSheetService;
 
 /**
  * 
@@ -110,6 +109,7 @@ public class TableHelper {
 		return r[1];
 	}
 	
+	
 	/**
 	 * 
 	 * @param list
@@ -177,5 +177,22 @@ public class TableHelper {
 		return res;
 	}
 	
+	public String lastTime(String time){
+		System.out.print(time);
+		String temp[]=time.split("-");
+		int year=Integer.parseInt(temp[0]);
+		int month=Integer.parseInt(temp[1]);
+		if(month!=1)
+			month--;
+		else{
+			year--;
+			month=12;
+		}
+		if(month<10)
+			return String.valueOf(year)+"-0"+String.valueOf(month);
+		else
+			return String.valueOf(year)+"-"+String.valueOf(month);
+		
+	}
 	
 }

@@ -1,11 +1,11 @@
 package cn.edu.nju.polaris.sheet;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.entity.BalanceSheet;
 import cn.edu.nju.polaris.entity.CashflowSheet;
@@ -15,6 +15,7 @@ import cn.edu.nju.polaris.repository.CashflowSheetRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
 import cn.edu.nju.polaris.service.Impl.TableHelper;
 
+@Service
 public class CashFlowTableSheetCal {
 	private VoucherItemRepository vir;
 	private TableHelper helper;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.entity.CashflowSheet;
 import cn.edu.nju.polaris.repository.CashflowSheetRepository;
@@ -17,6 +18,7 @@ import cn.edu.nju.polaris.vo.Pro_and_CashVo;
  * @author hyf
  *
  */
+@Service
 public class CashFlowImpl implements CashFlowService{
 	private TableHelper helper;
 	private CashflowSheetRepository cfsr;
