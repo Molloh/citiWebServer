@@ -2,6 +2,7 @@ package cn.edu.nju.polaris.service.Impl;
 
 import cn.edu.nju.polaris.entity.Account;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
+import cn.edu.nju.polaris.exception.ResourceNotFoundException;
 import cn.edu.nju.polaris.repository.AccountRepository;
 import cn.edu.nju.polaris.service.AccountService;
 import cn.edu.nju.polaris.vo.AccountInfoVO;
@@ -28,6 +29,7 @@ public class AccountServiceImpl implements AccountService {
             account.setEmail(vo.getEmail());
             account.setFirstIndustry(vo.getFirstIndustry());
             account.setSecondIndustry(vo.getSecondIndustry());
+            account.setSupplyChainIndex(vo.getSupplyChainIndex());
             account.setScale(vo.getScale());
             accountRepository.save(account);
         }
@@ -36,10 +38,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void signUp(AccountVO vo) {
         if (accountRepository.findByEmail(vo.getEmail()) != null){
-            throw new ResourceConflictException("该邮箱已被注册!");
+            throw new ResourceConflictException("该邮箱已被注册");
         }
         if (accountRepository.findByCompanyName(vo.getCompanyName()) != null){
-            throw new ResourceConflictException("该公司已被注册!");
+            throw new ResourceConflictException("该公司已被注册");
         }
         accountRepository.save(vo2Entity(vo));
     }
@@ -51,12 +53,14 @@ public class AccountServiceImpl implements AccountService {
             AccountInfoVO infoVO = new AccountInfoVO();
             infoVO.setLocation(account.getLocation());
             infoVO.setScale(account.getScale());
+            infoVO.setSupplyChainIndex(account.getSupplyChainIndex());
             infoVO.setFirstIndustry(account.getFirstIndustry());
             infoVO.setSecondIndustry(account.getSecondIndustry());
             infoVO.setEmail(account.getEmail());
+            infoVO.setActiveTime(account.getActiveTime());
             return infoVO;
         }
-        return null;
+        throw new ResourceNotFoundException("不存在此公司的账套");
     }
 
     @Override
@@ -70,11 +74,13 @@ public class AccountServiceImpl implements AccountService {
         Account account = new Account();
         account.setId(vo.getId());
         account.setCompanyName(vo.getCompanyName());
+        account.setSupplyChainIndex(vo.getSupplyChainIndex());
         account.setLocation(vo.getLocation());
         account.setActiveTime(vo.getActiveTime());
         account.setFirstIndustry(vo.getFirstIndustry());
         account.setSecondIndustry(vo.getSecondIndustry());
         account.setEmail(vo.getEmail());
+        account.setActiveTime(vo.getActiveTime());
         return account;
     }
 

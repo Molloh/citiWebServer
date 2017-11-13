@@ -1,26 +1,42 @@
 package cn.edu.nju.polaris.vo;
 
+import java.sql.Timestamp;
+
 public class AccountInfoVO {
 
     private String location;
 
     private String scale;
 
+    private String supplyChainIndex;
+
     private String firstIndustry;
 
     private String secondIndustry;
+
+    private Timestamp activeTime;
 
     private String email;
 
     public AccountInfoVO() {
     }
 
-    public AccountInfoVO(String location, String scale, String firstIndustry, String secondIndustry, String email) {
+    public AccountInfoVO(String location, String scale, String supplyChainIndex, String firstIndustry, String secondIndustry, Timestamp activeTime, String email) {
         this.location = location;
         this.scale = scale;
+        this.supplyChainIndex = supplyChainIndex;
         this.firstIndustry = firstIndustry;
         this.secondIndustry = secondIndustry;
+        this.activeTime = activeTime;
         this.email = email;
+    }
+
+    public Timestamp getActiveTime() {
+        return activeTime;
+    }
+
+    public void setActiveTime(Timestamp activeTime) {
+        this.activeTime = activeTime;
     }
 
     public String getLocation() {
@@ -37,6 +53,14 @@ public class AccountInfoVO {
 
     public void setScale(String scale) {
         this.scale = scale;
+    }
+
+    public String getSupplyChainIndex() {
+        return supplyChainIndex;
+    }
+
+    public void setSupplyChainIndex(String supplyChainIndex) {
+        this.supplyChainIndex = supplyChainIndex;
     }
 
     public String getFirstIndustry() {

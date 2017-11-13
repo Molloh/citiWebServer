@@ -14,6 +14,7 @@ import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.CashflowSheetRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
 import cn.edu.nju.polaris.service.Impl.TableHelper;
+import org.springframework.stereotype.Component;
 
 @Service
 public class CashFlowTableSheetCal {

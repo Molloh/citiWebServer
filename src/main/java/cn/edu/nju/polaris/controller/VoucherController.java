@@ -1,10 +1,11 @@
 package cn.edu.nju.polaris.controller;
 
 import cn.edu.nju.polaris.service.VoucherService;
+import cn.edu.nju.polaris.vo.SubjectVO;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/vouchers")
@@ -14,6 +15,13 @@ public class VoucherController {
 
     public VoucherController(VoucherService voucherService){
         this.voucherService = voucherService;
+    }
+
+
+    @GetMapping(value = "/{voucherId}")
+    public VoucherVO getVoucher(@PathVariable String voucherId,
+                                @RequestParam Long companyId){
+        return voucherService.getOneVoucher(voucherId,companyId);
     }
 
 }

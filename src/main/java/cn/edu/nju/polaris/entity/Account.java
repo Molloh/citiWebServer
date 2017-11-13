@@ -21,6 +21,9 @@ public class Account {
     @Column(name = "scale")
     private String scale;// 公司规模
 
+    @Column(name = "supply_chain_index")
+    private String supplyChainIndex; // 公司所处供应链位置
+
     @Column(name = "active_time")
     private Timestamp activeTime; // 账套启用时间
 
@@ -55,6 +58,14 @@ public class Account {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getSupplyChainIndex() {
+        return supplyChainIndex;
+    }
+
+    public void setSupplyChainIndex(String supplyChainIndex) {
+        this.supplyChainIndex = supplyChainIndex;
     }
 
     public Timestamp getActiveTime() {
@@ -104,6 +115,7 @@ public class Account {
                 ", companyName='" + companyName + '\'' +
                 ", location='" + location + '\'' +
                 ", scale='" + scale + '\'' +
+                ", supplyChainIndex='" + supplyChainIndex + '\'' +
                 ", activeTime=" + activeTime +
                 ", firstIndustry='" + firstIndustry + '\'' +
                 ", secondIndustry='" + secondIndustry + '\'' +

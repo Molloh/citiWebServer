@@ -3,6 +3,10 @@ package cn.edu.nju.polaris.service;
 import java.util.List;
 
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
+import cn.edu.nju.polaris.entity.SupplyChain;
+import cn.edu.nju.polaris.vo.SupplyChainVO;
+
+import java.util.List;
 
 /**
  * 
@@ -58,4 +62,18 @@ public interface SupplyChainService {
 	 * @return 模块三：供应链整体绩效评价
 	 */
 	public double[] getSupplyChainTotal(long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
+
+    List<SupplyChainVO> findChainByUpstreamCompany(Long companyId);
+
+    List<SupplyChainVO> findChainByMidstreamCompany(Long companyId);
+
+    List<SupplyChainVO> findChainByDownstreamCompany(Long companyId);
+
+    List<SupplyChainVO> findAll();
+
+    void addOneChainForUpstream(SupplyChainVO vo);
+
+    void addOneChainForMidStream(SupplyChainVO vo);
+
+    void addOneChainForDownStream(SupplyChainVO vo);
 }

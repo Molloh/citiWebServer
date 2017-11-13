@@ -14,4 +14,10 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItem,Lon
      */
     List<InventoryItem> findAllByCategory(String category);
 
+    /**
+     *
+     * @param name
+     * @return
+     */
+    InventoryItem findByName(String name);
 }
