@@ -124,6 +124,8 @@ public class VoucherServiceImpl implements VoucherService{
         return true;
     }
 
+
+
     private boolean deleteOneItem(String voucherId, long factoryId, int line) {
         VoucherItemMultiKeysClass key = new VoucherItemMultiKeysClass();
         key.setVoucherId(voucherId);
@@ -145,6 +147,96 @@ public class VoucherServiceImpl implements VoucherService{
         }
         voucherItemRepository.save(itemList);
         return true;
+    }
+    //需要添加对辅助信息一、二的操作！！！
+
+    /**
+     * 删除一个凭证中全部的辅助信息一
+     * @param voucherId
+     * @param factoryId
+     * @return
+     */
+    private boolean deleteOneVoucherAllSupportOne(String voucherId,long factoryId){
+        return false;
+    }
+
+    /**
+     * 删除一个凭证条目对应的全部辅助信息一
+     * @param voucherId
+     * @param factory
+     * @param voucherLine
+     * @return
+     */
+    private boolean deleteOneVoucherItemAllSupportOne(String voucherId,long factory,int voucherLine){
+        return false;
+    }
+
+    /**
+     * 删除一条辅助信息一
+     * @param voucherId
+     * @param factoryId
+     * @param voucherLine
+     * @param supportLine
+     * @return
+     */
+    private boolean deleteOneSupportOne(String voucherId,long factoryId,int voucherLine,int supportLine){
+        return false;
+    }
+
+    /**
+     * 删除一个凭证中全部的辅助信息二
+     * @param voucherId
+     * @param factoryId
+     * @return
+     */
+    private boolean deleteOneVoucherAllSupportTwo(String voucherId,long factoryId){
+        return false;
+    }
+
+    /**
+     * 删除一个凭证条目对应的全部辅助信息二
+     * @param voucherId
+     * @param factory
+     * @param voucherLine
+     * @return
+     */
+    private boolean deleteOneVoucherItemAllSupportTwo(String voucherId,long factory,int voucherLine){
+        return false;
+    }
+
+    /**
+     * 删除一条辅助信息一
+     * @param voucherId
+     * @param factoryId
+     * @param voucherLine
+     * @param supportLine
+     * @return
+     */
+    private boolean deleteOneSupportTwo(String voucherId,long factoryId,int voucherLine,int supportLine){
+        return false;
+    }
+
+    /**
+     * 修改一条凭证条目对应的全部的辅助信息一
+     * @param voucherId
+     * @param factoryId
+     * @param voucherLine
+     * @return
+     */
+    private boolean modifyOneItemAllSupportOne(String voucherId,long factoryId,int voucherLine,List<SupportItem1> item1List){
+        return false;
+    }
+
+    /**
+     * 修改一条凭证条目对应的全部的辅助信息二
+     * @param voucherId
+     * @param factoryId
+     * @param voucherLine
+     * @param item2List
+     * @return
+     */
+    private boolean modifyOneItemAllSupportTwo(String voucherId,long factoryId,int voucherLine,List<SupportItem2> item2List){
+        return false;
     }
 
 
@@ -629,6 +721,8 @@ public class VoucherServiceImpl implements VoucherService{
 
     }
 
+
+
     /**
      * 用来判断一个VoucherVo是否符合搜索条件
      * @param searchVo
@@ -784,8 +878,30 @@ public class VoucherServiceImpl implements VoucherService{
         return result;
     }
 
+    /**
+     * 需要删除voucher voucherItem supportItem1 supportItem2 subjectRecord需要修改subjectBalance
+     * @param voucherId
+     * @param factoryId
+     * @return
+     */
+    @Override
+    public boolean deleteOneVoucherVo(String voucherId, long factoryId) {
+        boolean result1=deleteOneVoucher(voucherId,factoryId);
+        boolean result2=deleteOneVoucherItems(voucherId,factoryId);
+        //删除辅助信息一
+        //删除辅助信息二
+        subjectsRecordRepository.deleteAllByCompanyIdAndVoucherId(factoryId,voucherId);
+
+        return false;
+    }
+
+
+
     @Override
     public boolean deleteSelectedVoucher(ArrayList<String> voucherIdList, long factoryId) {
+
+
+
         return false;
     }
 
@@ -807,6 +923,11 @@ public class VoucherServiceImpl implements VoucherService{
     @Override
     public ArrayList<String> getAllVoucherMaker(long factoryId) {
         return null;
+    }
+
+    @Override
+    public double getCurrentVarietyEndingStocks(long factoryId, String variety) {
+        return 0;
     }
 
 

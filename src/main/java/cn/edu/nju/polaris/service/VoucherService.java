@@ -88,6 +88,14 @@ public interface VoucherService {
     public ArrayList<VoucherVO> getSearchedVoucher(VoucherSearchVo searchVo,long factoryId);
 
     /**
+     * 删除一条凭证
+     * @param voucherId
+     * @param factoryId
+     * @return
+     */
+    public boolean deleteOneVoucherVo(String voucherId,long factoryId);
+
+    /**
      * 删除所选择的凭证信息
      * @param voucherIdList
      * @param factoryId
@@ -127,4 +135,11 @@ public interface VoucherService {
      */
     public ArrayList<String> getAllVoucherMaker(long factoryId);
 
+    /**
+     * 获得当前的辅助信息一种的某种类的结存量
+     * @param factoryId
+     * @param variety
+     * @return
+     */
+    public double getCurrentVarietyEndingStocks(long factoryId,String variety);
 }
