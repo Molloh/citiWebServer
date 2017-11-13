@@ -43,7 +43,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param date  yyyy-mm-dd
      * @return
      */
-    @Query(value = "select * from support_item1 where company_id=?1 and date<?2 and variety in (select name from inventory_item where variety='原材料')",nativeQuery = true)
+    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety in (select name from inventory_item where variety='原材料')",nativeQuery = true)
     List<SupportItem1> findAllRawMaterial(Long companyId, String date);
 
 
@@ -53,7 +53,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param date
      * @return
      */
-    @Query(value = "select * from support_item1 where company_id=?1 and date<?2 and variety in (select name from inventory_item where variety='产品')",nativeQuery = true)
+    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety in (select name from inventory_item where variety='产品')",nativeQuery = true)
     List<SupportItem1> findAllProduct(Long companyId, String date);
 
 
@@ -64,7 +64,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param materialName
      * @return
      */
-    @Query(value = "select * from support_item1 where company_id=?1 and date<?2 and variety=?3",nativeQuery = true)
+    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety=?3",nativeQuery = true)
     List<SupportItem1> findOneMaterial(Long companyId, Timestamp date, String materialName);
 
     /**
@@ -74,6 +74,6 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param productName
      * @return
      */
-    @Query(value = "select * from support_item1 where company_id=?1 and date<?2 and variety=?3",nativeQuery = true)
+    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety=?3",nativeQuery = true)
     List<SupportItem1> findOneProduct(Long companyId, Timestamp date, String productName);
 }
