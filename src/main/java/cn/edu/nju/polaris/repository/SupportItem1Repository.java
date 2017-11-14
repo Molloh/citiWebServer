@@ -36,12 +36,19 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      */
     void deleteByCompanyIdAndVoucherIdAndVoucherLinesAndSupportLines(Long companyId,String voucherId,int voucherLines,int supportLines);
 
+    void deleteByCompanyIdAndVoucherId(Long companyId,String voucherId);
+
+
     /**
      * 得到一个公司所有原材料的最新一条记录
      * @param companyId
      * @return
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "SELECT * FROM support_item1 WHERE company_id =1 AND (date,variety) IN \n" +
+            "(SELECT max(date),variety\n" +
+            "FROM support_item1\n" +
+            "WHERE company_id = 1 AND variety IN (SELECT name FROM inventory_item WHERE category='原材料')\n" +
+            "GROUP BY variety)",nativeQuery = true)
     List<SupportItem1> findNewestRawMaterial(Long companyId);
 
     /**
@@ -49,7 +56,11 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param companyId
      * @return
      */
-    @Query(value = "",nativeQuery = true)
+    @Query(value = "SELECT * FROM support_item1 WHERE company_id =1 AND (date,variety) IN \n" +
+            "(SELECT max(date),variety\n" +
+            "FROM support_item1\n" +
+            "WHERE company_id = 1 AND variety IN (SELECT name FROM inventory_item WHERE category='产品')\n" +
+            "GROUP BY variety)",nativeQuery = true)
     List<SupportItem1>findNewestProduct(Long companyId);
 
     /**
@@ -78,7 +89,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param date  yyyy-mm-dd
      * @return
      */
-    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety in (select name from inventory_item where variety='原材料')",nativeQuery = true)
+    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety in (select name from inventory_item where category='原材料')",nativeQuery = true)
     List<SupportItem1> findAllRawMaterial(Long companyId, String date);
 
 
@@ -88,7 +99,7 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
      * @param date
      * @return
      */
-    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety in (select name from inventory_item where variety='产品')",nativeQuery = true)
+    @Query(value = "select * from support_item1 where company_id=?1 and date>?2 and variety in (select name from inventory_item where category='产品')",nativeQuery = true)
     List<SupportItem1> findAllProduct(Long companyId, String date);
 
 

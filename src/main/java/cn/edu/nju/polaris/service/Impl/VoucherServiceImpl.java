@@ -1,6 +1,7 @@
 package cn.edu.nju.polaris.service.Impl;
 
 import cn.edu.nju.polaris.entity.*;
+import cn.edu.nju.polaris.entity.MultiKeysClass.SupportItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherItemMultiKeysClass;
 import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
@@ -145,6 +146,7 @@ public class VoucherServiceImpl implements VoucherService{
         if (list == null) {
             throw new ResourceNotFoundException("该凭证不存在");
         }
+        voucherItemRepository.delete(list);
         voucherItemRepository.save(itemList);
         return true;
     }
@@ -157,7 +159,8 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean deleteOneVoucherAllSupportOne(String voucherId,long factoryId){
-        return false;
+        supportItem1Repository.deleteByCompanyIdAndVoucherId(factoryId,voucherId);
+        return true;
     }
 
     /**
@@ -168,7 +171,8 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean deleteOneVoucherItemAllSupportOne(String voucherId,long factory,int voucherLine){
-        return false;
+        supportItem1Repository.deleteAllByCompanyIdAndVoucherIdAndVoucherLines(factory,voucherId,voucherLine);
+        return true;
     }
 
     /**
@@ -180,7 +184,17 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean deleteOneSupportOne(String voucherId,long factoryId,int voucherLine,int supportLine){
-        return false;
+        SupportItemMultiKeysClass key = new SupportItemMultiKeysClass();
+        key.setCompanyId(factoryId);
+        key.setVoucherId(voucherId);
+        key.setVoucherLines(voucherLine);
+        key.setSupportLines(supportLine);
+        SupportItem1 item1 = supportItem1Repository.findOne(key);
+        if (item1 == null){
+            throw new ResourceNotFoundException("该辅助信息条目不存在");
+        }
+        supportItem1Repository.delete(key);
+        return true;
     }
 
     /**
@@ -190,7 +204,8 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean deleteOneVoucherAllSupportTwo(String voucherId,long factoryId){
-        return false;
+        supportItem2Repository.deleteByCompanyIdAndVoucherId(factoryId,voucherId);
+        return true;
     }
 
     /**
@@ -201,7 +216,8 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean deleteOneVoucherItemAllSupportTwo(String voucherId,long factory,int voucherLine){
-        return false;
+        supportItem2Repository.deleteAllByCompanyIdAndVoucherIdAndVoucherLines(factory,voucherId,voucherLine);
+        return true;
     }
 
     /**
@@ -213,7 +229,17 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean deleteOneSupportTwo(String voucherId,long factoryId,int voucherLine,int supportLine){
-        return false;
+        SupportItemMultiKeysClass key = new SupportItemMultiKeysClass();
+        key.setCompanyId(factoryId);
+        key.setVoucherId(voucherId);
+        key.setVoucherLines(voucherLine);
+        key.setSupportLines(supportLine);
+        SupportItem2 item2 = supportItem2Repository.findOne(key);
+        if (item2 == null){
+            throw new ResourceNotFoundException("该辅助信息条目不存在");
+        }
+        supportItem2Repository.delete(key);
+        return true;
     }
 
     /**
@@ -224,7 +250,13 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean modifyOneItemAllSupportOne(String voucherId,long factoryId,int voucherLine,List<SupportItem1> item1List){
-        return false;
+        List<SupportItem1> item1s = supportItem1Repository.findAllByCompanyIdAndVoucherIdAndVoucherLines(factoryId,voucherId,voucherLine);
+        if (item1s == null){
+            throw new ResourceNotFoundException("该凭证条目不存在辅助信息");
+        }
+        supportItem1Repository.delete(item1s);
+        supportItem1Repository.save(item1List);
+        return true;
     }
 
     /**
@@ -236,7 +268,13 @@ public class VoucherServiceImpl implements VoucherService{
      * @return
      */
     private boolean modifyOneItemAllSupportTwo(String voucherId,long factoryId,int voucherLine,List<SupportItem2> item2List){
-        return false;
+        List<SupportItem2> item2s = supportItem2Repository.findAllByCompanyIdAndVoucherIdAndVoucherLines(factoryId,voucherId,voucherLine);
+        if (item2s == null){
+            throw new ResourceNotFoundException("该凭证条目不存在辅助信息");
+        }
+        supportItem2Repository.delete(item2s);
+        supportItem2Repository.save(item2List);
+        return true;
     }
 
 

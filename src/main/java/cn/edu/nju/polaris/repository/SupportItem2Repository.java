@@ -37,4 +37,5 @@ public interface SupportItem2Repository extends JpaRepository<SupportItem2,Suppo
     void deleteByCompanyIdAndVoucherIdAndVoucherLinesAndSupportLines(Long companyId,String voucherId,int voucherLines,int supportLines);
 
 
+    void deleteByCompanyIdAndVoucherId(Long companyId,String voucherId);
 }
