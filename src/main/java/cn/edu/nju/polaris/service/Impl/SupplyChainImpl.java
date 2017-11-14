@@ -1,5 +1,6 @@
 package cn.edu.nju.polaris.service.Impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,11 @@ import cn.edu.nju.polaris.repository.SupplyChainRepository;
 import cn.edu.nju.polaris.repository.SupportItem1Repository;
 import cn.edu.nju.polaris.repository.SupportItem2Repository;
 import cn.edu.nju.polaris.service.SupplyChainService;
+import cn.edu.nju.polaris.vo.AccountInfoVO;
+import cn.edu.nju.polaris.vo.AccountVO;
+import cn.edu.nju.polaris.vo.Financing1;
+import cn.edu.nju.polaris.vo.Financing2;
+import cn.edu.nju.polaris.vo.Financing3;
 import cn.edu.nju.polaris.vo.RaworProductAndFromVo;
 import cn.edu.nju.polaris.vo.SupplyChainVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -447,7 +453,9 @@ public class SupplyChainImpl implements SupplyChainService{
 	
 	
 	/*************************************融资***********************************************************/
-
+	
+	
+	/***企业***/
 	@Override
 	public List<String> getAccountsreceivableCompanys(long company_id) {
 		List<SupportItem2> list=sir2.findAllByCompanyId(company_id);
@@ -532,4 +540,92 @@ public class SupplyChainImpl implements SupplyChainService{
 	private String getCompanyName(long id){
 		return ar.findById(id).getCompanyName();
 	}
+
+	
+	/****金融机构***/
+	
+	@Override
+	public List<Financing1> getfinancings1() {
+		List<ReceivablesFinancing> list=rfr.findAll();
+		
+		List<Financing1> res=new ArrayList<>();
+		
+		for(ReceivablesFinancing r:list){
+			long id=r.getCompanyId();
+			String name=getCompanyName(id);
+			String com=r.getCompanyName();
+			double p=r.getNetAmount();
+			double q=r.getMortgageAmount();
+			
+			res.add(new Financing1(id,name,com,p,q));
+		}
+		
+		return res;
+	}
+
+	@Override
+	public List<Financing2> getfinancings2() {
+		List<MovablePledgeFinancing> list=mpfr.findAll();
+		
+		List<Financing2> res=new ArrayList<>();
+		
+		for(MovablePledgeFinancing m:list){
+			long id=m.getCompanyId();
+			String name=getCompanyName(id);
+			String t=m.getInventoryName();
+			double p=m.getNetAmount();
+			double q=m.getMortgageAmount();
+			
+			res.add(new Financing2(id,name,t,p,q));
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Financing3> getfinancings3() {
+		List<ConfirmingStorageFinancing> list=csfr.findAll();
+		
+		List<Financing3> res=new ArrayList<>();
+		
+		for(ConfirmingStorageFinancing c:list){
+			long id=c.getCompanyId();
+			String name=getCompanyName(id);
+			
+			String q=c.getCargo();
+			String w=c.getOrigin();
+			double e=c.getAmount();
+			double r=c.getProportion();
+			
+			res.add(new Financing3(id,name,q,w,e,r));
+		}
+		
+		return null;
+	}
+
+	@Override
+	public AccountVO getCompanyInfo(String name) {
+		Account a= ar.findByCompanyName(name);
+		return new AccountVO(a.getId(), a.getCompanyName(), a.getLocation(), a.getScale(),
+				a.getSupplyChainIndex(), a.getActiveTime(), a.getFirstIndustry(), a.getSecondIndustry(), a.getEmail());
+	}
+
+	@Override
+	public List<SupplyChainVO> getChains(String name) {
+		List<SupplyChainVO> res=findAll();
+		
+		for(int i=0;i<res.size();){
+			SupplyChainVO v=res.get(i);
+			boolean q=!v.downstreamCompany.equals(name);
+			boolean w=!v.midstreamCompany.equals(name);
+			boolean e=!v.upstreamCompany.equals(name);
+			if(q&&w&&e){//不在该供应链中
+				res.remove(i);
+			}else
+				i++;
+		}
+		
+		return res;
+	}
+	
 }

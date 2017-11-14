@@ -4,6 +4,11 @@ import java.util.List;
 
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
 import cn.edu.nju.polaris.entity.SupplyChain;
+import cn.edu.nju.polaris.vo.AccountInfoVO;
+import cn.edu.nju.polaris.vo.AccountVO;
+import cn.edu.nju.polaris.vo.Financing1;
+import cn.edu.nju.polaris.vo.Financing2;
+import cn.edu.nju.polaris.vo.Financing3;
 import cn.edu.nju.polaris.vo.RaworProductAndFromVo;
 import cn.edu.nju.polaris.vo.SupplyChainVO;
 
@@ -157,4 +162,37 @@ public interface SupplyChainService {
     public void Applyforfinancing_Confirmingwarehousefinancing(long id, String goods,String from,double money,double rate);
     
     public  long getCompanyId(String name);
+    
+    /*******金融机构******/
+    /**
+     * 
+     * @return 应收账款融资(金融机构需求)
+     */
+    public List<Financing1> getfinancings1();
+    
+    /**
+     * 
+     * @return 动产质押融资(金融机构需求)
+     */
+    public List<Financing2> getfinancings2();
+    
+    /**
+     * 
+     * @return 保兑仓融资(金融机构需求)
+     */
+    public List<Financing3> getfinancings3();
+    
+    /**
+     * 
+     * @return 企业基本信息
+     */
+    public AccountVO getCompanyInfo(String name);
+    
+    /**
+     * 
+     * @param name
+     * @return 供应链构成
+     */
+    public List<SupplyChainVO> getChains(String name);
+    
 }
