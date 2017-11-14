@@ -20,6 +20,13 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
     List<SupportItem1> findAllByCompanyIdAndVoucherIdAndVoucherLines(Long companyId, String voucherId, int voucherLines);
 
     /**
+     * 根据公司id获得所有记录
+     * @param companyId
+     * @return
+     */
+    List<SupportItem1> findAllByCompanyId(Long companyId);
+
+    /**
      * 删除一个凭证行数对应的全部辅助信息一
      * @param companyId
      * @param voucherId
