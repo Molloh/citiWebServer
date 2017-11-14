@@ -9,22 +9,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.entity.VoucherItem;
+import cn.edu.nju.polaris.entity.SupplyChainFinancing.ConfirmingStorageFinancing;
+import cn.edu.nju.polaris.entity.SupplyChainFinancing.MovablePledgeFinancing;
+import cn.edu.nju.polaris.entity.SupplyChainFinancing.ReceivablesFinancing;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.CashflowSheetRepository;
 import cn.edu.nju.polaris.repository.IndustryIndexRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
+import cn.edu.nju.polaris.repository.SupplyChainFinancing.ConfirmingStorageFinancingRepository;
+import cn.edu.nju.polaris.repository.SupplyChainFinancing.MovablePledgeFinancingRepository;
+import cn.edu.nju.polaris.repository.SupplyChainFinancing.ReceivablesFinancingRepository;
 import cn.edu.nju.polaris.service.SupplyChainService;
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
 import cn.edu.nju.polaris.entity.Account;
 import cn.edu.nju.polaris.entity.IndustryIndex;
 import cn.edu.nju.polaris.entity.SupplyChain;
 import cn.edu.nju.polaris.entity.SupportItem1;
+import cn.edu.nju.polaris.entity.SupportItem2;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
 import cn.edu.nju.polaris.repository.AccountRepository;
 import cn.edu.nju.polaris.repository.SupplyChainRepository;
 import cn.edu.nju.polaris.repository.SupportItem1Repository;
+import cn.edu.nju.polaris.repository.SupportItem2Repository;
 import cn.edu.nju.polaris.service.SupplyChainService;
+import cn.edu.nju.polaris.vo.RaworProductAndFromVo;
 import cn.edu.nju.polaris.vo.SupplyChainVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,13 +57,19 @@ public class SupplyChainImpl implements SupplyChainService{
     private final SupplyChainRepository supplyChainRepository;
     private final AccountRepository accountRepository;
     private final SupportItem1Repository sir;
+    private final SupportItem2Repository sir2;
     private final CashflowSheetRepository cfr;
     private final AccountRepository ar;
     private final IndustryIndexRepository ir;
+    
+    private final ReceivablesFinancingRepository rfr;
+    private final MovablePledgeFinancingRepository mpfr;
+    private final ConfirmingStorageFinancingRepository csfr;
 
 	@Autowired
 	public SupplyChainImpl(VoucherItemRepository vir,BalanceSheetRepository bsr,SupplyChainRepository supplyChainRepository, AccountRepository accountRepository,
-			SupportItem1Repository sir,CashflowSheetRepository cfr,AccountRepository ar,IndustryIndexRepository ir){
+			SupportItem1Repository sir,CashflowSheetRepository cfr,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
+			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr){
 		this.bsr=bsr;
 		this.vir=vir;
 		this.helper=new TableHelper();
@@ -64,6 +79,10 @@ public class SupplyChainImpl implements SupplyChainService{
         this.cfr=cfr;
         this.ar=ar;
         this.ir=ir;
+        this.sir2=sir2;
+        this.rfr=rfr;
+        this.mpfr=mpfr;
+        this.csfr=csfr;
 	}
 
 	@Override
@@ -239,88 +258,34 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 
 	@Override
-	public double[] getSupplyChainTotal(long Supplier_id, long Manufacturer_id, long Distributor_id, String time) {
+	public double[] getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
+			long Supplier_id, long Manufacturer_id, long Distributor_id, String time) {
 		double []res=new double[10];
 		
 		String last=helper.lastTime(time);
 		
-		List<VoucherItem> list11=vir.getListThroughPeriod(last, Supplier_id);
-		Map<String,double[]> map11=helper.tempCal(list11);
-		List<VoucherItem> list12=vir.getListThroughPeriod(time, Manufacturer_id);
-		Map<String,double[]> map12=helper.tempCal(list12);
-		List<VoucherItem> list21=vir.getListThroughPeriod(last, Distributor_id);
-		Map<String,double[]> map21=helper.tempCal(list21);
-		List<VoucherItem> list22=vir.getListThroughPeriod(time, Supplier_id);
-		Map<String,double[]> map22=helper.tempCal(list22);
-		List<VoucherItem> list31=vir.getListThroughPeriod(last, Manufacturer_id);
-		Map<String,double[]> map31=helper.tempCal(list31);
-		List<VoucherItem> list32=vir.getListThroughPeriod(time, Distributor_id);
-		Map<String,double[]> map32=helper.tempCal(list32);
-		
-		double this_zyshouru1=helper.Cal("5001",map12);//当期主营业务收入
-		double last_zyshouru1=helper.Cal("5001", map11);//上期主营业务收入
-		double this_zychenben1=helper.Cal2("5401", map12);//当期主营业务成本
-		double last_zychenben1=helper.Cal2("5401", map11);//上期主营业务成本
-		double this_lirun1=this_zyshouru1-this_zychenben1;//当期利润
-		double last_zong1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, last, "资产合计").getBalance();//上期期末总资产
-		double this_zong1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, time, "资产合计").getBalance();//本期期末总资产
-		double last_cunhuo1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, last, "存货").getBalance();//上期期末存货
-		double this_cunhuo1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, time, "存货").getBalance();//当期期末存货
-		double this_zongfu1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, time, "负债合计").getBalance();//当期总负债
-		double Netcashinflow1=cfr.findByPeriodAndCompanyIdAndName(time,Supplier_id ,"经营活动产生的现金流量净额").getBalance();//当期经营现金净流入
-		
-		double this_zyshouru2=helper.Cal("5001",map22);//当期主营业务收入
-		double last_zyshouru2=helper.Cal("5001", map21);//上期主营业务收入
-		double this_zychenben2=helper.Cal2("5401", map22);//当期主营业务成本
-		double last_zychenben2=helper.Cal2("5401", map21);//上期主营业务成本
-		double this_lirun2=this_zyshouru2-this_zychenben2;//当期利润
-		double last_zong2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, last, "资产合计").getBalance();//上期期末总资产
-		double this_zong2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, time, "资产合计").getBalance();//本期期末总资产
-		double last_cunhuo2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, last, "存货").getBalance();//上期期末存货
-		double this_cunhuo2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, time, "存货").getBalance();//当期期末存货
-		double this_zongfu2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, time, "负债合计").getBalance();//当期总负债
-		double Netcashinflow2=cfr.findByPeriodAndCompanyIdAndName(time,Manufacturer_id ,"经营活动产生的现金流量净额").getBalance();//当期经营现金净流入
-
-		double this_zyshouru3=helper.Cal("5001",map32);//当期主营业务收入
-		double last_zyshouru3=helper.Cal("5001", map31);//上期主营业务收入
-		double this_zychenben3=helper.Cal2("5401", map32);//当期主营业务成本
-		double last_zychenben3=helper.Cal2("5401", map31);//上期主营业务成本
-		double this_lirun3=this_zyshouru3-this_zychenben3;//当期利润
-		double last_zong3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, last, "资产合计").getBalance();//上期期末总资产
-		double this_zong3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, time, "资产合计").getBalance();//本期期末总资产
-		double last_cunhuo3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, last, "存货").getBalance();//上期期末存货
-		double this_cunhuo3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, time, "存货").getBalance();//当期期末存货
-		double this_zongfu3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, time, "负债合计").getBalance();//当期总负债
-
-		double Netcashinflow3=cfr.findByPeriodAndCompanyIdAndName(time,Distributor_id ,"经营活动产生的现金流量净额").getBalance();//当期经营现金净流入
-		
-		double last_chainzong=last_zong1+last_zong2+last_zong3;//上期期末供应链总资产
-		double this_chainzong=this_zong1+this_zong2+this_zong3;//当期期末供应链总资产
-		double this_chainfu=this_zongfu3+this_zongfu2+this_zongfu1;//当期供应链总负债
-		
-		double zongcunhuo=this_cunhuo1+this_cunhuo2+this_cunhuo3+last_cunhuo1+last_cunhuo2+last_cunhuo3;
-		double this_zonglirun=this_lirun1+this_lirun2+this_lirun3;//当期总利润
-		double last_zonglirun=last_zyshouru1+last_zyshouru2+last_zyshouru3-last_zychenben1-last_zychenben2-last_zychenben3;//上期总利润
-		
+		List<SupportItem1> l1=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);
+		List<SupportItem1> l2=sir.findAllByCompanyIdAndEndSideAndDate(Distributor_id,Manufacturer_name,time);
+		List<SupportItem1> l3=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);
 		
 		//1.财务方面
-		res[0]=(this_chainzong+last_chainzong)!=0?2*(this_lirun1+this_lirun2+this_lirun3)/(this_chainzong+last_chainzong):0;//供应链资产收益率
-		res[1]=(Netcashinflow1+Netcashinflow2+Netcashinflow3)!=0?(this_zyshouru3+this_zyshouru2+this_zyshouru1)/(Netcashinflow1+Netcashinflow2+Netcashinflow3):0;//现金周转率
-		res[2]=this_chainzong!=0?this_chainfu/this_chainzong:0;///资产负债率
+		//res[0]=;//供应链资产收益率
+		//res[1]=;//现金周转率
+		//res[2]=;///资产负债率
 		
 		//2.客户方面
 		List<Double> list=CalLv(sir.findAllItemByDate(Supplier_id, time),sir.findAllItemByDate(Manufacturer_id, time),sir.findAllItemByDate(Distributor_id, time));
-		res[3]=list.get(0);//退货率
-		res[4]=list.get(1);//准时交货率
-		res[5]=list.get(2);//产品柔性
+		//res[3]=list.get(0);//退货率
+		//res[4]=list.get(1);//准时交货率
+		//res[5]=list.get(2);//产品柔性
 		
 		//3.业务流程
-		res[6]=zongcunhuo!=0?2*(this_zychenben1+this_zychenben2+this_zychenben3)/zongcunhuo:0;//存货周转率
+		//res[6]=;//存货周转率
 		res[7]=list.get(3);//完美交货完成水平
 		
 		//4.未来发展
 		//新产品销售比率
-		res[9]=last_zonglirun!=0?(this_zonglirun-last_zonglirun)/last_zonglirun:0;//利润增长率
+		//res[9]=;//利润增长率
 		return res;
 	}
 	
@@ -466,4 +431,105 @@ public class SupplyChainImpl implements SupplyChainService{
         vo.downstreamCompany = chain.getDownstreamCompany();
         return vo;
     }
+
+	@Override
+	public long[] getIds(String Supplier_name, String Manufacturer_name, String Distributor_name) {
+		long []res=new long[3];
+		
+		res[0]=ar.findByCompanyName(Supplier_name).getId();
+		res[1]=ar.findByCompanyName(Manufacturer_name).getId();
+		res[2]=ar.findByCompanyName(Distributor_name).getId();
+		
+		return res;
+	}
+
+	
+	
+	
+	/*************************************融资***********************************************************/
+
+	@Override
+	public List<String> getAccountsreceivableCompanys(long company_id) {
+		List<SupportItem2> list=sir2.findAllByCompanyId(company_id);
+		
+		List<String> res=new ArrayList<String>();
+		
+		for(SupportItem2 s:list){
+			String name=s.getCompanyName();
+			if(!res.contains(name))
+				res.add(name);
+		}
+		
+		return res;
+	}
+
+	@Override
+	public double getNetreceivables(String start, String end, long company_id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public void Applyforfinancing_Accountsreceivable(long id,String company, double Netreceivables, double Mortgageamount) {
+		ReceivablesFinancing r=new ReceivablesFinancing(id,company,Netreceivables,Mortgageamount);
+		rfr.save(r);
+	}
+
+	@Override
+	public List<RaworProductAndFromVo> getRawsandProducts(long company_id) {
+		List<SupportItem2> list=sir2.findAllByCompanyId(company_id);
+		
+		List<RaworProductAndFromVo> res=new ArrayList<>();
+		Map<Long,List<String>> map=new HashMap<>();
+		
+		for(SupportItem2 s:list){
+			long id=s.getCompanyId();
+			String name=s.getCompanyName();
+			if(map.containsKey(id)){
+				List<String> t=map.get(id);
+				if(!t.contains(name)){
+					t.add(name);
+					map.put(id, t);
+				}
+			}else{
+				List<String> t=new ArrayList<>();
+				t.add(name);
+				map.put(id, t);
+			}
+		}
+		
+		for(Map.Entry<Long, List<String>> entry:map.entrySet()){
+			res.add(new RaworProductAndFromVo(getCompanyName(entry.getKey()),entry.getValue()));
+		}
+		
+		return res;
+	}
+
+	@Override
+	public double getNetinventory(String start, String end, long company_id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void Applyforfinancing_Chattelmortgage(long id,String type, double Netinventory, double Inventorypledge) {
+		MovablePledgeFinancing m=new MovablePledgeFinancing(id,type,Netinventory,Inventorypledge);
+		mpfr.save(m);
+	}
+
+	@Override
+	public void Applyforfinancing_Confirmingwarehousefinancing(long id ,String goods, String from, double money, double rate) {
+		ConfirmingStorageFinancing c=new ConfirmingStorageFinancing(id,goods,from,money,rate);
+		csfr.save(c);
+	}
+	
+	@Override
+	public long getCompanyId(String name){
+		return ar.findByCompanyName(name).getId();
+	}
+	
+	private String getCompanyName(long id){
+		return ar.findById(id).getCompanyName();
+	}
 }

@@ -26,7 +26,14 @@ public class MovablePledgeFinancing {
     @Column(name = "mortgage_amount")
     private Double mortgageAmount; // 库存质押额
 
-    public Long getId() {
+    public MovablePledgeFinancing(long id2, String type, double netinventory, double inventorypledge) {
+		this.companyId=id2;
+		this.inventoryName=type;
+		this.netAmount=netinventory;
+		this.mortgageAmount=inventorypledge;
+	}
+
+	public Long getId() {
         return id;
     }
 

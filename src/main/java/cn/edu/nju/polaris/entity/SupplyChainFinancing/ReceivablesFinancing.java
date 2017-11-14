@@ -25,7 +25,14 @@ public class ReceivablesFinancing {
     @Column(name = "mortgage_amount")
     private Double mortgageAmount; // 应收帐款抵押额
 
-    public Long getId() {
+    public ReceivablesFinancing(long Id, String company, double netreceivables, double m) {
+		this.companyId=Id;
+		this.companyName=company;
+		this.netAmount=netreceivables;
+		this.mortgageAmount=m;
+	}
+
+	public Long getId() {
         return id;
     }
 

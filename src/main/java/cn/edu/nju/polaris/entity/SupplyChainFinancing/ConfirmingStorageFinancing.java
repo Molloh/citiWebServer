@@ -25,7 +25,15 @@ public class ConfirmingStorageFinancing {
     private Double proportion; // 保障金比例
 
 
-    public Long getId() {
+    public ConfirmingStorageFinancing(long id2, String goods, String from, double money, double rate) {
+		this.companyId=id2;
+		this.cargo=goods;
+		this.origin=from;
+		this.amount=money;
+		this.proportion=rate;
+	}
+
+	public Long getId() {
         return id;
     }
 

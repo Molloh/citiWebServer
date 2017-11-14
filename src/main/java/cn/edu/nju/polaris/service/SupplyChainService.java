@@ -4,6 +4,7 @@ import java.util.List;
 
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
 import cn.edu.nju.polaris.entity.SupplyChain;
+import cn.edu.nju.polaris.vo.RaworProductAndFromVo;
 import cn.edu.nju.polaris.vo.SupplyChainVO;
 
 import java.util.List;
@@ -61,7 +62,17 @@ public interface SupplyChainService {
 	 * @param time yyyy-mm
 	 * @return 模块三：供应链整体绩效评价(10个数据)
 	 */
-	public double[] getSupplyChainTotal(long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
+	public double[] getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
+			long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
+	
+	/**
+	 * 
+	 * @param Supplier_id
+	 * @param Manufacturer_id
+	 * @param Distributor_id
+	 * @return
+	 */
+	public long[] getIds(String Supplier_name,String Manufacturer_name,String Distributor_name);
 
     List<SupplyChainVO> findChainByUpstreamCompany(Long companyId);
 
@@ -76,4 +87,74 @@ public interface SupplyChainService {
     void addOneChainForMidStream(SupplyChainVO vo);
 
     void addOneChainForDownStream(SupplyChainVO vo);
+    
+    
+    
+    /*******************融资******************************/
+    
+    
+    /**
+     * 
+     * @param company_id
+     * @return 应收帐款融资中的【应收帐款对象】
+     */
+    public List<String> getAccountsreceivableCompanys(long company_id);
+    
+    /**
+     * 
+     * @param start yyyy-mm
+     * @param end yyyy-mm
+     * @param company_id
+     * @return 应收帐款净额（明细账的分类汇总结果）
+     */
+    public double getNetreceivables(String start,String end,long company_id);
+    
+    
+    /**
+     * @param id       申请的公司
+     * @param company  应收帐款对象（下拉框含应收帐款辅助信息部分的公司名称，让企业选择）
+     * @param Netreceivables 	应收帐款净额（明细账的分类汇总结果）
+     * @param Mortgageamount 	应收帐款抵押额（企业自己输入）
+     * 进行应收帐款融资，保存信息
+     */
+    public void Applyforfinancing_Accountsreceivable(long id,String company,double Netreceivables,double Mortgageamount);
+    
+    /**
+     * 
+     * @param company_id
+     * @return 动产质押融资和保兑仓融资中的 【原材料和产品名称,以及与之相关的公司】
+     */
+    public List<RaworProductAndFromVo> getRawsandProducts(long company_id);
+     
+    
+    /**
+     * 
+     * @param start yyyy-mm
+     * @param end yyyy-mm
+     * @param company_id
+     * @return 库存净额（明细账的分类汇总导入）
+     */
+    public double getNetinventory(String start,String end,long company_id);
+    
+    /**
+     * @param id       申请的公司
+     * @param type 	库存种类（下拉框含原材料和产品名称，让企业选择）
+     * @param Netinventory 	库存净额（明细账的分类汇总导入）
+     * @param Inventorypledge 	库存质押额（企业自己输入）
+     * 选择动产质押融资，保存信息
+     */
+    public void Applyforfinancing_Chattelmortgage(long id,String type,double Netinventory,double Inventorypledge);
+    
+    
+    /**
+     * @param id       申请的公司
+     * @param goods 	计划购买货物（下拉框含原材料和产品名称，让企业选择）
+     * @param from      货物来源（根据原材料或产品名称自动匹配来源方,让企业选择）
+     * @param money  	拟购货物金额（企业自己输入）
+     * @param rate   	保障金比例（企业自己输入）
+     * 选择保兑仓融资，保存信息
+     */
+    public void Applyforfinancing_Confirmingwarehousefinancing(long id, String goods,String from,double money,double rate);
+    
+    public  long getCompanyId(String name);
 }
