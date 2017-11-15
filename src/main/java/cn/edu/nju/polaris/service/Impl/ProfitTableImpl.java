@@ -48,21 +48,34 @@ public class ProfitTableImpl implements ProfitTableService{
 			List<ProfitSheet> temp=null;
 			for(int i=0;i<times.size()-1;i++){
 				temp=psr.findByCompanyIdAndPeriod(company_id, times.get(i));
-				for(ProfitSheet p:temp){
-					if(i==0){
-						map.put(p.getName(), p.getBalance());
-					}else{
-						map.put(p.getName(), map.get(p.getName())+p.getBalance());
+				
+				if(temp.size()!=0){
+					for(ProfitSheet p:temp){
+						if(i==0){
+							map.put(p.getName(), p.getBalance());
+						}else{
+							map.put(p.getName(), map.get(p.getName())+p.getBalance());
+						}
 					}
-				}
+				}		
 			}
 			
-			for(int i=0;i<list.size();i++){
-				ProfitSheet p=list.get(i);
-				String project=p.getName();	
-				double period=p.getBalance();
-				double year=map.get(project)+period;
-				res.add(new Pro_and_CashVo(project,i+1,year,period));
+			if(times.size()==1||map.size()==0){
+				for(int i=0;i<list.size();i++){
+					ProfitSheet p=list.get(i);
+					String project=p.getName();	
+					double period=p.getBalance();
+					double year=period;
+					res.add(new Pro_and_CashVo(project,i+1,year,period));
+				}
+			}else{
+				for(int i=0;i<list.size();i++){
+					ProfitSheet p=list.get(i);
+					String project=p.getName();	
+					double period=p.getBalance();
+					double year=map.get(project)+period;
+					res.add(new Pro_and_CashVo(project,i+1,year,period));
+				}
 			}
 			
 		}

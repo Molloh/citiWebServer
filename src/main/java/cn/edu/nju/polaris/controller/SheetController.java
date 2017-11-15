@@ -8,6 +8,9 @@ import cn.edu.nju.polaris.sheet.CashFlowTableSheetCal;
 import cn.edu.nju.polaris.sheet.ProfitTableSheetCal;
 import cn.edu.nju.polaris.vo.BalanceSheetItemVo;
 import cn.edu.nju.polaris.vo.Pro_and_CashVo;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,36 +35,66 @@ public class SheetController {
         this.profitTableSheetUpdate = profitTableSheetUpdate;
     }
 
+    @ApiOperation(value = "更新资产负债表",notes = "根据公司id和期数（YYYY-mm）更新")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
+    })
     @PutMapping("/balance/update/{companyId}")
     public void updateBalanceSheet(@PathVariable Long companyId,
                                    @RequestParam String phase){
         balanceSheetUpdate.UpdateBalanceSheet(companyId,phase);
     }
 
+    @ApiOperation(value = "更新现金流量表",notes = "根据公司id和期数（YYYY-mm）更新")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
+    })
     @PutMapping("/cashflow/update/{companyId}")
     public void updateCashFlowSheet(@PathVariable Long companyId,
                                     @RequestParam String phase){
         cashflowSheetUpdate.UpdateCashFlowTable(phase,companyId);
     }
 
+    @ApiOperation(value = "更新利润表",notes = "根据公司id和期数（YYYY-mm）更新")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
+    })
     @PutMapping("/profit/update/{companyId}")
     public void updateProfitSheet(@PathVariable Long companyId,
                                   @RequestParam String phase){
         profitTableSheetUpdate.UpdateProfitTable(phase,companyId);
     }
 
+    @ApiOperation(value = "获得资产负债表",notes = "根据公司id和期数（YYYY-mm）获得")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
+    })
     @GetMapping("/balance/{companyId}")
     public List<BalanceSheetItemVo> getBalanceSheet(@PathVariable Long companyId,
                                                     @RequestParam String phase){
         return balanceSheetService.getBalanceSheet(companyId,phase);
     }
 
+    @ApiOperation(value = "获得现金流量表",notes = "根据公司id和期数（YYYY-mm）获得")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
+    })
     @GetMapping("/cashflow/{companyId}")
     public List<Pro_and_CashVo> getCashFLowSheet(@PathVariable Long companyId,
                                                  @RequestParam String phase){
         return cashFlowService.CashFlowTable_Info(phase,companyId);
     }
 
+    @ApiOperation(value = "获得利润表",notes = "根据公司id和期数（YYYY-mm）获得")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
+    })
     @GetMapping("/profit/{companyId}")
     public List<Pro_and_CashVo> getProfitSheet(@PathVariable Long companyId,
                                                @RequestParam String phase){
