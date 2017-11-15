@@ -1,5 +1,6 @@
 package cn.edu.nju.polaris.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,8 +132,9 @@ public interface SupplyChainService {
      * @param end yyyy-mm
      * @param company_id
      * @return 应收帐款净额（明细账的分类汇总结果）
+     * @throws ParseException 
      */
-    public double getNetreceivables(String start,String end,long company_id);
+    public double getNetreceivables(String start,String end,long company_id) throws ParseException;
     
     
     /**
@@ -158,8 +160,9 @@ public interface SupplyChainService {
      * @param end yyyy-mm
      * @param company_id
      * @return 库存净额（明细账的分类汇总导入）
+     * @throws ParseException 
      */
-    public double getNetinventory(String start,String end,long company_id);
+    public double getNetinventory(String start,String end,long company_id) throws ParseException;
     
     /**
      * @param id       申请的公司

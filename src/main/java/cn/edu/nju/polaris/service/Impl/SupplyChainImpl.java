@@ -1,6 +1,7 @@
 package cn.edu.nju.polaris.service.Impl;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ConfirmingStorageFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.MovablePledgeFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ReceivablesFinancingRepository;
+import cn.edu.nju.polaris.service.AccountBooksBlService;
 import cn.edu.nju.polaris.service.InventoryManagementService;
 import cn.edu.nju.polaris.service.SupplyChainService;
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
@@ -84,6 +86,7 @@ public class SupplyChainImpl implements SupplyChainService{
     private final VoucherRepository voucherRepository;
     private final SubjectsRepository subjectsRepository;
     private final SubjectsRecordRepository subjectsRecordRepository;
+    private final AccountBooksBlService abs;
     
 
 	@Autowired
@@ -109,6 +112,7 @@ public class SupplyChainImpl implements SupplyChainService{
         this.subjectsRepository=subjectsRepository;
         this.subjectsRecordRepository=subjectsRecordRepository;
         this.ims=new InventoryManagementImpl(sir,safeInventoryRepository,ar);
+        this.abs=new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository,sir,sir2);
 	}
 
 	@Override
@@ -563,8 +567,8 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 
 	@Override
-	public double getNetreceivables(String start, String end, long company_id) {
-		return new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository).netAccountReceivable(company_id, start, end);
+	public double getNetreceivables(String start, String end, long company_id) throws ParseException {
+		return abs.netAccountReceivable(company_id, start, end);
 	}
 
 
@@ -605,8 +609,8 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 
 	@Override
-	public double getNetinventory(String start, String end, long company_id) {
-		return new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository).netAccountInventory(company_id, start, end);
+	public double getNetinventory(String start, String end, long company_id) throws ParseException {
+		return abs.netAccountInventory(company_id, start, end);
 	}
 
 	@Override
