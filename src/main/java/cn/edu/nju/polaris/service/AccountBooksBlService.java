@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * 处理和账目相关功能的逻辑层接口
  * Created by zhangzy on 2017/11/15 上午11:14
  */
-@Service
+
 public interface AccountBooksBlService {
 
 /**
@@ -26,7 +26,7 @@ public interface AccountBooksBlService {
      * @param factoryId
      * @return
      */
-    public ArrayList<String> getAllExistedSubjectId(String factoryId);
+    public ArrayList<String> getAllExistedSubjectId(long factoryId);
 
     /**
      * 获得一个科目的明细账
@@ -36,7 +36,7 @@ public interface AccountBooksBlService {
      * @param factoryId
      * @return
      */
-    public DetailAccountVo getOneSubjectDetail(String subjectId, BookSearchVo searchVo, String factoryId);
+    public DetailAccountVo getOneSubjectDetail(String subjectId, BookSearchVo searchVo, long factoryId);
 
     /**
      * 总账
@@ -48,7 +48,7 @@ public interface AccountBooksBlService {
      * @param factoryId
      * @return
      */
-    public ArrayList<TotalAccountVo> getAllSubjectTotal(BookSearchVo searchVo, String factoryId);
+    public ArrayList<TotalAccountVo> getAllSubjectTotal(BookSearchVo searchVo, long factoryId);
 
     /**
      * 获得单个科目的总账
@@ -57,7 +57,7 @@ public interface AccountBooksBlService {
      * @param factoryId
      * @return
      */
-    public TotalAccountVo getOneSubjectTotal(String subjectId,BookSearchVo searchVo,String factoryId);
+    public TotalAccountVo getOneSubjectTotal(String subjectId,BookSearchVo searchVo,long factoryId);
 
     /**
      * 科目余额表
@@ -69,7 +69,7 @@ public interface AccountBooksBlService {
      * @param factoryId
      * @return
      */
-    public ArrayList<BalanceTableOneClause> getBalanceTableAllClauses(BookSearchVo searchVo, String factoryId);
+    public ArrayList<BalanceTableOneClause> getBalanceTableAllClauses(BookSearchVo searchVo, long factoryId);
 
 
     /**
@@ -82,15 +82,8 @@ public interface AccountBooksBlService {
      * @param factoryId
      * @return
      */
-    public ArrayList<GatherTableOneClause> getGatherTableAllClauses(BookSearchVo searchVo, String factoryId);
+    public ArrayList<GatherTableOneClause> getGatherTableAllClauses(BookSearchVo searchVo, long factoryId);
 
-    /**
-     * 获得全部科目某一个期间的期末金额信息
-     * @param month    "2017-08"
-     * @param factoryId
-     * @return
-     */
-    public ArrayList<Subjects> getAllSubjectPeriodEndPrice(String month, String factoryId);
 
     /**
      * 获得开始科目和结束科目之间所有有改变记录的科目的id和name
@@ -98,7 +91,7 @@ public interface AccountBooksBlService {
      * @param endSubject
      * @return
      */
-    public ArrayList<SubjectIdAndNameVo> getBetweenSubject(String startSubject,String endSubject,String factoryId);
+    public ArrayList<SubjectIdAndNameVo> getBetweenSubject(String startSubject,String endSubject,long factoryId);
 
     /**
      * 附加的方法
