@@ -16,7 +16,10 @@ import cn.edu.nju.polaris.entity.SupplyChainFinancing.ReceivablesFinancing;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.CashflowSheetRepository;
 import cn.edu.nju.polaris.repository.IndustryIndexRepository;
+import cn.edu.nju.polaris.repository.SubjectsRecordRepository;
+import cn.edu.nju.polaris.repository.SubjectsRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
+import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ConfirmingStorageFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.MovablePledgeFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ReceivablesFinancingRepository;
@@ -71,11 +74,16 @@ public class SupplyChainImpl implements SupplyChainService{
     private final ReceivablesFinancingRepository rfr;
     private final MovablePledgeFinancingRepository mpfr;
     private final ConfirmingStorageFinancingRepository csfr;
+    
+    private final VoucherRepository voucherRepository;
+    private final SubjectsRepository subjectsRepository;
+    private final SubjectsRecordRepository subjectsRecordRepository;
 
 	@Autowired
 	public SupplyChainImpl(VoucherItemRepository vir,BalanceSheetRepository bsr,SupplyChainRepository supplyChainRepository, AccountRepository accountRepository,
 			SupportItem1Repository sir,CashflowSheetRepository cfr,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
-			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr){
+			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr,
+			VoucherRepository voucherRepository,SubjectsRepository subjectsRepository,SubjectsRecordRepository subjectsRecordRepository){
 		this.bsr=bsr;
 		this.vir=vir;
 		this.helper=new TableHelper();
@@ -89,6 +97,9 @@ public class SupplyChainImpl implements SupplyChainService{
         this.rfr=rfr;
         this.mpfr=mpfr;
         this.csfr=csfr;
+        this.voucherRepository=voucherRepository;
+        this.subjectsRepository=subjectsRepository;
+        this.subjectsRecordRepository=subjectsRecordRepository;
 	}
 
 	@Override
@@ -253,7 +264,7 @@ public class SupplyChainImpl implements SupplyChainService{
 
 	@Override
 	public double[] getSupplyChainCooperation1(long Supplier_id, long Manufacturer_id, String time) {
-		
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -270,17 +281,22 @@ public class SupplyChainImpl implements SupplyChainService{
 		
 		String last=helper.lastTime(time);
 		
-		List<SupportItem1> l1=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);
-		List<SupportItem1> l2=sir.findAllByCompanyIdAndEndSideAndDate(Distributor_id,Manufacturer_name,time);
-		List<SupportItem1> l3=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);
+		List<SupportItem1> t1=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);//供应商和生产商的交易
+		double this_shouru1=ShouruCal(t1);//供应商本期收入
+		Map<String,Integer> map1=GoodsNums(t1);
+		
+		
+		List<SupportItem1> t2=sir.findAllByCompanyIdAndEndSideAndDate(Distributor_id,Manufacturer_name,time);
+		List<SupportItem1> t3=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);
 		
 		//1.财务方面
 		//res[0]=;//供应链资产收益率
 		//res[1]=;//现金周转率
+		
 		//res[2]=;///资产负债率
 		
 		//2.客户方面
-		List<Double> list=CalLv(sir.findAllItemByDate(Supplier_id, time),sir.findAllItemByDate(Manufacturer_id, time),sir.findAllItemByDate(Distributor_id, time));
+		List<Integer> list=CalLv(sir.findAllItemByDate(Supplier_id, time));
 		//res[3]=list.get(0);//退货率
 		//res[4]=list.get(1);//准时交货率
 		//res[5]=list.get(2);//产品柔性
@@ -295,12 +311,40 @@ public class SupplyChainImpl implements SupplyChainService{
 		return res;
 	}
 	
-	private List<Double> CalLv(List<SupportItem1> list1,List<SupportItem1> list2,List<SupportItem1> list3){
-		List<Double> res=new ArrayList<>();
-		if((list1.size()+list2.size()+list3.size())==0){
-			res.add((double) 0);res.add((double) 0);res.add((double) 0);res.add((double) 0);
-			return res;
+	/**
+	 * 
+	 * @param l
+	 * @return 两个企业之间交易的物品种类和数量
+	 */
+	private Map<String,Integer> GoodsNums(List<SupportItem1> l){
+		Map<String,Integer> map=new HashMap<>();
+		
+		for(SupportItem1 s:l){
+			String v=s.getVariety();
+			if(map.containsKey(v)){
+				map.put(v, map.get(v)+s.getInputNum());
+			}else{
+				map.put(v, s.getInputNum());
+			}
 		}
+		return map;
+	}
+	
+	private double ShouruCal(List<SupportItem1> l){
+		double res=0;
+		for(SupportItem1 s:l)
+			res+=s.getInputAmount();
+		return res;
+	}
+	
+	/**
+	 * 
+	 * @param list1
+	 * @return
+	 */
+	private List<Integer> CalLv(List<SupportItem1> list1){
+		List<Integer> res=new ArrayList<>();
+
 		int count1=0;
 		int count2=0;
 		int count3=0;
@@ -313,31 +357,7 @@ public class SupplyChainImpl implements SupplyChainService{
 			if(s.getNew())
 				count3++;
 		}
-		
-		for(SupportItem1 s:list2){
-			if(s.getReturnedPurchase())
-				count1++;
-			if(s.getDispatchOntime())
-				count2++;
-			if(s.getNew())
-				count3++;
-		}
-		
-		for(SupportItem1 s:list3){
-			if(s.getReturnedPurchase())
-				count1++;
-			if(s.getDispatchOntime())
-				count2++;
-			if(s.getNew())
-				count3++;
-		}
-		
-		
-		int size=list1.size()+list2.size()+list3.size();
-		res.add((double)count1/(double)size);
-		res.add((double)count2/(double)size);
-		res.add((double)count3/(double)size);
-		res.add((double)(count2-count1)/(double)size);
+
 		
 		return res;
 	}
@@ -473,8 +493,7 @@ public class SupplyChainImpl implements SupplyChainService{
 
 	@Override
 	public double getNetreceivables(String start, String end, long company_id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository).netAccountReceivable(company_id, start, end);
 	}
 
 
@@ -516,8 +535,7 @@ public class SupplyChainImpl implements SupplyChainService{
 
 	@Override
 	public double getNetinventory(String start, String end, long company_id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository).netAccountInventory(company_id, start, end);
 	}
 
 	@Override
@@ -579,7 +597,7 @@ public class SupplyChainImpl implements SupplyChainService{
 			res.add(new Financing2(id,name,t,p,q));
 		}
 		
-		return null;
+		return res;
 	}
 
 	@Override
@@ -600,7 +618,7 @@ public class SupplyChainImpl implements SupplyChainService{
 			res.add(new Financing3(id,name,q,w,e,r));
 		}
 		
-		return null;
+		return res;
 	}
 
 	@Override
