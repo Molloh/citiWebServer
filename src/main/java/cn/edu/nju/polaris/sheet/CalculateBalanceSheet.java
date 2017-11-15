@@ -5,6 +5,7 @@ import cn.edu.nju.polaris.entity.SubjectsBalance;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.SubjectsBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by 费慧通 on 2017/11/7.
  */
-@Service
+@Component
 public class CalculateBalanceSheet {
     private final BalanceSheetRepository balanceSheetRepository;
     private final SubjectsBalanceRepository subjectsBalanceRepository;

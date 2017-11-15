@@ -399,12 +399,12 @@ public class DateConvert {
     public static void main(String[] args) throws ParseException {
 //        System.out.println(monthToPeriod("2017-12"));
 //        System.out.println(periodToMonth("2017年第8期"));
-        System.out.println(getBetweenMonth("2016-04","2017-04").size());
-
-        ArrayList<String> monthList=getBetweenMonthList("2016-04","2017-04");
-        for(int count=0;count<monthList.size();count++){
-            System.out.println(monthList.get(count));
-        }
+//        System.out.println(getBetweenMonth("2016-04","2017-04").size());
+//
+//        ArrayList<String> monthList=getBetweenMonthList("2016-04","2017-04");
+//        for(int count=0;count<monthList.size();count++){
+//            System.out.println(monthList.get(count));
+//        }
 
         System.out.println(monthToPeriod("2010-09"));
 
@@ -451,5 +451,23 @@ public class DateConvert {
 
 //        System.out.println(getMonthBetween("2008-10","2009-09"));
 
+        System.out.println(getPeriodSection("2016-01","2017-10"));
     }
+
+    public static List<String> getPeriodSection(String beginPeriod,String endPeriod) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(dateFormat.parse(beginPeriod));
+        Calendar end = Calendar.getInstance();
+        end.setTime(dateFormat.parse(endPeriod));
+        List<String> list = new ArrayList<>();
+        list.add(beginPeriod);
+        while (end.compareTo(begin) > 0){
+            begin.add(Calendar.MONTH,1);
+            list.add(dateFormat.format(begin.getTime()));
+        }
+        return list;
+    }
+
+
 }

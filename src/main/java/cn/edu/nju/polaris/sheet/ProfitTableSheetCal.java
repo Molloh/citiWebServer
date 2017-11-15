@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.entity.ProfitSheet;
@@ -18,7 +19,7 @@ import cn.edu.nju.polaris.service.Impl.TableHelper;
  * @author hyf
  *
  */
-@Service
+@Component
 public class ProfitTableSheetCal {
 	
 	private VoucherItemRepository vir;

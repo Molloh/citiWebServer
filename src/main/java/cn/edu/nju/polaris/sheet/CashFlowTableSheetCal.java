@@ -16,7 +16,7 @@ import cn.edu.nju.polaris.repository.VoucherItemRepository;
 import cn.edu.nju.polaris.service.Impl.TableHelper;
 import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class CashFlowTableSheetCal {
 	private VoucherItemRepository vir;
 	private TableHelper helper;
