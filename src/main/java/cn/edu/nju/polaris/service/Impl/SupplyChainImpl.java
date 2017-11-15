@@ -16,6 +16,7 @@ import cn.edu.nju.polaris.entity.SupplyChainFinancing.ReceivablesFinancing;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.CashflowSheetRepository;
 import cn.edu.nju.polaris.repository.IndustryIndexRepository;
+import cn.edu.nju.polaris.repository.SafeInventoryRepository;
 import cn.edu.nju.polaris.repository.SubjectsRecordRepository;
 import cn.edu.nju.polaris.repository.SubjectsRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
@@ -23,9 +24,12 @@ import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ConfirmingStorageFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.MovablePledgeFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ReceivablesFinancingRepository;
+import cn.edu.nju.polaris.service.InventoryManagementService;
 import cn.edu.nju.polaris.service.SupplyChainService;
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
+import cn.edu.nju.polaris.vo.Inventory.InventoryAppraisalVo;
 import cn.edu.nju.polaris.entity.Account;
+import cn.edu.nju.polaris.entity.BalanceSheet;
 import cn.edu.nju.polaris.entity.IndustryIndex;
 import cn.edu.nju.polaris.entity.SupplyChain;
 import cn.edu.nju.polaris.entity.SupportItem1;
@@ -61,6 +65,8 @@ public class SupplyChainImpl implements SupplyChainService{
 	
 	private TableHelper helper;
 	
+	private InventoryManagementService ims;
+	
 	private final BalanceSheetRepository bsr;
 	private final VoucherItemRepository vir;
     private final SupplyChainRepository supplyChainRepository;
@@ -78,12 +84,14 @@ public class SupplyChainImpl implements SupplyChainService{
     private final VoucherRepository voucherRepository;
     private final SubjectsRepository subjectsRepository;
     private final SubjectsRecordRepository subjectsRecordRepository;
+    
 
 	@Autowired
 	public SupplyChainImpl(VoucherItemRepository vir,BalanceSheetRepository bsr,SupplyChainRepository supplyChainRepository, AccountRepository accountRepository,
 			SupportItem1Repository sir,CashflowSheetRepository cfr,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
 			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr,
-			VoucherRepository voucherRepository,SubjectsRepository subjectsRepository,SubjectsRecordRepository subjectsRecordRepository){
+			VoucherRepository voucherRepository,SubjectsRepository subjectsRepository,SubjectsRecordRepository subjectsRecordRepository,
+			SafeInventoryRepository safeInventoryRepository){
 		this.bsr=bsr;
 		this.vir=vir;
 		this.helper=new TableHelper();
@@ -100,6 +108,7 @@ public class SupplyChainImpl implements SupplyChainService{
         this.voucherRepository=voucherRepository;
         this.subjectsRepository=subjectsRepository;
         this.subjectsRecordRepository=subjectsRecordRepository;
+        this.ims=new InventoryManagementImpl(sir,safeInventoryRepository,ar);
 	}
 
 	@Override
@@ -108,15 +117,26 @@ public class SupplyChainImpl implements SupplyChainService{
 		String last=helper.lastTime(time);
 		
 		List<VoucherItem> list11=vir.getListThroughPeriod(last, Supplier_id);
-		Map<String,double[]> map11=helper.tempCal(list11);
+		Map<String,double[]> map11=null;
+		if(list11.size()!=0)
+			map11=helper.tempCal(list11);
+		
 		List<VoucherItem> list12=vir.getListThroughPeriod(time, Manufacturer_id);
 		Map<String,double[]> map12=helper.tempCal(list12);
+		
 		List<VoucherItem> list21=vir.getListThroughPeriod(last, Distributor_id);
-		Map<String,double[]> map21=helper.tempCal(list21);
+		Map<String,double[]> map21=null;
+		if(list21.size()!=0)
+			map21=helper.tempCal(list21);
+		
 		List<VoucherItem> list22=vir.getListThroughPeriod(time, Supplier_id);
 		Map<String,double[]> map22=helper.tempCal(list22);
+		
 		List<VoucherItem> list31=vir.getListThroughPeriod(last, Manufacturer_id);
-		Map<String,double[]> map31=helper.tempCal(list31);
+		Map<String,double[]> map31=null;
+		if(list31.size()!=0)
+			map31=helper.tempCal(list31);
+		
 		List<VoucherItem> list32=vir.getListThroughPeriod(time, Distributor_id);
 		Map<String,double[]> map32=helper.tempCal(list32);
 		
@@ -129,14 +149,31 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 	
 	private SupplyModuleOne MemberTempCal(Map<String,double[]> map1,Map<String,double[]> map2,long company_id,String time,String last){
+		double last_zyshouru1=0;//上期主营业务收入
+		double last_zychenben1=0;//上期主营业务成本
+		double last_zong1=0;//上期期末总资产
+		BalanceSheet b=null;
+		double last_cunhuo1=0;//上期期末存货
+		
+		if(map1.size()!=0){
+			last_zyshouru1=helper.Cal("5001", map1);
+			last_zychenben1=helper.Cal2("5401", map1);
+			
+		}
 		double this_zyshouru1=helper.Cal("5001",map2);//当期主营业务收入
-		double last_zyshouru1=helper.Cal("5001", map1);//上期主营业务收入
+		
 		double this_zychenben1=helper.Cal2("5401", map2);//当期主营业务成本
-		double last_zychenben1=helper.Cal2("5401", map1);//上期主营业务成本
-		double last_zong1=bsr.findByCompanyIdAndPeriodAndName(company_id, last, "资产合计").getBalance();//上期期末总资产
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(company_id, last, "资产合计");
+		if(b!=null)
+			last_zong1=b.getBalance();
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(company_id, last, "存货");
+		if(b!=null)
+			last_cunhuo1=b.getBalance();
+		
 		double this_zong1=bsr.findByCompanyIdAndPeriodAndName(company_id, time, "资产合计").getBalance();//本期期末总资产
 		double this_qtshouru1=helper.Cal("5051", map2);//当期其他业务收入
-		double last_cunhuo1=bsr.findByCompanyIdAndPeriodAndName(company_id, last, "存货").getBalance();//上期期末存货
 		double this_cunhuo1=bsr.findByCompanyIdAndPeriodAndName(company_id, time, "存货").getBalance();//当期期末存货
 		double zongfu1=bsr.findByCompanyIdAndPeriodAndName(company_id, time, "负债合计").getBalance();//总负债
 		double this_liudongzichan=bsr.findByCompanyIdAndPeriodAndName(company_id, time, "流动资产合计").getBalance();//当期期末流动资产
@@ -263,15 +300,49 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 
 	@Override
-	public double[] getSupplyChainCooperation1(long Supplier_id, long Manufacturer_id, String time) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation11(long Supplier_id, long Manufacturer_id, String time) {
+		String name2=getCompanyName(Manufacturer_id);
+		
+		List<SupportItem1> t=sir.findAllByCompanyIdAndEndSideAndDate(Supplier_id,name2,time);
+		
+		ArrayList<String> variety=new ArrayList<>();
+		
+		for(SupportItem1 s:t){
+			if(!variety.contains(s.getVariety()))
+				variety.add(s.getVariety());
+		}
+		
+		return ims.getRawMaterialInventoryAppraisal(Supplier_id,Manufacturer_id, time,variety);
+	}
+	
+	@Override
+	public double[] getSupplyChainCooperation12(long Supplier_id,long Manufacturer_id,String time){
+		double res[]=new double[2];
+		
+		return res;
+	}
+	
+	@Override
+	public double[] getSupplyChainCooperation22(long Manufacturer_id,long Distributor_id,String time){
+		double res[]=new double[2];
+		
+		return res;
 	}
 
 	@Override
-	public double[] getSupplyChainCooperation2(long Manufacturer_id, long Distributor_id, String time) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation21(long Manufacturer_id, long Distributor_id, String time) {
+		String name2=getCompanyName(Distributor_id);
+		
+		List<SupportItem1> t=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,name2,time);
+		
+		ArrayList<String> variety=new ArrayList<>();
+		
+		for(SupportItem1 s:t){
+			if(!variety.contains(s.getVariety()))
+				variety.add(s.getVariety());
+		}
+		
+		return ims.getProductInventoryAppraisal(Manufacturer_id,Distributor_id, time,variety);
 	}
 
 	@Override
