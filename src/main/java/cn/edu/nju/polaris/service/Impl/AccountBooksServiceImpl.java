@@ -1,21 +1,15 @@
 package cn.edu.nju.polaris.service.Impl;
 
-import cn.edu.nju.polaris.entity.Subjects;
-import cn.edu.nju.polaris.entity.SubjectsRecord;
-import cn.edu.nju.polaris.entity.Voucher;
-import cn.edu.nju.polaris.repository.SubjectsRecordRepository;
-import cn.edu.nju.polaris.repository.SubjectsRepository;
-import cn.edu.nju.polaris.repository.VoucherRepository;
+import cn.edu.nju.polaris.entity.*;
+import cn.edu.nju.polaris.repository.*;
 import cn.edu.nju.polaris.service.AccountBooksBlService;
 import cn.edu.nju.polaris.util.DateConvert;
+import cn.edu.nju.polaris.util.DateHelper;
 import cn.edu.nju.polaris.util.SubjectBalanceHelper;
 import cn.edu.nju.polaris.vo.accountBook.*;
-import org.apache.poi.hssf.record.SubRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.Subject;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.*;
 
@@ -28,12 +22,16 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
     private final VoucherRepository voucherRepository;
     private final SubjectsRepository subjectsRepository;
     private final SubjectsRecordRepository subjectsRecordRepository;
+    private final SupportItem1Repository supportItem1Repository;
+    private final SupportItem2Repository supportItem2Repository;
 
     @Autowired
-    public AccountBooksServiceImpl(VoucherRepository voucherRepository, SubjectsRepository subjectsRepository, SubjectsRecordRepository subjectsRecordRepository) {
+    public AccountBooksServiceImpl(VoucherRepository voucherRepository, SubjectsRepository subjectsRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository) {
         this.voucherRepository=voucherRepository;
         this.subjectsRepository=subjectsRepository;
         this.subjectsRecordRepository=subjectsRecordRepository;
+        this.supportItem1Repository=supportItem1Repository;
+        this.supportItem2Repository=supportItem2Repository;
     }
 
 
@@ -498,15 +496,68 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
     }
 
     @Override
-    public double netAccountReceivable(long factoryId, String startMonth, String endMonth) {
+    public double netAccountReceivable(long factoryId, String startMonth, String endMonth) throws ParseException {
+        double result=0.0;
+
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+        HashMap<String,String> voucherIdToMonthMap=new HashMap<>();
+        for(int count=0;count<allVoucherList.size();count++){
+            Voucher oneVoucher=allVoucherList.get(count);
+            voucherIdToMonthMap.put(oneVoucher.getVoucherId(),String.valueOf(oneVoucher.getDate()).substring(0,7));
+        }
 
 
-        return 0;
+        List<SupportItem2> item2List=supportItem2Repository.findAllByCompanyId(factoryId);
+        HashSet<String> betweenMonthSet=DateConvert.getBetweenMonth(startMonth,endMonth);
+
+        for(int count=0;count<item2List.size();count++){
+            SupportItem2 oneItem2=item2List.get(count);
+            if(betweenMonthSet.contains(voucherIdToMonthMap.get(oneItem2.getVoucherId()))){
+                if(oneItem2.getSubjects().equals("1122")){
+                    result=result+oneItem2.getAmount();
+                }else{
+                    result=result-oneItem2.getAmount();
+                }
+
+
+            }
+        }
+        return result;
     }
 
     @Override
-    public double netAccountInventory(long factoryId, String startMonth, String endMonth) {
+    public double netAccountInventory(long factoryId, String startMonth, String endMonth) throws ParseException {
+        double result=0.0;
 
-        return 0;
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+        HashMap<String,String> voucherIdToMonthMap=new HashMap<>();
+        for(int count=0;count<allVoucherList.size();count++){
+            Voucher oneVoucher=allVoucherList.get(count);
+            voucherIdToMonthMap.put(oneVoucher.getVoucherId(),String.valueOf(oneVoucher.getDate()).substring(0,7));
+        }
+
+        List<SupportItem1> item1List=supportItem1Repository.findAllByCompanyId(factoryId);
+        HashSet<String> betweenMonthSet=DateConvert.getBetweenMonth(startMonth,endMonth);
+
+        for(int count=0;count<item1List.size();count++){
+            SupportItem1 oneItem1=item1List.get(count);
+
+            if(betweenMonthSet.contains(voucherIdToMonthMap.get(oneItem1.getVoucherId()))){
+                if(oneItem1.getInputAmount()!=null){
+                    result=result+oneItem1.getInputAmount();
+                }
+
+                if(oneItem1.getOutputAmount()!=null){
+                    result=result-oneItem1.getOutputAmount();
+                }
+
+
+            }
+
+
+        }
+        return result;
     }
+
+
 }

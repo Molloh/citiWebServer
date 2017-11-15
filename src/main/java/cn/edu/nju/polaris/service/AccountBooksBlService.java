@@ -4,6 +4,7 @@ import cn.edu.nju.polaris.entity.Subjects;
 import cn.edu.nju.polaris.vo.accountBook.*;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -104,16 +105,16 @@ public interface AccountBooksBlService {
      * @param endMonth "2011-03"
      * @return
      */
-    public double netAccountReceivable(long factoryId,String startMonth,String endMonth);
+    public double netAccountReceivable(long factoryId,String startMonth,String endMonth) throws ParseException;
 
     /**
      * 获得库存净额
      * @param factoryId
-     * @param startMonth "2010-03"
-     * @param endMonth "2011-06"
+     * @param startMonth
+     * @param endMonth
      * @return
      */
-    public double netAccountInventory(long factoryId,String startMonth,String endMonth);
+    public double netAccountInventory(long factoryId,String startMonth,String endMonth) throws ParseException;
 
 
 }
