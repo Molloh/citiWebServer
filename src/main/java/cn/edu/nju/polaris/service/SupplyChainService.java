@@ -69,12 +69,12 @@ public interface SupplyChainService {
 	 */
 	public double[] getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
 			long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
-	
+
 	/**
-	 * 
-	 * @param Supplier_id
-	 * @param Manufacturer_id
-	 * @param Distributor_id
+	 *
+	 * @param Supplier_name
+	 * @param Manufacturer_name
+	 * @param Distributor_name
 	 * @return
 	 */
 	public long[] getIds(String Supplier_name,String Manufacturer_name,String Distributor_name);

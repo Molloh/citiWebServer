@@ -79,6 +79,9 @@ public class BalanceSheet {
                 '}';
     }
 
+    public BalanceSheet() {
+    }
+
     public BalanceSheet(Long companyId, String period, String name, Double balance) {
         this.companyId = companyId;
         this.period = period;
