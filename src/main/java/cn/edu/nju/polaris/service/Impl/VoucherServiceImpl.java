@@ -154,8 +154,8 @@ public class VoucherServiceImpl implements VoucherService{
 
     /**
      * 删除一个凭证中全部的辅助信息一
-     * @param voucherId
-     * @param factoryId
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
      * @return
      */
     private boolean deleteOneVoucherAllSupportOne(String voucherId,long factoryId){
@@ -165,22 +165,22 @@ public class VoucherServiceImpl implements VoucherService{
 
     /**
      * 删除一个凭证条目对应的全部辅助信息一
-     * @param voucherId
-     * @param factory
-     * @param voucherLine
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
+     * @param voucherLine 凭证行数
      * @return
      */
-    private boolean deleteOneVoucherItemAllSupportOne(String voucherId,long factory,int voucherLine){
-        supportItem1Repository.deleteAllByCompanyIdAndVoucherIdAndVoucherLines(factory,voucherId,voucherLine);
+    private boolean deleteOneVoucherItemAllSupportOne(String voucherId,long factoryId,int voucherLine){
+        supportItem1Repository.deleteAllByCompanyIdAndVoucherIdAndVoucherLines(factoryId,voucherId,voucherLine);
         return true;
     }
 
     /**
      * 删除一条辅助信息一
-     * @param voucherId
-     * @param factoryId
-     * @param voucherLine
-     * @param supportLine
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
+     * @param voucherLine 凭证行数
+     * @param supportLine 辅助信息行数
      * @return
      */
     private boolean deleteOneSupportOne(String voucherId,long factoryId,int voucherLine,int supportLine){
@@ -199,8 +199,8 @@ public class VoucherServiceImpl implements VoucherService{
 
     /**
      * 删除一个凭证中全部的辅助信息二
-     * @param voucherId
-     * @param factoryId
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
      * @return
      */
     private boolean deleteOneVoucherAllSupportTwo(String voucherId,long factoryId){
@@ -210,22 +210,22 @@ public class VoucherServiceImpl implements VoucherService{
 
     /**
      * 删除一个凭证条目对应的全部辅助信息二
-     * @param voucherId
-     * @param factory
-     * @param voucherLine
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
+     * @param voucherLine 凭证行数
      * @return
      */
-    private boolean deleteOneVoucherItemAllSupportTwo(String voucherId,long factory,int voucherLine){
-        supportItem2Repository.deleteAllByCompanyIdAndVoucherIdAndVoucherLines(factory,voucherId,voucherLine);
+    private boolean deleteOneVoucherItemAllSupportTwo(String voucherId,long factoryId,int voucherLine){
+        supportItem2Repository.deleteAllByCompanyIdAndVoucherIdAndVoucherLines(factoryId,voucherId,voucherLine);
         return true;
     }
 
     /**
      * 删除一条辅助信息一
-     * @param voucherId
-     * @param factoryId
-     * @param voucherLine
-     * @param supportLine
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
+     * @param voucherLine 凭证行数
+     * @param supportLine 辅助信息行数
      * @return
      */
     private boolean deleteOneSupportTwo(String voucherId,long factoryId,int voucherLine,int supportLine){
@@ -244,9 +244,10 @@ public class VoucherServiceImpl implements VoucherService{
 
     /**
      * 修改一条凭证条目对应的全部的辅助信息一
-     * @param voucherId
-     * @param factoryId
-     * @param voucherLine
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
+     * @param voucherLine 凭证行数
+     * @param item1List 辅助信息一列表
      * @return
      */
     private boolean modifyOneItemAllSupportOne(String voucherId,long factoryId,int voucherLine,List<SupportItem1> item1List){
@@ -261,10 +262,10 @@ public class VoucherServiceImpl implements VoucherService{
 
     /**
      * 修改一条凭证条目对应的全部的辅助信息二
-     * @param voucherId
-     * @param factoryId
-     * @param voucherLine
-     * @param item2List
+     * @param voucherId 凭证编号
+     * @param factoryId 公司编号
+     * @param voucherLine 凭证行数
+     * @param item2List 辅助信息二列表
      * @return
      */
     private boolean modifyOneItemAllSupportTwo(String voucherId,long factoryId,int voucherLine,List<SupportItem2> item2List){
@@ -924,48 +925,161 @@ public class VoucherServiceImpl implements VoucherService{
      */
     @Override
     public boolean deleteOneVoucherVo(String voucherId, long factoryId) {
+        Voucher voucher=voucherRepository.findByVoucherIdAndCompanyId(voucherId,factoryId);
+        List<VoucherItem> itemList=voucherItemRepository.findByCompanyIdAndVoucherId(factoryId,voucherId);
+
+        //先对每一行凭证条目进行处理 把当前期间的科目余额进行修改
+        for(int count=0;count<itemList.size();count++){
+            VoucherItem oneItem=itemList.get(count);
+            String subjectId=oneItem.getSubjects();
+            String month=String.valueOf(voucher.getDate()).substring(0,7);
+            double debitAmount=oneItem.getDebitAmount();
+            double creditAmount=oneItem.getCreditAmount();
+
+            SubjectsBalance beforeBalance=subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(factoryId,subjectId,month);
+            SubjectsBalance newBalance=new SubjectsBalance();
+            newBalance.setId(beforeBalance.getId());
+            newBalance.setCompanyId(beforeBalance.getCompanyId());
+            newBalance.setSubjectsId(beforeBalance.getSubjectsId());
+            newBalance.setDate(beforeBalance.getDate());
+            newBalance.setDebitAmount(beforeBalance.getDebitAmount()+debitAmount);
+            newBalance.setCreditAmount(beforeBalance.getCreditAmount()+creditAmount);
+            newBalance.setBalance(beforeBalance.getBalance()+SubjectBalanceHelper.getDirection(subjectId)*(debitAmount-creditAmount));
+
+            subjectsBalanceRepository.save(newBalance);
+        }
+
         boolean result1=deleteOneVoucher(voucherId,factoryId);
         boolean result2=deleteOneVoucherItems(voucherId,factoryId);
-        //删除辅助信息一
-        //删除辅助信息二
+        boolean result3=deleteOneVoucherAllSupportOne(voucherId,factoryId);
+        boolean result4=deleteOneVoucherAllSupportTwo(voucherId,factoryId);
         subjectsRecordRepository.deleteAllByCompanyIdAndVoucherId(factoryId,voucherId);
 
-        return false;
+        boolean result=result1&&result2&&result3&&result4;
+
+
+        return result;
     }
 
 
 
     @Override
     public boolean deleteSelectedVoucher(ArrayList<String> voucherIdList, long factoryId) {
+        boolean result=true;
 
-
-
-        return false;
+        if(voucherIdList.size()==0||voucherIdList==null){
+            return false;
+        }else{
+            for(int count=0;count<voucherIdList.size();count++){
+                result=deleteOneVoucherVo(voucherIdList.get(count),factoryId)&&result;
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean amendOneVoucher(VoucherVO voucherVO, String beforeVoucherId) {
-        return false;
+        long factoryId=voucherVO.getCompany_id();
+        String voucherId=voucherVO.getVoucher_id();
+        //对voucherId,factoryId,beforeVoucherId进行操作
+
+        //修改：先进行删除再进行添加
+        boolean result=true;
+        boolean result1=deleteOneVoucherVo(beforeVoucherId,factoryId);
+        boolean result2=saveOneVoucher(voucherVO);
+        result=result&result1&result2;
+
+        return result;
     }
 
     @Override
     public int getCurrentNumber(String voucherCharacter, long factoryId) {
-        return 0;
-    }
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+        int theMaxNumber=0;
 
-    @Override
-    public ArrayList<String> getAllPeriod(long factoryId) {
-        return null;
-    }
 
-    @Override
-    public ArrayList<String> getAllVoucherMaker(long factoryId) {
-        return null;
+        for(int count=0;count<allVoucherList.size();count++){
+            String voucherId=allVoucherList.get(count).getVoucherId();
+            String character=voucherId.split("-")[0];
+            int number=Integer.valueOf(voucherId.split("-")[1]);
+
+            if(character.equals(voucherCharacter)){
+                if(number>theMaxNumber){
+                    theMaxNumber=number;
+                }
+            }
+
+        }
+        return theMaxNumber+1;
     }
 
     @Override
     public double getCurrentVarietyEndingStocks(long factoryId, String variety) {
-        return 0;
+        double total=0.0;
+
+        List<SupportItem1> allItemOneList=supportItem1Repository.findAllByCompanyId(factoryId);
+
+        for(int count=0;count<allItemOneList.size();count++){
+            SupportItem1 oneItem1=allItemOneList.get(count);
+            if(oneItem1.getCompanyId()==factoryId&&oneItem1.getVariety().equals(variety)){
+                if(oneItem1.getOutputNum()!=null){
+                    total=total+oneItem1.getEndingStocks();
+
+                }else if(oneItem1.getInputNum()!=null){
+                    total=total-oneItem1.getEndingStocks();
+                }
+
+
+            }
+        }
+        return total;
+    }
+
+    @Override
+    public ArrayList<String> getAllExistedPeriod(long factoryId) {
+        ArrayList<String> resultList=new ArrayList<>();
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+
+        for(int count=0;count<allVoucherList.size();count++){
+
+            String oneMonth=String.valueOf(allVoucherList.get(count).getDate()).substring(0,7);
+            String onePeriod=DateConvert.monthToPeriod(oneMonth);
+            if(!resultList.contains(onePeriod)){
+                resultList.add(onePeriod);
+            }
+
+        }
+        return resultList;
+    }
+
+    @Override
+    public ArrayList<String> getAllExistedMaker(long factoryId) {
+        ArrayList<String> resultList=new ArrayList<>();
+        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
+
+        for(int count=0;count<allVoucherList.size();count++){
+            String oneMaker=allVoucherList.get(count).getVoucherMaker();
+            if(!resultList.contains(oneMaker)){
+                resultList.add(oneMaker);
+            }
+        }
+        return resultList;
+    }
+
+    @Override
+    public ArrayList<String> getAllSubjectId() {
+        ArrayList<String> resultList=new ArrayList<>();
+        List<Subjects> allSubjectList=subjectsRepository.findAll();
+
+        for(int count=0;count<allSubjectList.size();count++){
+            String oneSubjectId=allSubjectList.get(count).getSubjectsId();
+            if(!resultList.contains(oneSubjectId)){
+                resultList.add(oneSubjectId);
+
+            }
+
+        }
+        return resultList;
     }
 
 

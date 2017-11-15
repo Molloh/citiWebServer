@@ -121,19 +121,6 @@ public interface VoucherService {
      */
     public int getCurrentNumber(String voucherCharacter,long factoryId);
 
-    /**
-     * 获得数据库中全部的会计期间
-     * @param factoryId
-     * @return
-     */
-    public ArrayList<String> getAllPeriod(long factoryId);
-
-    /**
-     * 获得数据库中全部存在的制单人
-     * @param factoryId
-     * @return
-     */
-    public ArrayList<String> getAllVoucherMaker(long factoryId);
 
     /**
      * 获得当前的辅助信息一种的某种类的结存量
@@ -142,4 +129,25 @@ public interface VoucherService {
      * @return
      */
     public double getCurrentVarietyEndingStocks(long factoryId,String variety);
+
+    /**
+     * 获得全部的会计期间
+     * @param factoryId
+     * @return
+     */
+    public ArrayList<String> getAllExistedPeriod(long factoryId);
+
+    /**
+     * 获得全部的制单人信息
+     * @param factoryId
+     * @return
+     */
+    public ArrayList<String> getAllExistedMaker(long factoryId);
+
+    /**
+     * 获得全部的科目编号
+     * @return
+     */
+    public ArrayList<String> getAllSubjectId();
+
 }
