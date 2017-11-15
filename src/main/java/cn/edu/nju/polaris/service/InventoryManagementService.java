@@ -82,4 +82,13 @@ public interface InventoryManagementService {
      * @return
      */
     public ArrayList<InventoryAppraisalVo> getProductInventoryAppraisal(long company_id1,long company_id2, String time, ArrayList<String> variety);
+
+    /**
+     * 得到公司1档期发给公司2的存货+公司1期末存货-公司1期初存货
+     * @param company_id1
+     * @param company_id2
+     * @param time
+     * @return
+     */
+    public double getCurrentInventory(long company_id1, long company_id2, String time);
 }
