@@ -216,6 +216,12 @@ public class InventoryManagementImpl implements InventoryManagementService {
         return getRawMaterialInventoryAppraisal(company_id1,company_id2,time,variety);
     }
 
+    @Override
+    public double getCurrentInventory(long company_id1, long company_id2, String time) {
+        List<SafeInventory> list1 = safeInventoryRepository.findAllMaterialSafeInventory(company_id1);
+        return 0;
+    }
+
     private ArrayList<InventoryMonitorItemVo> getInventoryMonitor(List<SupportItem1> list1, List<SafeInventory> list2){
         ArrayList<InventoryMonitorItemVo> result = new ArrayList<>();
         ArrayList<String> varieties = getAllVariety(list1);
