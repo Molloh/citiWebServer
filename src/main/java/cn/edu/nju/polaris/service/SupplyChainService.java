@@ -1,8 +1,11 @@
 package cn.edu.nju.polaris.service;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
+import cn.edu.nju.polaris.vo.Inventory.InventoryAppraisalVo;
 import cn.edu.nju.polaris.entity.SupplyChain;
 import cn.edu.nju.polaris.vo.AccountInfoVO;
 import cn.edu.nju.polaris.vo.AccountVO;
@@ -46,18 +49,36 @@ public interface SupplyChainService {
 	 * @param Supplier_id     供应商
 	 * @param Manufacturer_id 生产商
 	 * @param time yyyy-mm
-	 * @return 供应链协作绩效评价(模块二)
+	 * @return 供应链协作绩效评价(模块二)  1.	准时交货率       3.	退货率
 	 */
-	public double[] getSupplyChainCooperation1(long Supplier_id,long Manufacturer_id,String time);
+	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation11(long Supplier_id,long Manufacturer_id,String time);
+	
+	/**
+	 * 
+	 * @param Supplier_id     供应商
+	 * @param Manufacturer_id 生产商
+	 * @param time yyyy-mm
+	 * @return 供应链协作绩效评价(模块二)  2.	成本利润率    4.	产需率
+	 */
+	public double[] getSupplyChainCooperation12(long Supplier_id,long Manufacturer_id,String time);
 	
 	/**
 	 * 
 	 * @param Manufacturer_id   生产商
 	 * @param Distributor_id    分销商
 	 * @param time yyyy-mm
-	 * @return 供应链协作绩效评价(模块二)
+	 * @return 供应链协作绩效评价(模块二)  1.	准时交货率       3.	退货率
 	 */
-	public double[] getSupplyChainCooperation2(long Manufacturer_id,long Distributor_id,String time);
+	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation21(long Manufacturer_id,long Distributor_id,String time);
+	
+	/**
+	 * 
+	 * @param Manufacturer_id   生产商
+	 * @param Distributor_id    分销商
+	 * @param time yyyy-mm
+	 * @return 供应链协作绩效评价(模块二)  2.	成本利润率    4.	产需率
+	 */
+	public double[] getSupplyChainCooperation22(long Manufacturer_id,long Distributor_id,String time);
 	
 	/**
 	 * 
@@ -111,8 +132,9 @@ public interface SupplyChainService {
      * @param end yyyy-mm
      * @param company_id
      * @return 应收帐款净额（明细账的分类汇总结果）
+     * @throws ParseException 
      */
-    public double getNetreceivables(String start,String end,long company_id);
+    public double getNetreceivables(String start,String end,long company_id) throws ParseException;
     
     
     /**
@@ -138,8 +160,9 @@ public interface SupplyChainService {
      * @param end yyyy-mm
      * @param company_id
      * @return 库存净额（明细账的分类汇总导入）
+     * @throws ParseException 
      */
-    public double getNetinventory(String start,String end,long company_id);
+    public double getNetinventory(String start,String end,long company_id) throws ParseException;
     
     /**
      * @param id       申请的公司
