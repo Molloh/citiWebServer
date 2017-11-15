@@ -145,30 +145,41 @@ public class CashFlowTableSheetCal {
 		operating_activities[6]=Net_cash_increase[0]-Investment_activities[5]-Financing_activities[5];//1.7“经营活动产生的现金流量净额”
 		operating_activities[1]=operating_activities[6]-operating_activities[0]+operating_activities[2]+
 				operating_activities[3]+operating_activities[4]+operating_activities[5];
-		
-		cfr.save(new CashflowSheet(company_id,time,"销售产成品、商品、提供劳务收到的现金",operating_activities[0]));
-		cfr.save(new CashflowSheet(company_id,time,"收到其他与经营活动有关的现金",operating_activities[1]));
-		cfr.save(new CashflowSheet(company_id,time,"购买原材料、商品、接受劳务支付的现金",operating_activities[2]));
-		cfr.save(new CashflowSheet(company_id,time,"支付的职工薪酬",operating_activities[3]));
-		cfr.save(new CashflowSheet(company_id,time,"支付的税费",operating_activities[4]));
-		cfr.save(new CashflowSheet(company_id,time,"支付其他与经营活动有关的现金",operating_activities[5]));
-		cfr.save(new CashflowSheet(company_id,time,"经营活动产生的现金流量净额",operating_activities[6]));
-		cfr.save(new CashflowSheet(company_id,time,"收回短期投资、长期债券投资和长期股权投资收到的现金",Investment_activities[0]));
-		cfr.save(new CashflowSheet(company_id,time,"取得投资收益收到的现金",Investment_activities[1]));
-		cfr.save(new CashflowSheet(company_id,time,"处置固定资产、无形资产和其他非流动资产收回的现金净额 ",Investment_activities[2]));
-		cfr.save(new CashflowSheet(company_id,time,"短期投资、长期债券投资和长期股权投资支付的现金",Investment_activities[3]));
-		cfr.save(new CashflowSheet(company_id,time,"购建固定资产、无形资产和其他非流动资产支付的现金",Investment_activities[4]));
-		cfr.save(new CashflowSheet(company_id,time,"投资活动产生的现金流量净额",Investment_activities[5]));
-		cfr.save(new CashflowSheet(company_id,time,"取得借款收到的现金",Financing_activities[0]));
-		cfr.save(new CashflowSheet(company_id,time,"吸收投资者投资收到的现金",Financing_activities[1]));
-		cfr.save(new CashflowSheet(company_id,time,"偿还借款本金支付的现金",Financing_activities[2]));
-		cfr.save(new CashflowSheet(company_id,time,"偿还借款利息支付的现金",Financing_activities[3]));
-		cfr.save(new CashflowSheet(company_id,time,"分配利润支付的现金",Financing_activities[4]));
-		cfr.save(new CashflowSheet(company_id,time,"筹资活动产生的现金流量净额",Financing_activities[5]));
-		cfr.save(new CashflowSheet(company_id,time,"四、现金净增加额",Net_cash_increase[0]));
-		cfr.save(new CashflowSheet(company_id,time,"加：期初现金余额",Net_cash_increase[1]));
-		cfr.save(new CashflowSheet(company_id,time,"五、期末现金余额",Final_cash_balance));
+
+		save(company_id,time,"销售产成品、商品、提供劳务收到的现金",operating_activities[0]);
+		save(company_id,time,"收到其他与经营活动有关的现金",operating_activities[1]);
+		save(company_id,time,"购买原材料、商品、接受劳务支付的现金",operating_activities[2]);
+        save(company_id,time,"支付的职工薪酬",operating_activities[3]);
+        save(company_id,time,"支付的税费",operating_activities[4]);
+        save(company_id,time,"支付其他与经营活动有关的现金",operating_activities[5]);
+        save(company_id,time,"经营活动产生的现金流量净额",operating_activities[6]);
+        save(company_id,time,"收回短期投资、长期债券投资和长期股权投资收到的现金",Investment_activities[0]);
+        save(company_id,time,"取得投资收益收到的现金",Investment_activities[1]);
+        save(company_id,time,"处置固定资产、无形资产和其他非流动资产收回的现金净额 ",Investment_activities[2]);
+        save(company_id,time,"短期投资、长期债券投资和长期股权投资支付的现金",Investment_activities[3]);
+        save(company_id,time,"购建固定资产、无形资产和其他非流动资产支付的现金",Investment_activities[4]);
+        save(company_id,time,"投资活动产生的现金流量净额",Investment_activities[5]);
+        save(company_id,time,"取得借款收到的现金",Financing_activities[0]);
+        save(company_id,time,"吸收投资者投资收到的现金",Financing_activities[1]);
+        save(company_id,time,"偿还借款本金支付的现金",Financing_activities[2]);
+        save(company_id,time,"偿还借款利息支付的现金",Financing_activities[3]);
+        save(company_id,time,"分配利润支付的现金",Financing_activities[4]);
+        save(company_id,time,"筹资活动产生的现金流量净额",Financing_activities[5]);
+        save(company_id,time,"四、现金净增加额",Net_cash_increase[0]);
+        save(company_id,time,"加：期初现金余额",Net_cash_increase[1]);
+        save(company_id,time,"五、期末现金余额",Final_cash_balance);
 	}
+
+	private void save(Long companyId,String time,String name,Double value){
+	    CashflowSheet item = cfr.findByPeriodAndCompanyIdAndName(time,companyId,name);
+	    if (item != null){
+	        item.setBalance(value);
+	        cfr.save(item);
+        }else {
+	        item = new CashflowSheet(companyId,time,name,value);
+	        cfr.save(item);
+        }
+    }
 	
 	private double getGivenVourchers(String time, String sub1, String sub2,long company_id){
 		List<VoucherItem> list1=vir.getDebitVoucherItemByPeriod(time, sub1, company_id);

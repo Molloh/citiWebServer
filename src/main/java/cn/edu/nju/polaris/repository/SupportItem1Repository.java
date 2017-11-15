@@ -71,6 +71,28 @@ public interface SupportItem1Repository extends JpaRepository<SupportItem1,Suppo
     List<SupportItem1>findNewestProduct(Long companyId);
 
     /**
+     * 根据科目id，公司id，收入/发出方，time（yyyy-mm到这个时间为止的）的信息
+     * @param subjects
+     * @param companyId
+     * @param endSide
+     * @param period yyyy-mm
+     * @return
+     */
+    @Query(value = "select * from support_item1 where subjects=?1 and company_id =?2 and end_side=?3 and date_format(date,'%Y-%m')<?4",nativeQuery = true)
+    List<SupportItem1> findAllBySubjectsAndCompanyIdAndEndSideAndDateBefore(String subjects,Long companyId,String endSide,String period);
+
+
+    /**
+     * 根据科目id，公司id，收入/发出方，time（yyyy-mm当期）的信息
+     * @param subjects
+     * @param companyId
+     * @param endSide
+     * @param period yyyy-mm
+     * @return
+     */
+    @Query(value = "select * from support_item1 where subjects=?1 and company_id =?2 and end_side=?3 and date_format(date,'%Y-%m')=?4",nativeQuery = true)
+    List<SupportItem1> findAllBySubjectsAndCompanyIdAndEndSideAndDate(String subjects,Long companyId,String endSide,String period);
+    /**
      * 根据公司id，收入/发出方名称，日期为期数
      * @param compangId
      * @param companyName 当companyId所代表公司为发出方时，companyName为收入方名称   当companyId所代表公司为收入方时，companyName为发出方名称

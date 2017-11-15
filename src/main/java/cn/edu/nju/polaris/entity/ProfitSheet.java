@@ -26,6 +26,9 @@ public class ProfitSheet {
     @Column(name = "balance")
     private Double balance; // 余额
 
+    public ProfitSheet() {
+    }
+
     public ProfitSheet(long company_id, String time, String string, double balance) {
 		this.companyId=company_id;
 		this.period=time;

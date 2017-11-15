@@ -45,8 +45,8 @@ public class SheetController {
     }
 
     @PutMapping("/profit/update/{companyId}")
-    public void updateProfitSheet(Long companyId,
-                                  String phase){
+    public void updateProfitSheet(@PathVariable Long companyId,
+                                  @RequestParam String phase){
         profitTableSheetUpdate.UpdateProfitTable(phase,companyId);
     }
 

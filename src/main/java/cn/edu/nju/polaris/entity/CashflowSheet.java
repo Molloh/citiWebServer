@@ -83,4 +83,7 @@ public class CashflowSheet {
                 ", balance=" + balance +
                 '}';
     }
+
+    public CashflowSheet() {
+    }
 }

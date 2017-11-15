@@ -3,6 +3,7 @@ package cn.edu.nju.polaris.controller;
 import cn.edu.nju.polaris.entity.SupplyChain;
 import cn.edu.nju.polaris.service.SupplyChainService;
 import cn.edu.nju.polaris.vo.SupplyChainVO;
+import cn.edu.nju.polaris.vo.SupplyModuleOne;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -67,4 +68,5 @@ public class SupplyChainController {
     void saveOneByDownstream(@RequestBody SupplyChainVO vo){
         supplyChainService.addOneChainForDownStream(vo);
     }
+
 }

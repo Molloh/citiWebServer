@@ -7,7 +7,6 @@ import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 
 import java.util.ArrayList;
-
 public interface VoucherService {
 
 //    void saveVoucher(Voucher voucher);
