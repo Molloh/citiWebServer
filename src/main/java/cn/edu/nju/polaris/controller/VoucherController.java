@@ -27,7 +27,7 @@ public class VoucherController {
 
 
     @ApiOperation(value = "新增一个凭证")
-    @ApiImplicitParam(value = "vo",name = "凭证vo",required = true,dataType = "VoucherVO")
+    @ApiImplicitParam(name = "vo",value = "凭证vo",required = true,dataType = "VoucherVO")
     @PostMapping("")
     public void addOneVoucher(@RequestBody VoucherVO vo){
         voucherService.saveOneVoucher(vo);
@@ -37,8 +37,8 @@ public class VoucherController {
 
     @ApiOperation(value = "获得凭证信息",notes = "根据公司id和凭证号获得凭证信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "voucherId",name = "凭证字",required = true,dataType = "String"),
-            @ApiImplicitParam(value = "companyId",name = "公司id",required = true,dataType = "Long")
+            @ApiImplicitParam(name = "voucherId",value = "凭证字",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long")
     })
     @GetMapping(value = "/{voucherId}")
     public VoucherVO getVoucher(@PathVariable String voucherId,
@@ -46,20 +46,47 @@ public class VoucherController {
         return voucherService.getOneVoucher(voucherId,companyId);
     }
 
+    @ApiOperation(value = "获得当前凭证所有条目的合计")
+    @ApiImplicitParam(name = "itemList",value = "所有凭证条目",required = true,dataType = "ArrayList")
+    @PostMapping(value = "/total")
+    public ItemTotalVo getVoucherTotal(@RequestBody ArrayList<VoucherItem> itemList){
+        return voucherService.getVoucherTotal(itemList);
+    }
+
+    @ApiOperation(value = "获得当前月份的会计科目的余额")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "subjectId",value = "科目ID",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/subjects/balance/{subjectId}/{time}")
+    public double getOneSubjectBalance(@PathVariable String subjectId,
+                                       @RequestParam Long companyId,
+                                       @PathVariable String time){
+        return voucherService.getOneSubjectBalance(subjectId,companyId,time);
+    }
+
+    @ApiOperation(value = "获得当前时期的全部凭证信息")
+    @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    @GetMapping("/current/{companyId}")
+    public ArrayList<VoucherVO> getCurrentPeriodVouchers(@PathVariable Long companyId){
+        return voucherService.getCurrentPeriodAllVoucher(companyId);
+    }
+
     @ApiOperation(value = "根据搜索条件获得凭证信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "companyId",name = "公司id",required = true,dataType = "Long"),
-            @ApiImplicitParam(value = "startPeriod",name = "会计期间开始时期",required = true,dataType = "String"),
-            @ApiImplicitParam(value = "endPeriod",name = "会计期间结束时期",required = true,dataType = "String"),
-            @ApiImplicitParam(value = "character",name = "凭证字",required = false,defaultValue = "全部",dataType = "String"),
-            @ApiImplicitParam(value = "maker",name = "制单人",required = false,defaultValue = "全部",dataType = "String"),
-            @ApiImplicitParam(value = "abstracts",name = "摘要",required = false,defaultValue = "",dataType = "String"),
-            @ApiImplicitParam(value = "subjectId",name = "科目id",required = false,defaultValue = "",dataType = "String"),
-            @ApiImplicitParam(value = "lowPrice",name = "金额下限",required = false,defaultValue = "-1.0",dataType = "Double"),
-            @ApiImplicitParam(value = "highPrice",name = "金额上限",required = false,defaultValue = "-1.0",dataType = "Double"),
-            @ApiImplicitParam(value = "lowVoucherNumber",name = "凭证号下限",required = false,defaultValue = "-1",dataType = "Integer"),
-            @ApiImplicitParam(value = "highVoucherNumber",name = "凭证号上限",required = false,defaultValue = "-1",dataType = "Integer"),
-            @ApiImplicitParam(value = "sortOrder",name = "排序方式",required = false,defaultValue = "0",dataType = "Integer")
+            @ApiImplicitParam(name = "companyId",value = "公司id",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "startPeriod",value = "会计期间开始时期",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "endPeriod",value = "会计期间结束时期",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "character",value = "凭证字",required = false,defaultValue = "全部",dataType = "String"),
+            @ApiImplicitParam(name = "maker",value = "制单人",required = false,defaultValue = "全部",dataType = "String"),
+            @ApiImplicitParam(name = "abstracts",value = "摘要",required = false,defaultValue = "",dataType = "String"),
+            @ApiImplicitParam(name = "subjectId",value = "科目id",required = false,defaultValue = "",dataType = "String"),
+            @ApiImplicitParam(name = "lowPrice",value = "金额下限",required = false,defaultValue = "-1.0",dataType = "Double"),
+            @ApiImplicitParam(name = "highPrice",value = "金额上限",required = false,defaultValue = "-1.0",dataType = "Double"),
+            @ApiImplicitParam(name = "lowVoucherNumber",value = "凭证号下限",required = false,defaultValue = "-1",dataType = "Integer"),
+            @ApiImplicitParam(name = "highVoucherNumber",value = "凭证号上限",required = false,defaultValue = "-1",dataType = "Integer"),
+            @ApiImplicitParam(name = "sortOrder",value = "排序方式",required = false,defaultValue = "0",dataType = "Integer")
     })
     @GetMapping(value = "/search")
     public List<VoucherVO> getSearchedVoucher(@RequestParam Long companyId,
@@ -89,5 +116,56 @@ public class VoucherController {
         return voucherService.getSearchedVoucher(vo,companyId);
     }
 
+    @ApiOperation(value = "删除一条凭证")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "voucherId",value = "凭证ID",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    })
+    @DeleteMapping("{voucherId}")
+    public void deleteOneVoucher(@PathVariable String voucherId,
+                                 @RequestParam Long companyId){
+        voucherService.deleteOneVoucherVo(voucherId,companyId);
+    }
 
+    @ApiOperation(value = "修改一条凭证信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "vo",value = "凭证VO",required = true,dataType = "VoucherVO"),
+            @ApiImplicitParam(name = "voucherId",value = "凭证id",required = true,dataType = "String")
+    })
+    @PutMapping("{voucherId}")
+    public void modifyOneVoucher(@RequestBody VoucherVO vo,
+                                 @PathVariable String voucherId){
+        voucherService.amendOneVoucher(vo,voucherId);
+    }
+
+    @ApiOperation(value = "根据输入的凭证字获得当前最新的凭证号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "voucherChar",value = "凭证字",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    })
+    @GetMapping("/num/{voucherChar}")
+    public int getCurrentNumber(@PathVariable String voucherChar,
+                                @RequestParam Long companyId){
+        return voucherService.getCurrentNumber(voucherChar,companyId);
+    }
+
+    @ApiOperation(value = "获得全部的会计期间")
+    @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    @GetMapping("/period")
+    public ArrayList<String> getAllPeriod(@RequestParam Long companyId){
+        return voucherService.getAllExistedPeriod(companyId);
+    }
+
+    @ApiOperation(value = "获得全部的制单人信息")
+    @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    @GetMapping("/maker")
+    public ArrayList<String> getAllMaker(@RequestParam Long companyId){
+        return voucherService.getAllExistedMaker(companyId);
+    }
+
+    @ApiOperation(value = "获得全部的科目编号")
+    @GetMapping("/subjectid")
+    public ArrayList<String> getAllSubjectId(){
+        return voucherService.getAllSubjectId();
+    }
 }
