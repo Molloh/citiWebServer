@@ -8,6 +8,9 @@ import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
 import cn.edu.nju.polaris.repository.*;
 import cn.edu.nju.polaris.service.VoucherService;
+import cn.edu.nju.polaris.sheet.CalculateBalanceSheet;
+import cn.edu.nju.polaris.sheet.CashFlowTableSheetCal;
+import cn.edu.nju.polaris.sheet.ProfitTableSheetCal;
 import cn.edu.nju.polaris.vo.voucher.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +31,12 @@ public class VoucherServiceImpl implements VoucherService{
     private final SubjectsRecordRepository subjectsRecordRepository;
     private final SupportItem1Repository supportItem1Repository;
     private final SupportItem2Repository supportItem2Repository;
+    private final CalculateBalanceSheet calculateBalanceSheet;
+    private final CashFlowTableSheetCal cashFlowTableSheetCal;
+    private final ProfitTableSheetCal profitTableSheetCal;
 
     @Autowired
-    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository) {
+    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository, CalculateBalanceSheet calculateBalanceSheet, CashFlowTableSheetCal cashFlowTableSheetCal, ProfitTableSheetCal profitTableSheetCal) {
         this.voucherRepository = voucherRepository;
         this.voucherItemRepository = voucherItemRepository;
         this.subjectsRepository=subjectsRepository;
@@ -38,6 +44,9 @@ public class VoucherServiceImpl implements VoucherService{
         this.subjectsRecordRepository=subjectsRecordRepository;
         this.supportItem1Repository=supportItem1Repository;
         this.supportItem2Repository=supportItem2Repository;
+        this.calculateBalanceSheet=calculateBalanceSheet;
+        this.cashFlowTableSheetCal=cashFlowTableSheetCal;
+        this.profitTableSheetCal=profitTableSheetCal;
     }
 
     private boolean addVoucher(Voucher voucher) {
@@ -411,6 +420,10 @@ public class VoucherServiceImpl implements VoucherService{
         boolean result2=addSeveralItems(itemList);
 
         result=result&result1&result2;
+
+        calculateBalanceSheet.UpdateBalanceSheet(voucherVO.getCompany_id(), voucherVO.getDate().substring(0,7));
+        cashFlowTableSheetCal.UpdateCashFlowTable(voucherVO.getDate().substring(0,7),voucherVO.getCompany_id());
+        profitTableSheetCal.UpdateProfitTable(voucherVO.getDate().substring(0,7),voucherVO.getCompany_id());
 
         return result;
 
@@ -928,6 +941,7 @@ public class VoucherServiceImpl implements VoucherService{
         Voucher voucher=voucherRepository.findByVoucherIdAndCompanyId(voucherId,factoryId);
         List<VoucherItem> itemList=voucherItemRepository.findByCompanyIdAndVoucherId(factoryId,voucherId);
 
+
         //先对每一行凭证条目进行处理 把当前期间的科目余额进行修改
         for(int count=0;count<itemList.size();count++){
             VoucherItem oneItem=itemList.get(count);
@@ -957,6 +971,9 @@ public class VoucherServiceImpl implements VoucherService{
 
         boolean result=result1&&result2&&result3&&result4;
 
+        calculateBalanceSheet.UpdateBalanceSheet(factoryId,String.valueOf(voucher.getDate()).substring(0,7));
+        cashFlowTableSheetCal.UpdateCashFlowTable(String.valueOf(voucher.getDate()).substring(0,7),factoryId);
+        profitTableSheetCal.UpdateProfitTable(String.valueOf(voucher.getDate()).substring(0,7),factoryId);
 
         return result;
     }
