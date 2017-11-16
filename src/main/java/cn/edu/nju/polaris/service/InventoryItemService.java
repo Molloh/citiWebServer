@@ -12,4 +12,8 @@ public interface InventoryItemService {
     void deleteOneInventoryItem(InventoryItemVO vo);
 
     void saveMoreInventoryItem(List<InventoryItemVO> list);
+
+    List<InventoryItemVO> findAllMaterial();
+
+    List<InventoryItemVO> findAllProduct();
 }
