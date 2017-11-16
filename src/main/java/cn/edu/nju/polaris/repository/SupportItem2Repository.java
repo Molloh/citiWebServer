@@ -5,6 +5,7 @@ import cn.edu.nju.polaris.entity.SupportItem1;
 import cn.edu.nju.polaris.entity.SupportItem2;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public interface SupportItem2Repository extends JpaRepository<SupportItem2,Suppo
      * @param voucherId
      * @param voucherLines
      */
+    @Transactional
     void deleteAllByCompanyIdAndVoucherIdAndVoucherLines(Long companyId,String voucherId,int voucherLines);
 
     /**
@@ -40,8 +42,10 @@ public interface SupportItem2Repository extends JpaRepository<SupportItem2,Suppo
      * @param voucherLines
      * @param supportLines
      */
+    @Transactional
     void deleteByCompanyIdAndVoucherIdAndVoucherLinesAndSupportLines(Long companyId,String voucherId,int voucherLines,int supportLines);
 
 
+    @Transactional
     void deleteByCompanyIdAndVoucherId(Long companyId,String voucherId);
 }

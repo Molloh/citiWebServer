@@ -121,8 +121,8 @@ public class VoucherController {
             @ApiImplicitParam(name = "voucherId",value = "凭证ID",required = true,dataType = "String"),
             @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
     })
-    @DeleteMapping("{voucherId}")
-    public void deleteOneVoucher(@PathVariable String voucherId,
+    @PutMapping("/delete")
+    public void deleteOneVoucher(@RequestParam String voucherId,
                                  @RequestParam Long companyId){
         voucherService.deleteOneVoucherVo(voucherId,companyId);
     }
@@ -132,9 +132,9 @@ public class VoucherController {
             @ApiImplicitParam(name = "vo",value = "凭证VO",required = true,dataType = "VoucherVO"),
             @ApiImplicitParam(name = "voucherId",value = "凭证id",required = true,dataType = "String")
     })
-    @PutMapping("{voucherId}")
+    @PutMapping("")
     public void modifyOneVoucher(@RequestBody VoucherVO vo,
-                                 @PathVariable String voucherId){
+                                 @RequestParam String voucherId){
         voucherService.amendOneVoucher(vo,voucherId);
     }
 

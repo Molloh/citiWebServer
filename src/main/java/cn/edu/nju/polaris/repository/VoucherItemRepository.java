@@ -6,10 +6,10 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@CacheConfig(cacheNames = "voucherItems")
 public interface VoucherItemRepository extends JpaRepository<VoucherItem,VoucherItemMultiKeysClass>{
 
     /**
@@ -18,7 +18,6 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param voucherId
      * @return
      */
-    @Cacheable
     List<VoucherItem> findByCompanyIdAndVoucherId(Long companyId,String voucherId);
 
     /**
@@ -26,7 +25,6 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @return
      */
-    @Cacheable
     List<VoucherItem> findByCompanyId(Long companyId);
 
     /**
@@ -34,6 +32,7 @@ public interface VoucherItemRepository extends JpaRepository<VoucherItem,Voucher
      * @param companyId
      * @param voucherId
      */
+    @Transactional
     void deleteAllByCompanyIdAndVoucherId(Long companyId, String voucherId);
 
     /**

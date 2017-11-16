@@ -13,16 +13,16 @@ public class VoucherItemMultiKeysClass implements Serializable{
     @Column(name = "voucher_id")
     private String voucherId;
 
-    @Column(name = "lines")
-    private Integer lines;
+    @Column(name = "line")
+    private Integer line;
 
     public VoucherItemMultiKeysClass() {
     }
 
-    public VoucherItemMultiKeysClass(Long companyId, String voucherId, Integer lines) {
+    public VoucherItemMultiKeysClass(Long companyId, String voucherId, Integer line) {
         this.companyId = companyId;
         this.voucherId = voucherId;
-        this.lines = lines;
+        this.line = line;
     }
 
     public Long getCompanyId() {
@@ -42,11 +42,11 @@ public class VoucherItemMultiKeysClass implements Serializable{
     }
 
     public int getLines() {
-        return lines;
+        return line;
     }
 
-    public void setLines(int lines) {
-        this.lines = lines;
+    public void setLines(int line) {
+        this.line = line;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class VoucherItemMultiKeysClass implements Serializable{
         int result = 1;
         result = PRIME * result + ((companyId == null) ? 0 : companyId.hashCode());
         result = PRIME * result + ((voucherId == null) ? 0 : voucherId.hashCode());
-        result = PRIME * result + ((lines == null) ? 0 : lines.hashCode());
+        result = PRIME * result + ((line == null) ? 0 : line.hashCode());
         return result;
     }
 
@@ -88,11 +88,11 @@ public class VoucherItemMultiKeysClass implements Serializable{
             return false;
         }
 
-        if (lines == null){
-            if (other.lines != null){
+        if (line == null){
+            if (other.line != null){
                 return false;
             }
-        }else if(!lines.equals(other.lines)){
+        }else if(!line.equals(other.line)){
             return false;
         }
         return true;

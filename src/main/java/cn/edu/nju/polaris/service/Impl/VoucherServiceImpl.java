@@ -324,7 +324,7 @@ public class VoucherServiceImpl implements VoucherService{
                 newRecord.setCompanyId(voucherVO.getCompany_id());
                 newRecord.setVoucherId(voucherVO.getVoucher_id());
                 newRecord.setSubjectsId(subjectId);
-                newRecord.setDate(Timestamp.valueOf(voucherVO.getDate()));
+                newRecord.setDate(DateHelper.DateToTimeStamp(voucherVO.getDate()));
                 newRecord.setDebitAmount(debitAmount);
                 newRecord.setCreditAmount(creditAmount);
 
@@ -420,7 +420,7 @@ public class VoucherServiceImpl implements VoucherService{
         VoucherItem voucherItem=new VoucherItem();
         try{
             voucherItem.setCompanyId(itemVo.getCompany_id());
-            voucherItem.setVoucherId(itemVo.getSubjectId());
+            voucherItem.setVoucherId(itemVo.getVoucher_id());
             voucherItem.setLines(itemVo.getLines());
             voucherItem.setDescription(itemVo.getAbstracts());
             voucherItem.setSubjects(itemVo.getSubjectId());
@@ -942,17 +942,17 @@ public class VoucherServiceImpl implements VoucherService{
             newBalance.setCompanyId(beforeBalance.getCompanyId());
             newBalance.setSubjectsId(beforeBalance.getSubjectsId());
             newBalance.setDate(beforeBalance.getDate());
-            newBalance.setDebitAmount(beforeBalance.getDebitAmount()+debitAmount);
-            newBalance.setCreditAmount(beforeBalance.getCreditAmount()+creditAmount);
-            newBalance.setBalance(beforeBalance.getBalance()+SubjectBalanceHelper.getDirection(subjectId)*(debitAmount-creditAmount));
+            newBalance.setDebitAmount(beforeBalance.getDebitAmount()-debitAmount);
+            newBalance.setCreditAmount(beforeBalance.getCreditAmount()-creditAmount);
+            newBalance.setBalance(beforeBalance.getBalance()-SubjectBalanceHelper.getDirection(subjectId)*(debitAmount-creditAmount));
 
             subjectsBalanceRepository.save(newBalance);
         }
 
-        boolean result1=deleteOneVoucher(voucherId,factoryId);
-        boolean result2=deleteOneVoucherItems(voucherId,factoryId);
         boolean result3=deleteOneVoucherAllSupportOne(voucherId,factoryId);
         boolean result4=deleteOneVoucherAllSupportTwo(voucherId,factoryId);
+        boolean result2=deleteOneVoucherItems(voucherId,factoryId);
+        boolean result1=deleteOneVoucher(voucherId,factoryId);
         subjectsRecordRepository.deleteAllByCompanyIdAndVoucherId(factoryId,voucherId);
 
         boolean result=result1&&result2&&result3&&result4;
