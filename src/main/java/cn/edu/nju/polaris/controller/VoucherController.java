@@ -138,6 +138,17 @@ public class VoucherController {
         voucherService.amendOneVoucher(vo,voucherId);
     }
 
+    @ApiOperation(value = "获得当前的辅助信息一种的某种类的结存量")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "variety",value = "种类",required = true,dataType = "String")
+    })
+    @GetMapping("/stock/{variety}")
+    public double getCurrentVarietyEndingStock(@RequestParam Long companyId,
+                                               @PathVariable String variety){
+        return voucherService.getCurrentVarietyEndingStocks(companyId,variety);
+    }
+
     @ApiOperation(value = "根据输入的凭证字获得当前最新的凭证号")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "voucherChar",value = "凭证字",required = true,dataType = "String"),

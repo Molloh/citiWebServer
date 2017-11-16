@@ -17,6 +17,15 @@ public class BookSearchVo {
         super();
     }
 
+    public BookSearchVo(String startPeriod, String endPeriod, String startSubjectId, String endSubjectId, int lowLevel, int highLevel) {
+        this.startPeriod = startPeriod;
+        this.endPeriod = endPeriod;
+        this.startSubjectId = startSubjectId;
+        this.endSubjectId = endSubjectId;
+        this.lowLevel = lowLevel;
+        this.highLevel = highLevel;
+    }
+
     @Override
     public String toString() {
         return "BookSearchVo{" +
