@@ -1,13 +1,14 @@
 package cn.edu.nju.polaris.controller;
 
-import cn.edu.nju.polaris.entity.SupplyChain;
 import cn.edu.nju.polaris.service.SupplyChainService;
 import cn.edu.nju.polaris.vo.*;
+import cn.edu.nju.polaris.vo.Inventory.InventoryAppraisalVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,7 @@ public class SupplyChainController {
         this.supplyChainService = supplyChainService;
     }
 
+    /*********供应链设置***********/
     @ApiOperation(value = "获得所有供应链")
     @GetMapping("/all")
     List<SupplyChainVO> getAllSupplyChain(){
@@ -69,8 +71,118 @@ public class SupplyChainController {
         supplyChainService.addOneChainForDownStream(vo);
     }
 
+
+    /*******供应链绩效评价**********/
+    @ApiOperation(value = "供应链绩评价模块一")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "supplierId",value = "供应商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "distributorId",value = "分销商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/evaluation/module1")
+    List<SupplyModuleOne> getSupplyChainMember(@RequestParam Long supplierId,
+                                               @RequestParam Long manufacturerId,
+                                               @RequestParam Long distributorId,
+                                               @RequestParam String time){
+        return supplyChainService.getSupplyChainMember(supplierId,manufacturerId,distributorId,time);
+    }
+
+    @ApiOperation(value = "供应链绩评价模块一参考值",notes = "平均值、优秀值、较高值")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "supplierId",value = "供应商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "distributorId",value = "分销商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/evaluation/module1/reference")
+    List<List<SupplyModuleOne>> getSupplyChainMemberReference(@RequestParam Long supplierId,
+                                                              @RequestParam Long manufacturerId,
+                                                              @RequestParam Long distributorId,
+                                                              @RequestParam String time){
+        return supplyChainService.getSupplyChainMemberReference(supplierId,manufacturerId,distributorId,time);
+    }
+
+
+    @ApiOperation(value = "供应链绩评价模块二",notes = "供应商与生产商之间的'准时交货率'与'退货率'")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "supplierId",value = "供应商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/evaluation/module2/value1")
+    List<InventoryAppraisalVo> getSupplyChainCooperation11(@RequestParam Long supplierId,
+                                                           @RequestParam Long manufacturerId,
+                                                           @RequestParam String time){
+        return supplyChainService.getSupplyChainCooperation11(supplierId,manufacturerId,time);
+    }
+
+
+    @ApiOperation(value = "供应链绩评价模块二",notes = "供应商与生产商之间的'成本利润率'与'产需率'")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "supplierId",value = "供应商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/evaluation/module2/value2")
+    double[] getSupplyChainCooperation12(@RequestParam Long supplierId,
+                                         @RequestParam Long manufacturerId,
+                                         @RequestParam String time){
+        return supplyChainService.getSupplyChainCooperation12(supplierId,manufacturerId,time);
+    }
+
+
+    @ApiOperation(value = "供应链绩评价模块二",notes = "生产商与分销商之间的'准时交货率'与'退货率'")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "distributorId",value = "分销商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/evaluation/module2/value3")
+    List<InventoryAppraisalVo> getSupplyChainCooperation21(@RequestParam Long manufacturerId,
+                                                           @RequestParam Long distributorId,
+                                                           @RequestParam String time){
+        return supplyChainService.getSupplyChainCooperation21(manufacturerId,distributorId,time);
+    }
+
+    @ApiOperation(value = "供应链绩评价模块二",notes = "生产商与分销商之间的'成本利润率'与'产需率'")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "distributorId",value = "分销商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String")
+    })
+    @GetMapping("/evaluation/module2/value4")
+    double[] getSupplyChainCooperation22(@RequestParam Long manufacturerId,
+                                         @RequestParam Long distributorId,
+                                         @RequestParam String time){
+        return supplyChainService.getSupplyChainCooperation22(manufacturerId,distributorId,time);
+    }
+
+    @ApiOperation(value = "供应链绩评价模块三",notes = "供应链整体绩效评价（10个数据）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "supplierName",value = "供应商名称",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "manufacturerName",value = "生产商名称",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "distributorName",value = "分销商名称",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "supplierId",value = "供应商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "manufacturerId",value = "生产商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "distributorId",value = "分销商ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String"),
+    })
+    @GetMapping("/evaluation/module3")
+    double[] getSupplyChainTotal(@RequestParam String supplierName,
+                                 @RequestParam String manufacturerName,
+                                 @RequestParam String distributorName,
+                                 @RequestParam Long supplierId,
+                                 @RequestParam Long manufacturerId,
+                                 @RequestParam Long distributorId,
+                                 @RequestParam String time){
+        return supplyChainService.getSupplyChainTotal(supplierName,manufacturerName,distributorName,supplierId,manufacturerId,distributorId,time);
+    }
+
+
+    /****供应链融资****/
     @ApiOperation(value = "应收账款融资中的'应收账款对象'")
-    @ApiImplicitParam(name = "cmpanyId",value = "申请融资的公司ID",required = true,dataType = "Long")
+    @ApiImplicitParam(name = "companyId",value = "申请融资的公司ID",required = true,dataType = "Long")
     @GetMapping("/financing/receivables/{companyId}")
     List<String> getAccountsReceivableCompanys(@PathVariable Long companyId){
         return supplyChainService.getAccountsreceivableCompanys(companyId);
@@ -85,7 +197,7 @@ public class SupplyChainController {
     @GetMapping("/financing/receivables/net/{companyId}")
     Double getNetReceivables(@RequestParam String start,
                              @RequestParam String end,
-                             @PathVariable Long companyId){
+                             @PathVariable Long companyId) throws ParseException {
         return supplyChainService.getNetreceivables(start,end,companyId);
     }
 
@@ -105,7 +217,7 @@ public class SupplyChainController {
     @GetMapping("/financing/inventory/net/{companyId}")
     Double getNetInventory(@RequestParam String start,
                            @RequestParam String end,
-                           @PathVariable Long companyId){
+                           @PathVariable Long companyId) throws ParseException {
         return supplyChainService.getNetinventory(start,end,companyId);
     }
 
@@ -157,6 +269,7 @@ public class SupplyChainController {
         supplyChainService.Applyforfinancing_Confirmingwarehousefinancing(companyId,goods,from,money,rate);
     }
 
+    /******金融机构部分获得所有融资******/
     @ApiOperation(value = "获得所有应收账款融资",notes = "金融机构需求")
     @GetMapping("/financing/type1")
     List<Financing1> getAllFinancing1(){
@@ -174,5 +287,6 @@ public class SupplyChainController {
     List<Financing3> getAllFinancing3(){
         return supplyChainService.getfinancings3();
     }
+
 
 }

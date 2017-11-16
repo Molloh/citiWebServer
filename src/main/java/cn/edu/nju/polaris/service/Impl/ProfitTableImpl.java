@@ -116,22 +116,35 @@ public class ProfitTableImpl implements ProfitTableService{
 		
 		List<VoucherItem> list2=vir.getListThroughPeriod(lastTime(time), company_id);	
 		Map<String,double[]> map2=new HashMap<String,double[]>();
-		map=helper.tempCal(list2);
 		
 		double res[]=new double[10];
 		
-		res[0]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "四、净利润（净亏损以“-”号填列）").getBalance();//净利润
-		res[1]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "三、利润总额（亏损总额以“-”号填列）").getBalance();//利润总额
-		res[2]=helper.Cal("5401", map);//主营业务成本
-		res[3]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "销售费用").getBalance();//销售费用
-		res[4]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "管理费用").getBalance();//管理费用
-		res[5]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "财务费用").getBalance();//财务费用
-		res[6]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "减：营业成本").getBalance();//营业成本
-		res[7]=helper.Cal("5051", map);//其他业务收入
-		res[8]=helper.Cal("5001", map);//本期主营业务收入
-		res[9]=helper.Cal("5001", map2);//上一期主营业务收入
-				
-		
+		if(list2.size()==0){
+			res[0]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "四、净利润（净亏损以“-”号填列）").getBalance();//净利润
+			res[1]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "三、利润总额（亏损总额以“-”号填列）").getBalance();//利润总额
+			res[2]=0;//主营业务成本
+			res[3]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "销售费用").getBalance();//销售费用
+			res[4]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "管理费用").getBalance();//管理费用
+			res[5]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "财务费用").getBalance();//财务费用
+			res[6]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "减：营业成本").getBalance();//营业成本
+			res[7]=0;//其他业务收入
+			res[8]=0;//本期主营业务收入
+			res[9]=helper.Cal("5001", map2);//上一期主营业务收入
+		}
+		else{
+			map=helper.tempCal(list2);	
+			res[0]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "四、净利润（净亏损以“-”号填列）").getBalance();//净利润
+			res[1]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "三、利润总额（亏损总额以“-”号填列）").getBalance();//利润总额
+			res[2]=helper.Cal("5401", map);//主营业务成本
+			res[3]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "销售费用").getBalance();//销售费用
+			res[4]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "管理费用").getBalance();//管理费用
+			res[5]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "财务费用").getBalance();//财务费用
+			res[6]=psr.findByCompanyIdAndPeriodAndName(company_id, time, "减：营业成本").getBalance();//营业成本
+			res[7]=helper.Cal("5051", map);//其他业务收入
+			res[8]=helper.Cal("5001", map);//本期主营业务收入
+			res[9]=helper.Cal("5001", map2);//上一期主营业务收入
+		}
+
 		return res;
 	}
 	

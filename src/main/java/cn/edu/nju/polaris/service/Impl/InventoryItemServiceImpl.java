@@ -9,6 +9,7 @@ import cn.edu.nju.polaris.vo.InventoryItemVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,4 +58,25 @@ public class InventoryItemServiceImpl implements InventoryItemService{
             saveOneInventoryItem(vo);
         }
     }
+
+    @Override
+    public List<InventoryItemVO> findAllMaterial() {
+        List<InventoryItem> list = inventoryItemrepository.findAllByCategory("原材料");
+        List<InventoryItemVO> resultList = new ArrayList<>();
+        for (InventoryItem item : list){
+            resultList.add(new InventoryItemVO(item.getCategory(),item.getName()));
+        }
+        return resultList;
+    }
+
+    @Override
+    public List<InventoryItemVO> findAllProduct() {
+        List<InventoryItem> list = inventoryItemrepository.findAllByCategory("产品");
+        List<InventoryItemVO> resultList = new ArrayList<>();
+        for (InventoryItem item : list){
+            resultList.add(new InventoryItemVO(item.getCategory(),item.getName()));
+        }
+        return resultList;
+    }
+
 }

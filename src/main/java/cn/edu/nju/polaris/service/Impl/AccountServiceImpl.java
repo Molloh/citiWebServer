@@ -27,6 +27,7 @@ public class AccountServiceImpl implements AccountService {
         if (vo != null && account != null){
             account.setLocation(vo.getLocation());
             account.setEmail(vo.getEmail());
+            account.setActiveTime(vo.getActiveTime());
             account.setFirstIndustry(vo.getFirstIndustry());
             account.setSecondIndustry(vo.getSecondIndustry());
             account.setSupplyChainIndex(vo.getSupplyChainIndex());
@@ -75,6 +76,7 @@ public class AccountServiceImpl implements AccountService {
         account.setId(vo.getId());
         account.setCompanyName(vo.getCompanyName());
         account.setSupplyChainIndex(vo.getSupplyChainIndex());
+        account.setScale(vo.getScale());
         account.setLocation(vo.getLocation());
         account.setActiveTime(vo.getActiveTime());
         account.setFirstIndustry(vo.getFirstIndustry());

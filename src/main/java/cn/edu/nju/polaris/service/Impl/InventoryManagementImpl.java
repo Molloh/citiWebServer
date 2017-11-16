@@ -216,6 +216,15 @@ public class InventoryManagementImpl implements InventoryManagementService {
         return getRawMaterialInventoryAppraisal(company_id1,company_id2,time,variety);
     }
 
+    @Override
+    public double getCurrentInventory(long company_id1, long company_id2, String time) {
+        List<SupportItem1> list1 = supportItem1Repository.findAllItemByDate(company_id1,time);
+        List<SupportItem1> list2 = supportItem1Repository.findAllItemByDate(company_id2,getLastMonth(time));
+        List<SupportItem1> list3 = supportItem1Repository.findAllByCompanyIdAndEndSideAndDate(company_id1,accountRepository.findById(company_id2).getCompanyName(),time);
+        double result = getAllInventory(list3)+getAllInventory(list1)-getAllInventory(list2);
+        return result;
+    }
+
     private ArrayList<InventoryMonitorItemVo> getInventoryMonitor(List<SupportItem1> list1, List<SafeInventory> list2){
         ArrayList<InventoryMonitorItemVo> result = new ArrayList<>();
         ArrayList<String> varieties = getAllVariety(list1);
@@ -311,5 +320,48 @@ public class InventoryManagementImpl implements InventoryManagementService {
             }
         }
         return result;
+    }
+
+    private String getLastMonth(String phase){
+        String[] data = phase.split("-");
+        int year = Integer.valueOf(data[0]);
+        int month = Integer.valueOf(data[1]);
+        if(month==1){
+            month = 12;
+            year = year-1;
+        }else{
+            month = month-1;
+        }
+
+        if(month<10){
+            return year+"-0"+month;
+        }else{
+            return year+"-"+month;
+        }
+    }
+
+    private double getAllInventory(List<SupportItem1> list){
+        ArrayList<String> varieties = getAllVariety(list);
+        double num = 0.0;
+        for(int i=0;i<varieties.size();i++) {
+            String variety = varieties.get(i);
+            Timestamp ts = null;
+            double end = 0.0;
+            for (int j = 0; j < list.size(); j++) {
+                SupportItem1 supportItem1 = list.get(j);
+                if (supportItem1.getVariety().equals(variety)) {
+                    if (ts == null) {
+                        ts = supportItem1.getDate();
+                    } else {
+                        if (supportItem1.getDate().after(ts)) {
+                            ts = supportItem1.getDate();
+                            end = supportItem1.getEndingStocks();
+                        }
+                    }
+                }
+                num = num + end;
+            }
+        }
+        return num;
     }
 }

@@ -17,7 +17,7 @@ public class VoucherItem implements Serializable{
     private String voucherId;     //凭证号
 
     @Id
-    private int lines;            //凭证行数
+    private int line;            //凭证行数
 
     @Column(name = "abstract")
     private String description;   //摘要
@@ -63,11 +63,11 @@ public class VoucherItem implements Serializable{
     }
 
     public int getLines() {
-        return lines;
+        return line;
     }
 
     public void setLines(int lines) {
-        this.lines = lines;
+        this.line = lines;
     }
 
     public String getDescription() {
@@ -107,7 +107,7 @@ public class VoucherItem implements Serializable{
         return "VoucherItem{" +
                 "companyId='" + companyId + '\'' +
                 ", voucherId='" + voucherId + '\'' +
-                ", lines=" + lines +
+                ", lines=" + line +
                 ", description='" + description + '\'' +
                 ", subjects='" + subjects + '\'' +
                 ", debitAmount=" + debitAmount +

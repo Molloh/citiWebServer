@@ -6,12 +6,13 @@ import cn.edu.nju.polaris.entity.Voucher;
 import cn.edu.nju.polaris.entity.VoucherItem;
 import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@CacheConfig(cacheNames = "vouchers")
 public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKeysClass>{
 
     /**
@@ -20,7 +21,6 @@ public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKey
      * @param companyId
      * @return
      */
-    @Cacheable
     Voucher findByVoucherIdAndCompanyId(String voucherId,Long companyId);
 
     /**
@@ -35,6 +35,7 @@ public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKey
      * 删除一个公司的全部凭证
      * @param companyId
      */
+    @Transactional
     void deleteAllByCompanyId(Long companyId);
 
 
