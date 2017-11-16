@@ -51,7 +51,7 @@ public interface SupplyChainService {
 	 * @param time yyyy-mm
 	 * @return 供应链协作绩效评价(模块二)  1.	准时交货率       3.	退货率
 	 */
-	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation11(long Supplier_id,long Manufacturer_id,String time);
+	public List<InventoryAppraisalVo> getSupplyChainCooperation11(long Supplier_id,long Manufacturer_id,String time);
 	
 	/**
 	 * 
@@ -69,7 +69,7 @@ public interface SupplyChainService {
 	 * @param time yyyy-mm
 	 * @return 供应链协作绩效评价(模块二)  1.	准时交货率       3.	退货率
 	 */
-	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation21(long Manufacturer_id,long Distributor_id,String time);
+	public List<InventoryAppraisalVo> getSupplyChainCooperation21(long Manufacturer_id,long Distributor_id,String time);
 	
 	/**
 	 * 

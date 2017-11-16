@@ -304,7 +304,7 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 
 	@Override
-	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation11(long Supplier_id, long Manufacturer_id, String time) {
+	public List<InventoryAppraisalVo> getSupplyChainCooperation11(long Supplier_id, long Manufacturer_id, String time) {
 		String name2=getCompanyName(Manufacturer_id);
 		
 		List<SupportItem1> t=sir.findAllByCompanyIdAndEndSideAndDate(Supplier_id,name2,time);
@@ -334,7 +334,7 @@ public class SupplyChainImpl implements SupplyChainService{
 	}
 
 	@Override
-	public ArrayList<InventoryAppraisalVo> getSupplyChainCooperation21(long Manufacturer_id, long Distributor_id, String time) {
+	public List<InventoryAppraisalVo> getSupplyChainCooperation21(long Manufacturer_id, long Distributor_id, String time) {
 		String name2=getCompanyName(Distributor_id);
 		
 		List<SupportItem1> t=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,name2,time);

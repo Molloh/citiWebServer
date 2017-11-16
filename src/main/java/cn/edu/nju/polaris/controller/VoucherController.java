@@ -1,7 +1,9 @@
 package cn.edu.nju.polaris.controller;
 
+import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.service.VoucherService;
 import cn.edu.nju.polaris.vo.SubjectVO;
+import cn.edu.nju.polaris.vo.voucher.ItemTotalVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 import io.swagger.annotations.ApiImplicitParam;
@@ -10,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,15 @@ public class VoucherController {
     public VoucherController(VoucherService voucherService){
         this.voucherService = voucherService;
     }
+
+
+    @ApiOperation(value = "新增一个凭证")
+    @ApiImplicitParam(value = "vo",name = "凭证vo",required = true,dataType = "VoucherVO")
+    @PostMapping("")
+    public void addOneVoucher(@RequestBody VoucherVO vo){
+        voucherService.saveOneVoucher(vo);
+    }
+
 
 
     @ApiOperation(value = "获得凭证信息",notes = "根据公司id和凭证号获得凭证信息")
@@ -76,4 +88,6 @@ public class VoucherController {
         vo.setSortOrder(sortOrder);
         return voucherService.getSearchedVoucher(vo,companyId);
     }
+
+
 }
