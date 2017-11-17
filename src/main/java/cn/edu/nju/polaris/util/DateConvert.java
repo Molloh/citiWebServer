@@ -406,7 +406,13 @@ public class DateConvert {
 //            System.out.println(monthList.get(count));
 //        }
 
-        System.out.println(monthToPeriod("2010-09"));
+//        System.out.println(monthToPeriod("2010-09"));
+
+        System.out.println(getBetweenMonthList("2017-10","2017-10"));
+
+        for(int count=0;count<=0;count++){
+            System.out.println("1");
+        }
 
 //        String date="2010-04-10";
 //        System.out.println(date.substring(0,date.lastIndexOf("-")));

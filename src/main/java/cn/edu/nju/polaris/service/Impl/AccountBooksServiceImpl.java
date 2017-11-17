@@ -263,6 +263,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
             monthToDetailMap.get(currentMonth).set(1,oneVo);
 
+
             resultAmountVo.addAll(monthToDetailMap.get(currentMonth));
 
         }
@@ -275,11 +276,14 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
     public ArrayList<TotalAccountVo> getAllSubjectTotal(BookSearchVo searchVo, long factoryId) {
         ArrayList<TotalAccountVo> resultVoList=new ArrayList<>();
 
+        searchVo.setStartSubjectId(null);
+        searchVo.setEndSubjectId(null);
+
         ArrayList<String> allSubjectIdList=new ArrayList<>();
 
-        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
-        for(int count=0;count<allVoucherList.size();count++){
-            allSubjectIdList.add(allVoucherList.get(count).getVoucherId());
+        List<Subjects> allSubjectList=subjectsRepository.findAll();
+        for(int count=0;count<allSubjectList.size();count++){
+            allSubjectIdList.add(allSubjectList.get(count).getSubjectsId());
         }
 
 
@@ -299,6 +303,8 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
             }
         }
+
+
 
         for(int count=0;count<allSubjectIdList.size();count++){
             String oneSubjectId=allSubjectIdList.get(count);
