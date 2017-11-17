@@ -78,7 +78,7 @@ public class AccountBookController {
                                       @RequestParam Long companyId,
                                       @RequestParam String startPeriod,
                                       @RequestParam String endPeriod){
-        return accountBooksService.getOneSubjectTotal(subjectId,new BookSearchVo(startPeriod,endPeriod,"","",0,0),companyId);
+        return accountBooksService.getOneSubjectTotal(subjectId,new BookSearchVo(startPeriod,endPeriod,null,null,0,0),companyId);
     }
 
     /*** 科目余额表 ***/
@@ -128,14 +128,14 @@ public class AccountBookController {
 
     @ApiOperation(value = "获得开始科目和结束科目之间所有有改变记录的科目的id和name")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startSubjects",value = "开始科目",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "startSubject",value = "开始科目",required = true,dataType = "String"),
             @ApiImplicitParam(name = "endSubject",value = "结束科目",required = true,dataType = "String"),
             @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
     })
     @GetMapping("/subjects")
-    ArrayList<SubjectIdAndNameVo> getBetweenSubject(@RequestParam String startSubjects,
+    ArrayList<SubjectIdAndNameVo> getBetweenSubject(@RequestParam String startSubject,
                                                     @RequestParam String endSubject,
                                                     @RequestParam Long companyId){
-        return accountBooksService.getBetweenSubject(startSubjects,endSubject,companyId);
+        return accountBooksService.getBetweenSubject(startSubject,endSubject,companyId);
     }
 }
