@@ -20,6 +20,9 @@ public class SubjectsRecord {
     @Column(name = "subjects_id")
     private String subjectsId; // 会计科目id
 
+    @Column(name = "abstract")
+    private String abstracts;
+
     @Column(name = "date")
     private Timestamp date; // 记录时间
 
@@ -51,6 +54,14 @@ public class SubjectsRecord {
 
     public void setVoucherId(String voucherId) {
         this.voucherId = voucherId;
+    }
+
+    public String getAbstracts() {
+        return abstracts;
+    }
+
+    public void setAbstracts(String abstracts) {
+        this.abstracts = abstracts;
     }
 
     public String getSubjectsId() {
@@ -92,6 +103,7 @@ public class SubjectsRecord {
                 ", companyId=" + companyId +
                 ", voucherId='" + voucherId + '\'' +
                 ", subjectsId='" + subjectsId + '\'' +
+                ", abstracts='" + abstracts + '\'' +
                 ", date=" + date +
                 ", debitAmount=" + debitAmount +
                 ", creditAmount=" + creditAmount +
