@@ -38,12 +38,29 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
     public ArrayList<String> getAllExistedSubjectId(long factoryId) {
         ArrayList<String> resultList=new ArrayList<>();
 
-        List<Voucher> allVoucherList=voucherRepository.findByCompanyId(factoryId);
-        for(int count=0;count<allVoucherList.size();count++){
-            resultList.add(allVoucherList.get(count).getVoucherId());
-        }
+        List<SubjectsRecord> allRecordList=subjectsRecordRepository.findAllByCompanyId(factoryId);
+        if(allRecordList.size()==0||allRecordList==null){
+            return resultList;
 
+        }else{
+
+            for(int count=0;count<allRecordList.size();count++){
+                String oneSubjectId=allRecordList.get(count).getSubjectsId();
+                if(resultList.contains(oneSubjectId)){
+                    continue;
+                }else{
+                    resultList.add(oneSubjectId);
+
+                }
+
+
+            }
+
+
+
+        }
         return resultList;
+
     }
 
     @Override
@@ -188,7 +205,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
             }else if(betweenMonthSet.contains(currentMonth)){
                 //每一期的本期合计要随之发生变化   在所有的计算完成之后需要对本年累计进行计算
                 DetailAccountAmountVo oneAmountVo=new DetailAccountAmountVo();
-                oneAmountVo.setDate(String.valueOf(oneRecord.getDate()));
+                oneAmountVo.setDate(String.valueOf(oneRecord.getDate()).substring(0,7));
                 oneAmountVo.setVoucherId(oneRecord.getVoucherId());
                 oneAmountVo.setSubject(oneRecord.getSubjectsId());
 //                oneAmountVo.setAbstracts();
