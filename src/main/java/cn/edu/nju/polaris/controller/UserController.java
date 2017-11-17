@@ -53,8 +53,8 @@ public class UserController {
             @ApiImplicitParam(name = "oldPassword",value = "旧密码",required = true,dataType = "String"),
             @ApiImplicitParam(name = "newPassword",value = "新密码",required = true,dataType = "String")
     })
-    @PutMapping("/{userName}")
-    public void modifyPassword(@PathVariable String userName,
+    @PutMapping()
+    public void modifyPassword(@RequestParam String userName,
                                @RequestParam String oldPassword,
                                @RequestParam String newPassword){
         userService.modifyPassword(userName,oldPassword,newPassword);

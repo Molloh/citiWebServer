@@ -40,7 +40,7 @@ public class AccountBookController {
                                         @RequestParam Long companyId,
                                         @RequestParam String startPeriod,
                                         @RequestParam String endPeriod){
-        return accountBooksService.getOneSubjectDetail(subjectId,new BookSearchVo(startPeriod,endPeriod,"","",0,0),companyId);
+        return accountBooksService.getOneSubjectDetail(subjectId,new BookSearchVo(startPeriod,endPeriod,null,null,0,0),companyId);
     }
 
 
