@@ -208,7 +208,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
                 oneAmountVo.setDate(String.valueOf(oneRecord.getDate()).substring(0,7));
                 oneAmountVo.setVoucherId(oneRecord.getVoucherId());
                 oneAmountVo.setSubject(oneRecord.getSubjectsId());
-//                oneAmountVo.setAbstracts();
+                oneAmountVo.setAbstracts(oneRecord.getAbstracts());
                 oneAmountVo.setDebitAmount(oneRecord.getDebitAmount());
                 oneAmountVo.setCreditAmount(oneRecord.getCreditAmount());
                 oneAmountVo.setDirection(SubjectBalanceHelper.getDirectionString(subjectId));

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.util.*;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 
@@ -333,6 +332,7 @@ public class VoucherServiceImpl implements VoucherService{
                 newRecord.setCompanyId(voucherVO.getCompany_id());
                 newRecord.setVoucherId(voucherVO.getVoucher_id());
                 newRecord.setSubjectsId(subjectId);
+                newRecord.setAbstracts(oneItemVo.getAbstracts());
                 newRecord.setDate(DateHelper.DateToTimeStamp(voucherVO.getDate()));
                 newRecord.setDebitAmount(debitAmount);
                 newRecord.setCreditAmount(creditAmount);
