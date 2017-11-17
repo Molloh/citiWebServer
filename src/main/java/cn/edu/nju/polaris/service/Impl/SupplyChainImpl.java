@@ -75,7 +75,6 @@ public class SupplyChainImpl implements SupplyChainService{
     private final AccountRepository accountRepository;
     private final SupportItem1Repository sir;
     private final SupportItem2Repository sir2;
-    private final CashflowSheetRepository cfr;
     private final AccountRepository ar;
     private final IndustryIndexRepository ir;
     
@@ -83,15 +82,12 @@ public class SupplyChainImpl implements SupplyChainService{
     private final MovablePledgeFinancingRepository mpfr;
     private final ConfirmingStorageFinancingRepository csfr;
     
-    private final VoucherRepository voucherRepository;
-    private final SubjectsRepository subjectsRepository;
-    private final SubjectsRecordRepository subjectsRecordRepository;
     private final AccountBooksBlService abs;
     
 
 	@Autowired
 	public SupplyChainImpl(VoucherItemRepository vir,BalanceSheetRepository bsr,SupplyChainRepository supplyChainRepository, AccountRepository accountRepository,
-			SupportItem1Repository sir,CashflowSheetRepository cfr,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
+			SupportItem1Repository sir,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
 			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr,
 			VoucherRepository voucherRepository,SubjectsRepository subjectsRepository,SubjectsRecordRepository subjectsRecordRepository,
 			SafeInventoryRepository safeInventoryRepository){
@@ -101,16 +97,12 @@ public class SupplyChainImpl implements SupplyChainService{
         this.supplyChainRepository = supplyChainRepository;
         this.accountRepository = accountRepository;
         this.sir=sir;
-        this.cfr=cfr;
         this.ar=ar;
         this.ir=ir;
         this.sir2=sir2;
         this.rfr=rfr;
         this.mpfr=mpfr;
         this.csfr=csfr;
-        this.voucherRepository=voucherRepository;
-        this.subjectsRepository=subjectsRepository;
-        this.subjectsRecordRepository=subjectsRecordRepository;
         this.ims=new InventoryManagementImpl(sir,safeInventoryRepository,ar);
         this.abs=new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository,sir,sir2);
 	}
@@ -356,13 +348,12 @@ public class SupplyChainImpl implements SupplyChainService{
 		
 		String last=helper.lastTime(time);
 		
-		List<SupportItem1> t1=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);//供应商和生产商的交易
+		List<SupportItem1> t1=sir.findAllByCompanyIdAndEndSideAndDate(Supplier_id,Manufacturer_name,time);//供应商和生产商的交易
 		double this_shouru1=ShouruCal(t1);//供应商本期收入
 		Map<String,Integer> map1=GoodsNums(t1);
 		
+		List<SupportItem1> t2=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Distributor_name,time);
 		
-		List<SupportItem1> t2=sir.findAllByCompanyIdAndEndSideAndDate(Distributor_id,Manufacturer_name,time);
-		List<SupportItem1> t3=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Supplier_name,time);
 		
 		//1.财务方面
 		//res[0]=;//供应链资产收益率
@@ -371,14 +362,14 @@ public class SupplyChainImpl implements SupplyChainService{
 		//res[2]=;///资产负债率
 		
 		//2.客户方面
-		List<Integer> list=CalLv(sir.findAllItemByDate(Supplier_id, time));
-		//res[3]=list.get(0);//退货率
-		//res[4]=list.get(1);//准时交货率
-		//res[5]=list.get(2);//产品柔性
+		List<Integer> list=CalLv(t1,t2);
+		res[3]=list.get(0)/(double)list.get(4);//退货率
+		res[4]=list.get(1)/(double)list.get(4);//准时交货率
+	    res[5]=list.get(2)/(double)list.get(3);//产品柔性
 		
 		//3.业务流程
 		//res[6]=;//存货周转率
-		res[7]=list.get(3);//完美交货完成水平
+		res[7]=(list.get(1)-list.get(0))/(double)list.get(4);//完美交货完成水平
 		
 		//4.未来发展
 		//新产品销售比率
@@ -417,22 +408,42 @@ public class SupplyChainImpl implements SupplyChainService{
 	 * @param list1
 	 * @return
 	 */
-	private List<Integer> CalLv(List<SupportItem1> list1){
+	private List<Integer> CalLv(List<SupportItem1> list1,List<SupportItem1> list2){
 		List<Integer> res=new ArrayList<>();
 
 		int count1=0;
 		int count2=0;
 		int count3=0;
+		int count=0;
+		int total=0;
 
 		for(SupportItem1 s:list1){
+			count++;
+			total+=s.getOutputNum();
 			if(s.getReturnedPurchase())
-				count1++;
+				count1+=s.getOutputNum();
 			if(s.getDispatchOntime())
-				count2++;
+				count2+=s.getOutputNum();
 			if(s.getNew())
 				count3++;
 		}
 
+		
+		for(SupportItem1 s:list2){
+			count++;
+			total+=s.getOutputNum();
+			if(s.getReturnedPurchase())
+				count1+=s.getOutputNum();
+			if(s.getDispatchOntime())
+				count2+=s.getOutputNum();
+			if(s.getNew())
+				count3++;
+		}
+		res.add(count1);
+		res.add(count2);
+		res.add(count3);
+		res.add(count);
+		res.add(total);
 		
 		return res;
 	}
