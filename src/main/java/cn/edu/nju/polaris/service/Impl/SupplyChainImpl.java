@@ -349,17 +349,133 @@ public class SupplyChainImpl implements SupplyChainService{
 		String last=helper.lastTime(time);
 		
 		List<SupportItem1> t1=sir.findAllByCompanyIdAndEndSideAndDate(Supplier_id,Manufacturer_name,time);//供应商和生产商的交易
-		double this_shouru1=ShouruCal(t1);//供应商本期收入
+		//double this_shouru=ShouruCal(t1);//供应商本期收入
 		Map<String,Integer> map1=GoodsNums(t1);
 		
 		List<SupportItem1> t2=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Distributor_name,time);
 		
+		List<VoucherItem> list11=vir.getListThroughPeriod(last, Supplier_id);
+		Map<String,double[]> map11=null;
+		if(list11.size()!=0)
+			map11=helper.tempCal(list11);
+		
+		List<VoucherItem> list12=vir.getListThroughPeriod(time, Manufacturer_id);
+		Map<String,double[]> map12=helper.tempCal(list12);
+		
+		List<VoucherItem> list21=vir.getListThroughPeriod(last, Distributor_id);
+		Map<String,double[]> map21=null;
+		if(list21.size()!=0)
+			map21=helper.tempCal(list21);
+		
+		List<VoucherItem> list22=vir.getListThroughPeriod(time, Supplier_id);
+		Map<String,double[]> map22=helper.tempCal(list22);
+		
+		List<VoucherItem> list31=vir.getListThroughPeriod(last, Manufacturer_id);
+		Map<String,double[]> map31=null;
+		if(list31.size()!=0)
+			map31=helper.tempCal(list31);
+		
+		List<VoucherItem> list32=vir.getListThroughPeriod(time, Distributor_id);
+		Map<String,double[]> map32=helper.tempCal(list32);
+		
+		
+		double last_zyshouru1=0;//上期主营业务收入
+		double last_zychenben1=0;//上期主营业务成本
+		double last_zong1=0;//上期期末总资产
+		BalanceSheet b=null;
+		double last_cunhuo1=0;//上期期末存货
+		
+		if(map1.size()!=0){
+			last_zyshouru1=helper.Cal("5001", map11);
+			last_zychenben1=helper.Cal2("5401", map11);
+			
+		}
+		double this_zyshouru1=helper.Cal("5001",map12);//当期主营业务收入
+		
+		double this_zychenben1=helper.Cal2("5401", map12);//当期主营业务成本
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, last, "资产合计");
+		if(b!=null)
+			last_zong1=b.getBalance();
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, last, "存货");
+		if(b!=null)
+			last_cunhuo1=b.getBalance();
+		double this_zong1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, time, "资产合计").getBalance();//本期期末总资产
+		double this_cunhuo1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, time, "存货").getBalance();//当期期末存货
+		double zongfu1=bsr.findByCompanyIdAndPeriodAndName(Supplier_id, time, "负债合计").getBalance();//总负债
+		
+		
+		/***/
+		double last_zyshouru2=0;//上期主营业务收入
+		double last_zychenben2=0;//上期主营业务成本
+		double last_zong2=0;//上期期末总资产
+		double last_cunhuo2=0;//上期期末存货
+		
+		if(map1.size()!=0){
+			last_zyshouru2=helper.Cal("5001", map21);
+			last_zychenben2=helper.Cal2("5401", map21);
+			
+		}
+		double this_zyshouru2=helper.Cal("5001",map22);//当期主营业务收入
+		
+		double this_zychenben2=helper.Cal2("5401", map22);//当期主营业务成本
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, last, "资产合计");
+		if(b!=null)
+			last_zong2=b.getBalance();
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, last, "存货");
+		if(b!=null)
+			last_cunhuo2=b.getBalance();
+		double this_zong2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, time, "资产合计").getBalance();//本期期末总资产
+		double this_cunhuo2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, time, "存货").getBalance();//当期期末存货
+		double zongfu2=bsr.findByCompanyIdAndPeriodAndName(Manufacturer_id, time, "负债合计").getBalance();//总负债
+		
+		
+		
+		/**/
+		double last_zyshouru3=0;//上期主营业务收入
+		double last_zychenben3=0;//上期主营业务成本
+		double last_zong3=0;//上期期末总资产
+		double last_cunhuo3=0;//上期期末存货
+		
+		if(map1.size()!=0){
+			last_zyshouru3=helper.Cal("5001", map31);
+			last_zychenben3=helper.Cal2("5401", map31);
+			
+		}
+		double this_zyshouru3=helper.Cal("5001",map32);//当期主营业务收入
+		
+		double this_zychenben3=helper.Cal2("5401", map32);//当期主营业务成本
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, last, "资产合计");
+		if(b!=null)
+			last_zong3=b.getBalance();
+		
+		b=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, last, "存货");
+		if(b!=null)
+			last_cunhuo3=b.getBalance();
+		double this_zong3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, time, "资产合计").getBalance();//本期期末总资产
+		double this_cunhuo3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, time, "存货").getBalance();//当期期末存货
+		double zongfu3=bsr.findByCompanyIdAndPeriodAndName(Distributor_id, time, "负债合计").getBalance();//总负债
+		
+		
+		double this_zonglirun=last_zyshouru3+last_zyshouru2+last_zyshouru1-last_zychenben3-last_zychenben2-last_zychenben1;
+		
+		double this_zong=this_zong1+this_zong2+this_zong3;
+		double last_zong=last_zong1+last_zong2+last_zong3;
+		double zongfu=zongfu3+zongfu2+zongfu1;
+		
+		double zongcun=this_cunhuo3+this_cunhuo2+this_cunhuo1+last_cunhuo1+last_cunhuo2+last_cunhuo3;
+		double zong_ben=this_zychenben1+this_zychenben2+this_zychenben3;
+		double last_zonglirun=this_zyshouru1+this_zyshouru2+this_zyshouru3+zong_ben;
 		
 		//1.财务方面
-		//res[0]=;//供应链资产收益率
-		//res[1]=;//现金周转率
+		res[0]=(this_zong+last_zong)!=0?2*this_zonglirun/(this_zong+last_zong):0;//供应链资产收益率
+		res[1]=this_zonglirun!=0?(this_zyshouru3+this_zyshouru2+this_zyshouru1)/this_zonglirun:0;//现金周转率
 		
-		//res[2]=;///资产负债率
+		res[2]=this_zong!=0?zongfu/this_zong:0;///资产负债率
 		
 		//2.客户方面
 		List<Integer> list=CalLv(t1,t2);
@@ -368,12 +484,12 @@ public class SupplyChainImpl implements SupplyChainService{
 	    res[5]=list.get(2)/(double)list.get(3);//产品柔性
 		
 		//3.业务流程
-		//res[6]=;//存货周转率
+		res[6]=zongcun!=0?zong_ben/zongcun:0;//存货周转率
 		res[7]=(list.get(1)-list.get(0))/(double)list.get(4);//完美交货完成水平
 		
 		//4.未来发展
 		//新产品销售比率
-		//res[9]=;//利润增长率
+		res[9]=last_zonglirun!=0?(this_zonglirun-last_zonglirun)/last_zonglirun:0;//利润增长率
 		return res;
 	}
 	
