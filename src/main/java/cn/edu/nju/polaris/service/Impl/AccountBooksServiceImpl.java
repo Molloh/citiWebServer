@@ -304,10 +304,11 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
             String oneSubjectId=allSubjectIdList.get(count);
 
             if(subjectIdToRecordMap.containsKey(oneSubjectId)){
-                if(subjectIdToRecordMap.get(oneSubjectId).size()>1){
-                    resultVoList.add(getOneSubjectTotal(oneSubjectId,searchVo,factoryId));
-
-                }
+//                if(subjectIdToRecordMap.get(oneSubjectId).size()>1){
+//
+//
+//                }
+                resultVoList.add(getOneSubjectTotal(oneSubjectId,searchVo,factoryId));
             }
         }
         return resultVoList;
