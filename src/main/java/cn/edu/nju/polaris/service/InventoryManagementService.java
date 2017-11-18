@@ -1,8 +1,10 @@
 package cn.edu.nju.polaris.service;
 
+import cn.edu.nju.polaris.entity.SafeInventory;
 import cn.edu.nju.polaris.vo.Inventory.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 费慧通 on 2017/11/13.
@@ -91,4 +93,9 @@ public interface InventoryManagementService {
      * @return
      */
     public double getCurrentInventory(long company_id1, long company_id2, String time);
+
+
+    void saveOneSafeInventory(Long companyId,String name,Double inventory);
+
+    List<SafeInventory> findAllByCompanyId(Long companyId);
 }

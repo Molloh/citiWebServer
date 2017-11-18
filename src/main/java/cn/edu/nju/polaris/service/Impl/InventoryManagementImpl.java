@@ -225,6 +225,26 @@ public class InventoryManagementImpl implements InventoryManagementService {
         return result;
     }
 
+    @Override
+    public void saveOneSafeInventory(Long companyId, String name, Double inventory) {
+        SafeInventory safeInventory = safeInventoryRepository.findByCompanyIdAndName(companyId,name);
+        if (safeInventory != null){
+            safeInventory.setInventory(inventory);
+            safeInventoryRepository.save(safeInventory);
+        }else {
+            safeInventory = new SafeInventory();
+            safeInventory.setCompanyId(companyId);
+            safeInventory.setName(name);
+            safeInventory.setInventory(inventory);
+            safeInventoryRepository.save(safeInventory);
+        }
+    }
+
+    @Override
+    public List<SafeInventory> findAllByCompanyId(Long companyId) {
+        return safeInventoryRepository.findAllByCompanyId(companyId);
+    }
+
     private ArrayList<InventoryMonitorItemVo> getInventoryMonitor(List<SupportItem1> list1, List<SafeInventory> list2){
         ArrayList<InventoryMonitorItemVo> result = new ArrayList<>();
         ArrayList<String> varieties = getAllVariety(list1);

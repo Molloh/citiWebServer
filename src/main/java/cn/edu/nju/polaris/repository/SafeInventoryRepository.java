@@ -8,6 +8,22 @@ import java.util.List;
 
 public interface SafeInventoryRepository extends JpaRepository<SafeInventory,Long>{
 
+
+    /**
+     * 保存一个安全库存量
+     * @param companyId
+     * @param name
+     * @return
+     */
+    SafeInventory findByCompanyIdAndName(Long companyId,String name);
+
+    /**
+     * 获得一个公司所有的安全库存量
+     * @param companyId
+     * @return
+     */
+    List<SafeInventory> findAllByCompanyId(Long companyId);
+
     /**
      * 获得公司的所有 原材料安全库存量
      * @param companyId

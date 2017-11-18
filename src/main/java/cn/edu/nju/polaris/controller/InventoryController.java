@@ -1,5 +1,6 @@
 package cn.edu.nju.polaris.controller;
 
+import cn.edu.nju.polaris.entity.SafeInventory;
 import cn.edu.nju.polaris.service.InventoryItemService;
 import cn.edu.nju.polaris.service.InventoryManagementService;
 import cn.edu.nju.polaris.vo.Inventory.*;
@@ -37,10 +38,30 @@ public class InventoryController {
     @ApiImplicitParams({
             @ApiImplicitParam
     })
-    @DeleteMapping("/item/{name}")
-    void deleteOneInventoryItem(@PathVariable String name,
+    @PostMapping("/item/delete")
+    void deleteOneInventoryItem(@RequestParam String name,
                                 @RequestParam String category){
         inventoryItemService.deleteOneInventoryItem(new InventoryItemVO(category,name));
+    }
+
+    @ApiOperation(value = "保存一个安全库存量")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long"),
+            @ApiImplicitParam(name = "name",value = "原材料/产品名称",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "inventory",value = "安全库存量",required = true,dataType = "Double")
+    })
+    @PostMapping("/safe")
+    void saveOneSafeInventory(@RequestParam Long companyId,
+                              @RequestParam String name,
+                              @RequestParam Double inventory){
+        inventoryManagementService.saveOneSafeInventory(companyId,name,inventory);
+    }
+
+    @ApiOperation(value = "获得一个公司所有的安全库存量")
+    @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    @GetMapping("/safe")
+    List<SafeInventory> findAllSafeInventory(Long companyId){
+        return inventoryManagementService.findAllByCompanyId(companyId);
     }
 
     @ApiOperation(value = "获得所有记录的原材料")

@@ -10,4 +10,7 @@ public class InventoryItemVO {
         this.category = category;
         this.name = name;
     }
+
+    public InventoryItemVO() {
+    }
 }
