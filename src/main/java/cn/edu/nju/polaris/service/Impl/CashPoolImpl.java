@@ -7,6 +7,8 @@ import cn.edu.nju.polaris.service.CashPoolService;
 import cn.edu.nju.polaris.service.ProfitTableService;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by 费慧通 on 2017/11/13.
  */
@@ -42,11 +44,13 @@ public class CashPoolImpl implements CashPoolService {
         //经营现金净流量
         double data3 = service3.getNetcashflow(time, company_id);
 
+        DecimalFormat df = new DecimalFormat("0.00");
+
         double[] result = new double[4];
-        result[0] = data3/data2;
-        result[1] = data3/data1[0];
-        result[2] = data3/data1[2];
-        result[3] = (data1[3]+data1[4])/data1[1];
+        result[0] = Double.valueOf(df.format(data3/data2));
+        result[1] = Double.valueOf(df.format(data3/data1[0]));
+        result[2] = Double.valueOf(df.format(data3/data1[2]));
+        result[3] = Double.valueOf(df.format((data1[3]+data1[4])/data1[1]));
         return result;
     }
 }
