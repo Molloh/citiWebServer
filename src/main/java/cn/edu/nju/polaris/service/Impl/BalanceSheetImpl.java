@@ -54,17 +54,25 @@ public class BalanceSheetImpl implements BalanceSheetService {
     public double[] getValue(long company_id, String phase) {
         double[] value = new double[11];
         String last = getLastPhase(phase);
-        value[0] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"资产合计").getBalance();
+        BalanceSheet temp1 = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"资产合计");
+        if(temp1==null){
+            value[0] = 0;
+            value[5] = 0;
+            value[7] = 0;
+            value[10] = 0;
+        }else{
+            value[0] = temp1.getBalance();
+            value[5] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"应收账款").getBalance();
+            value[7] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"存货").getBalance();
+            value[10] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"所有者权益合计").getBalance();
+        }
         value[1] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"资产合计").getBalance();
         value[2] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"负债合计").getBalance();
         value[3] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"流动资产合计").getBalance();
         value[4] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"流动负债合计").getBalance();
-        value[5] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"应收账款").getBalance();
         value[6] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"应收账款").getBalance();
-        value[7] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"存货").getBalance();
         value[8] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"存货").getBalance();
         value[9] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"所有者权益合计").getBalance();
-        value[10] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"所有者权益合计").getBalance();
         return value;
     }
 
