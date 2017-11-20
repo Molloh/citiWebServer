@@ -45,10 +45,10 @@ public class CalculateBalanceSheet {
         double balance1_3 = getMoneyByCourseId("1121", true);
         save(company_id,phase,"应收票据",balance1_3);
         //1.4应收账款=应收账款+预收账款（*余额在借方时）
-        double balance1_4 = getMoneyByCourseId( "1122", true) + getMoneyByCourseId( "2203", true);
+        double balance1_4 = getMoneyByCourseId( "1122", true) + getMoneyHasCourseId( "2203", true);
         save(company_id,phase,"应收账款",balance1_4);
         //1.5预付账款=预付账款+应付账款（*余额在借方时）
-        double balance1_5 = getMoneyByCourseId( "1123", true) + getMoneyByCourseId( "2202", true);
+        double balance1_5 = getMoneyByCourseId( "1123", true) + getMoneyHasCourseId( "2202", true);
         save(company_id,phase,"预付账款",balance1_5);
         //1.6应收股利
         double balance1_6 = getMoneyByCourseId( "1131", true);
@@ -57,7 +57,7 @@ public class CalculateBalanceSheet {
         double balance1_7 = getMoneyByCourseId( "1132", true);
         save(company_id,phase,"应收利息",balance1_7);
         //1.8其他应收款=其他应收款+其他应付款（*余额在借方时）
-        double balance1_8 = getMoneyByCourseId( "1121", true) + getMoneyByCourseId( "2241", true);
+        double balance1_8 = getMoneyByCourseId( "1121", true) + getMoneyHasCourseId( "2241", true);
         save(company_id,phase,"其他应收款",balance1_8);
         //1.9存货=在途物资+材料采购+原材料+材料成本差异+库存商品-商品进销差价+委托加工物资+周转材料+消耗性生物资产+生产成本+制造费用+工程施工+机械作业
         double balance1_9 = getMoneyByCourseId( "1402", true) + getMoneyByCourseId( "1401", true) + getMoneyByCourseId( "1403", true)
@@ -95,7 +95,7 @@ public class CalculateBalanceSheet {
         double balance2_3 = getMoneyByCourseId( "1601", true);
         save(company_id,phase,"固定资产原价",balance2_3);
         //2.4减：累计折旧（数值=累计折旧）
-        double balance2_4 = getMoneyByCourseId( "1602", true);
+        double balance2_4 = getMoneyByCourseId( "1602", false);
         save(company_id,phase,"减：累计折旧",balance2_4);
         //2.5固定资产账面价值=固定资产原价-累计折旧
         double balance2_5 = balance2_3 - balance2_4;
@@ -125,7 +125,7 @@ public class CalculateBalanceSheet {
         double balance2_13 = getMoneyByCourseId("6001", true);
         save(company_id,phase,"其他非流动资产",balance2_13);
         //2.14非流动资产合计=长期股权投资+长期债券投资+固定资产账面价值+工程物资+在建工程+固定资产清理+生产性生物资产+开发支出+无形资产+长期待摊费用+其他非流动资产
-        double balance2_14 = balance2_1 + balance2_2 + balance2_3 + balance2_4 + balance2_5 + balance2_6 + balance2_7 + balance2_8 + balance2_9 + balance2_10 + balance2_11 + balance2_12 + balance2_13;
+        double balance2_14 = balance2_1 + balance2_2  + balance2_5 + balance2_6 + balance2_7 + balance2_8 + balance2_9 + balance2_10 + balance2_11 + balance2_12 + balance2_13;
         save(company_id,phase,"非流动资产合计",balance2_14);
         //3资产合计= 非流动资产合计+流动资产合计
         double balance3 = balance1_11 + balance2_14;
@@ -137,10 +137,10 @@ public class CalculateBalanceSheet {
         double balance4_2 = getMoneyByCourseId( "2201", false);
         save(company_id,phase,"应付票据",balance4_2);
         //4.3应付账款=应付账款+预付账款（*余额在贷方时）
-        double balance4_3 = getMoneyByCourseId( "2202", false) + getMoneyByCourseId( "1123", false);
+        double balance4_3 = getMoneyByCourseId( "2202", false) + getMoneyHasCourseId( "1123", false);
         save(company_id,phase,"应付账款",balance4_3);
         //4.4预收账款=预收账款+应收账款（*余额在贷方时）
-        double balance4_4 = getMoneyByCourseId( "2203", false) + getMoneyByCourseId( "1122", false);
+        double balance4_4 = getMoneyByCourseId( "2203", false) + getMoneyHasCourseId( "1122", false);
         save(company_id,phase,"预收账款",balance4_4);
         //4.5应付职工薪酬
         double balance4_5 = getMoneyByCourseId( "2211", false);
@@ -155,7 +155,7 @@ public class CalculateBalanceSheet {
         double balance4_8 = getMoneyByCourseId( "2232", false);
         save(company_id,phase,"应付利润",balance4_8);
         //4.9其他应付款=其他应付款+其他应收款（*余额在贷方时）
-        double balance4_9 = getMoneyByCourseId( "2241", false) + getMoneyByCourseId( "1221", false);
+        double balance4_9 = getMoneyByCourseId( "2241", false) + getMoneyHasCourseId( "1221", false);
         save(company_id,phase,"其他应付款",balance4_9);
         //4.10其他流动负债
         double balance4_10 = getMoneyByCourseId("8000", false);
@@ -223,9 +223,9 @@ public class CalculateBalanceSheet {
             SubjectsBalance subjectsBalance = list.get(i);
             if(subjectsBalance.getSubjectsId().equals(course_id)){
                 if(IsDebit){
-                    return subjectsBalance.getDebitAmount();
+                    return subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
                 }else {
-                    return subjectsBalance.getCreditAmount();
+                    return subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
                 }
             }
         }
@@ -244,12 +244,34 @@ public class CalculateBalanceSheet {
             SubjectsBalance subjectsBalance = list.get(i);
             if(subjectsBalance.getSubjectsId().substring(0,4).equals(course_id)){
                 if(IsDebit){
-                    result = result+subjectsBalance.getDebitAmount();
+                    result = result+subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
                 }else {
-                    result = result+subjectsBalance.getCreditAmount();
+                    result = result+subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
                 }
             }
         }
         return result;
+    }
+
+    public double getMoneyHasCourseId(String course_id, boolean IsDebit){
+        for(int i=0;i<list.size();i++){
+            SubjectsBalance subjectsBalance = list.get(i);
+            if(subjectsBalance.getSubjectsId().equals(course_id)){
+                if(IsDebit){
+                    if(subjectsBalance.getDebitAmount()>0){
+                        return subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
+                    }else{
+                        return 0.0;
+                    }
+                }else {
+                    if(subjectsBalance.getCreditAmount()>0){
+                        return subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
+                    }else{
+                        return 0.0;
+                    }
+                }
+            }
+        }
+        return 0.0;
     }
 }

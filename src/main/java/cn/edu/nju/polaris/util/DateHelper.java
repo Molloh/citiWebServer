@@ -40,7 +40,7 @@ public class DateHelper {
      * @return
      */
     public static Timestamp DateToTimeStamp(String date){
-        String dateTime=date+" 13:00:00";
+        String dateTime=date+" 14:00:00";
         return Timestamp.valueOf(dateTime);
     }
 

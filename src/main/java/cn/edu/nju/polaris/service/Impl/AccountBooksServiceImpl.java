@@ -125,6 +125,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
         //需要对subjectsPOArrayList按照时间来进行排序
         List<SubjectsRecord> allRecordList=subjectsRecordRepository.findAllByCompanyId(factoryId);
+        System.out.println("SubjectsRecord: " +allRecordList.size());
 
         List<SubjectsRecord> subjectsPOArrayList=new ArrayList<>();
         for(int count=0;count<allRecordList.size();count++){
@@ -416,7 +417,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
             if(SubjectBalanceHelper.getDirection(oneSubjectId)==1){
                 oneResultClause.setEndDebit(oneResultClause.getBeginDebit()+oneResultClause.getCurrentDebit()-oneResultClause.getBeginCredit()-oneResultClause.getCurrentCredit());
-                oneResultClause.setEndDebit(0.0);
+                oneResultClause.setEndCredit(0.0);
 
             }else{
                 oneResultClause.setEndDebit(0.0);

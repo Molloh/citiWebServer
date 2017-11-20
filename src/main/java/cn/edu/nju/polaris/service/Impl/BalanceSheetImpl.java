@@ -64,7 +64,7 @@ public class BalanceSheetImpl implements BalanceSheetService {
             value[0] = temp1.getBalance();
             value[5] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"应收账款").getBalance();
             value[7] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"存货").getBalance();
-            value[10] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"所有者权益合计").getBalance();
+            value[10] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,last,"所有者权益").getBalance();
         }
         value[1] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"资产合计").getBalance();
         value[2] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"负债合计").getBalance();
@@ -72,7 +72,7 @@ public class BalanceSheetImpl implements BalanceSheetService {
         value[4] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"流动负债合计").getBalance();
         value[6] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"应收账款").getBalance();
         value[8] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"存货").getBalance();
-        value[9] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"所有者权益合计").getBalance();
+        value[9] = balanceSheetRepository.findByCompanyIdAndPeriodAndName(company_id,phase,"所有者权益").getBalance();
         return value;
     }
 

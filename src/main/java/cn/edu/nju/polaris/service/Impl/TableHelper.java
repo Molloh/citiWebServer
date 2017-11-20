@@ -69,7 +69,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 借方
 	 */
 	public double DebitCal(String subject,Map<String,double[]> map){
@@ -81,7 +80,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 借方
 	 */
 	public double DebitCal(double[] r){
@@ -90,7 +88,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 贷方
 	 */
 	public double CreditCal(String subject,Map<String,double[]> map){
@@ -102,7 +99,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 贷方
 	 */
 	public double CreditCal(double[] r){
@@ -112,7 +108,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 贷-借
 	 */
 	public double Cal(String subject,Map<String,double[]> map) {
@@ -124,7 +119,6 @@ public class TableHelper {
 
 	/**
 	 * 
-	 * @param list
 	 * @return 贷-借
 	 */
 	public double Cal(double[] r) {
@@ -133,7 +127,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 借-贷
 	 */
 	public double Cal2(double[] r) {
@@ -142,7 +135,6 @@ public class TableHelper {
 	
 	/**
 	 * 
-	 * @param list
 	 * @return 借-贷
 	 */
 	public double Cal2(String subject,Map<String,double[]> map) {
