@@ -55,10 +55,10 @@ public class CashPoolImpl implements CashPoolService {
         DecimalFormat df = new DecimalFormat("0.00");
 
         ArrayList<Double> temp = new ArrayList<>();
-        temp.add(Double.valueOf(df.format(data3/data2)));
-        temp.add(Double.valueOf(df.format(data3/data1[0]*100)));
-        temp.add(Double.valueOf(df.format(data3/data1[2]*100)));
-        temp.add(Double.valueOf(df.format((data1[3]+data1[4])/data1[1]*100)));
+        temp.add(data3/data2);
+        temp.add(data3/data1[0]*100);
+        temp.add(data3/data1[2]*100);
+        temp.add((data1[3]+data1[4])/data1[1]*100);
 
         Account account = accountRepository.findById(company_id);
 
