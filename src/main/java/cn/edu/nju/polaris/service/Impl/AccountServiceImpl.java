@@ -51,7 +51,8 @@ public class AccountServiceImpl implements AccountService {
             throw new ResourceConflictException("该公司已被注册");
         }
         accountRepository.save(vo2Entity(vo));
-        subjectBalanceService.initialSubjectBalance(vo.getId(), DateHelper.TimeStamp2Date(vo.getActiveTime().toString(),"yyyy-MM"));
+        Account account = accountRepository.findByCompanyName(vo.getCompanyName());
+        subjectBalanceService.initialSubjectBalance(account.getId(), vo.getActiveTime().toString().substring(0,7));
     }
 
     @Override
