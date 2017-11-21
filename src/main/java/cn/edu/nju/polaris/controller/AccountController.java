@@ -52,7 +52,7 @@ public class AccountController {
 
     @ApiOperation(value = "获得账套信息",notes = "根据公司id获得账套信息")
     @ApiImplicitParam(name = "id",value = "公司ID",required = true,dataType = "Long")
-    @GetMapping("/{id}")
+    @GetMapping("/byId/{id}")
     public AccountVO findById(@PathVariable Long id){
         return accountService.findById(id);
     }

@@ -1,8 +1,11 @@
 package cn.edu.nju.polaris.util;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by zhangzy on 2017/11/10 下午9:03
@@ -42,6 +45,12 @@ public class DateHelper {
     public static Timestamp DateToTimeStamp(String date){
         String dateTime=date+" 14:00:00";
         return Timestamp.valueOf(dateTime);
+    }
+
+    public static String TimeStamp2Date(String timestampString, String formats) {
+        Long timestamp = Long.parseLong(timestampString) * 1000;
+        String date = new SimpleDateFormat(formats, Locale.CHINA).format(new Date(timestamp));
+        return date;
     }
 
     public static void main(String[] args) {

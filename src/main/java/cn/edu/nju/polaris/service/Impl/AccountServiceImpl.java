@@ -5,6 +5,8 @@ import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
 import cn.edu.nju.polaris.repository.AccountRepository;
 import cn.edu.nju.polaris.service.AccountService;
+import cn.edu.nju.polaris.service.SubjectBalanceService;
+import cn.edu.nju.polaris.util.DateHelper;
 import cn.edu.nju.polaris.vo.AccountInfoVO;
 import cn.edu.nju.polaris.vo.AccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,15 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final SubjectBalanceService subjectBalanceService;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, SubjectBalanceService subjectBalanceService) {
         this.accountRepository = accountRepository;
+        this.subjectBalanceService = subjectBalanceService;
     }
+
+
 
 
     @Override
@@ -45,6 +51,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ResourceConflictException("该公司已被注册");
         }
         accountRepository.save(vo2Entity(vo));
+        subjectBalanceService.initialSubjectBalance(vo.getId(), DateHelper.TimeStamp2Date(vo.getActiveTime().toString(),"yyyy-MM"));
     }
 
     @Override
