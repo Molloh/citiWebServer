@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/supplychains")
+@RequestMapping("/")
 public class SupplyChainController {
 
     private final SupplyChainService supplyChainService;

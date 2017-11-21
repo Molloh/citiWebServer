@@ -23,4 +23,6 @@ public interface AccountService {
     AccountInfoVO findAccountByCompanyName(String companyName);
 
     Long findCompanyIdByName(String companyName);
+
+    AccountVO findById(Long id);
 }
