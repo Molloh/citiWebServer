@@ -70,6 +70,24 @@ public class AccountServiceImpl implements AccountService {
         return account.getId();
     }
 
+    @Override
+    public AccountVO findById(Long id) {
+        Account account = accountRepository.findById(id);
+        AccountVO vo = new AccountVO();
+        if (account != null){
+            vo.setId(account.getId());
+            vo.setScale(account.getScale());
+            vo.setEmail(account.getEmail());
+            vo.setFirstIndustry(account.getFirstIndustry());
+            vo.setSecondIndustry(account.getSecondIndustry());
+            vo.setLocation(account.getLocation());
+            vo.setCompanyName(account.getCompanyName());
+            vo.setActiveTime(account.getActiveTime());
+            vo.setSupplyChainIndex(account.getSupplyChainIndex());
+        }
+        return vo;
+    }
+
 
     private Account vo2Entity(AccountVO vo){
         Account account = new Account();
