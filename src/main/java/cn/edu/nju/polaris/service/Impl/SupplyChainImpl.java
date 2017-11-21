@@ -1,6 +1,5 @@
 package cn.edu.nju.polaris.service.Impl;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import cn.edu.nju.polaris.entity.SupplyChainFinancing.ConfirmingStorageFinancing
 import cn.edu.nju.polaris.entity.SupplyChainFinancing.MovablePledgeFinancing;
 import cn.edu.nju.polaris.entity.SupplyChainFinancing.ReceivablesFinancing;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
-import cn.edu.nju.polaris.repository.CashflowSheetRepository;
 import cn.edu.nju.polaris.repository.IndustryIndexRepository;
 import cn.edu.nju.polaris.repository.SafeInventoryRepository;
 import cn.edu.nju.polaris.repository.SubjectsRecordRepository;
@@ -42,19 +40,12 @@ import cn.edu.nju.polaris.repository.AccountRepository;
 import cn.edu.nju.polaris.repository.SupplyChainRepository;
 import cn.edu.nju.polaris.repository.SupportItem1Repository;
 import cn.edu.nju.polaris.repository.SupportItem2Repository;
-import cn.edu.nju.polaris.service.SupplyChainService;
-import cn.edu.nju.polaris.vo.AccountInfoVO;
 import cn.edu.nju.polaris.vo.AccountVO;
 import cn.edu.nju.polaris.vo.Financing1;
 import cn.edu.nju.polaris.vo.Financing2;
 import cn.edu.nju.polaris.vo.Financing3;
 import cn.edu.nju.polaris.vo.RaworProductAndFromVo;
 import cn.edu.nju.polaris.vo.SupplyChainVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -104,7 +95,7 @@ public class SupplyChainImpl implements SupplyChainService{
         this.mpfr=mpfr;
         this.csfr=csfr;
         this.ims=new InventoryManagementImpl(sir,safeInventoryRepository,ar);
-        this.abs=new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository,sir,sir2);
+        this.abs=new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository,sir,sir2, subjectInitialRepository);
 	}
 
 	@Override

@@ -23,14 +23,16 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
     private final SubjectsRecordRepository subjectsRecordRepository;
     private final SupportItem1Repository supportItem1Repository;
     private final SupportItem2Repository supportItem2Repository;
+    private final SubjectInitialRepository subjectInitialRepository;
 
     @Autowired
-    public AccountBooksServiceImpl(VoucherRepository voucherRepository, SubjectsRepository subjectsRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository) {
+    public AccountBooksServiceImpl(VoucherRepository voucherRepository, SubjectsRepository subjectsRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository, SubjectInitialRepository subjectInitialRepository) {
         this.voucherRepository=voucherRepository;
         this.subjectsRepository=subjectsRepository;
         this.subjectsRecordRepository=subjectsRecordRepository;
         this.supportItem1Repository=supportItem1Repository;
         this.supportItem2Repository=supportItem2Repository;
+        this.subjectInitialRepository=subjectInitialRepository;
     }
 
 
@@ -178,14 +180,16 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
             monthToDetailMap.put(month,newList);
         }
 
+        SubjectInitial subjectInitial=subjectInitialRepository.findByCompanyIdAndSubjectsId(factoryId,subjectId);
+
         DetailAccountAmountVo beginNumber=new DetailAccountAmountVo();
         beginNumber.setDate(startMonth+"-01");
         beginNumber.setSubject(subjectId);
         beginNumber.setAbstracts("期初余额");
-        beginNumber.setDebitAmount(0.0);
-        beginNumber.setCreditAmount(0.0);
+        beginNumber.setDebitAmount(subjectInitial.getDebitAmount());
+        beginNumber.setCreditAmount(subjectInitial.getCreditAmount());
         beginNumber.setDirection("平");
-        beginNumber.setBalance(0.0);
+        beginNumber.setBalance(subjectInitial.getBalance());
 
         //已经完成期初金额的计算
         for(int count=0;count<subjectsPOArrayList.size();count++){
