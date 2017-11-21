@@ -1,11 +1,16 @@
 package cn.edu.nju.polaris.controller;
 
+import cn.edu.nju.polaris.entity.SubjectInitial;
 import cn.edu.nju.polaris.service.SubjectBalanceService;
+import cn.edu.nju.polaris.service.SubjectInitialService;
 import cn.edu.nju.polaris.vo.SubjectBalanceVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
+import javax.security.auth.Subject;
+import java.util.List;
 
 @RestController
 @RequestMapping("/initial")
@@ -13,10 +18,12 @@ public class InitialController {
 
 
     private final SubjectBalanceService subjectBalanceService;
+    private final SubjectInitialService subjectInitialService;
 
 
-    public InitialController(SubjectBalanceService subjectBalanceService) {
+    public InitialController(SubjectBalanceService subjectBalanceService, SubjectInitialService subjectInitialService) {
         this.subjectBalanceService = subjectBalanceService;
+        this.subjectInitialService = subjectInitialService;
     }
 
     @ApiOperation(value = "期初设置")
@@ -24,21 +31,18 @@ public class InitialController {
             @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long"),
             @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
     })
-    @PostMapping()
     void initialSubjectBalance(@RequestParam Long companyId,
                                @RequestParam String phase){
         subjectBalanceService.initialSubjectBalance(companyId,phase);
     }
 
-
-    @ApiOperation(value = "保存科目余额")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "vo",value = "科目余额VO",required = true,dataType = "SubjectBalanceVO")
-    })
-    @PostMapping("/new")
-    void saveOneSubjectBalance(@RequestBody SubjectBalanceVO vo){
-        subjectBalanceService.saveOneSubjectBalance(vo);
+    @ApiOperation(value = "期初设置")
+    @ApiImplicitParam(name = "list",value = "期初设置的列表",required = true,dataType = "List")
+    @PostMapping()
+    void subjectsInitial(List<SubjectInitial> list){
+        subjectInitialService.saveSubjectInitials(list);
     }
+
 }
 
 
