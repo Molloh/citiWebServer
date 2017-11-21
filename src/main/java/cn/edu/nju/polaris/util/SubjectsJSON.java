@@ -2,9 +2,9 @@ package cn.edu.nju.polaris.util;
 
 import cn.edu.nju.polaris.entity.Subjects;
 import cn.edu.nju.polaris.repository.SubjectsRepository;
-import com.amazonaws.util.json.JSONArray;
-import com.amazonaws.util.json.JSONException;
-import com.amazonaws.util.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spring.web.json.Json;
 
