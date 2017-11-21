@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.entity.ProfitSheet;
 import cn.edu.nju.polaris.entity.VoucherItem;
@@ -61,12 +60,12 @@ public class ProfitTableSheetCal {
         Business_Taxes_and_Surcharges[3] = th.CreditCal("2221008", map);//应交城市维护建设税
         Business_Taxes_and_Surcharges[4] = th.CreditCal("2221005", map);//应交资源税
         Business_Taxes_and_Surcharges[5] = th.CreditCal("2221007", map);//应交土地增值税
-        Business_Taxes_and_Surcharges[6] = th.CreditCal("2221010", map) +//应交城镇土地使用税
+        Business_Taxes_and_Surcharges[6] = th.CreditCal("2221010", map)+//应交城镇土地使用税
                 th.CreditCal("2221011", map) +//应交车船使用税
                 th.CreditCal("2221009", map) +//应交房产税
                 th.CreditCal("2221017", map);//印花税
-        Business_Taxes_and_Surcharges[7] = th.CreditCal("2221013", map) +//教育费附加
-                th.CreditCal("2221014", map) +//地方教育费附加
+        Business_Taxes_and_Surcharges[7] = th.CreditCal("2221013", map)+//教育费附加
+                th.CreditCal("2221014", map)+//地方教育费附加
                 th.CreditCal("2221016", map) +//排污费
                 th.CreditCal("2221015", map);//矿产资源补偿费
         save(company_id, time, "营业税金及附加", Business_Taxes_and_Surcharges[0]);
@@ -143,6 +142,8 @@ public class ProfitTableSheetCal {
         save(company_id, time, "四、净利润（净亏损以“-”号填列）", Net_profit);
 
     }
+    
+    
 
     private void save(Long companyId, String time, String name, Double value) {
         ProfitSheet item = psr.findByCompanyIdAndPeriodAndName(companyId, time, name);

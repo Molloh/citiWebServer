@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import cn.edu.nju.polaris.entity.BalanceSheet;
 import cn.edu.nju.polaris.entity.CashflowSheet;
+import cn.edu.nju.polaris.entity.SubjectInitial;
 import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.CashflowSheetRepository;
+import cn.edu.nju.polaris.repository.SubjectInitialRepository;
 import cn.edu.nju.polaris.repository.VoucherItemRepository;
 import cn.edu.nju.polaris.service.Impl.TableHelper;
 import org.springframework.stereotype.Component;
@@ -22,13 +24,16 @@ public class CashFlowTableSheetCal {
     private TableHelper helper;
     private CashflowSheetRepository cfr;
     private BalanceSheetRepository bsr;
+    private SubjectInitialRepository sr;
 
     @Autowired
-    public CashFlowTableSheetCal(VoucherItemRepository vir, CashflowSheetRepository cfr, BalanceSheetRepository balanceSheetRepository) {
+    public CashFlowTableSheetCal(VoucherItemRepository vir, CashflowSheetRepository cfr, BalanceSheetRepository balanceSheetRepository,
+    		SubjectInitialRepository sr) {
         this.vir = vir;
         this.cfr = cfr;
         this.helper = new TableHelper();
         this.bsr = balanceSheetRepository;
+        this.sr=sr;
     }
 
     public void UpdateCashFlowTable(String time, long company_id) {
@@ -65,14 +70,18 @@ public class CashFlowTableSheetCal {
         s1 = helper.DebitCal("2211", map);//“应付职工薪酬”科目本期借方发生额累计数
         operating_activities[3] = s1;//“支付的职工薪酬”的本月金额
 
-        s1 = helper.DebitCal(helper.specificSubject("222100", map))-helper.DebitCal("2221001",map);//“应交税费”各明细账户本期借方发生额累计数
+        s1 = helper.DebitCal(helper.specificSubject("222100", map))
+        		-helper.DebitCal("2221001",map);//“应交税费”各明细账户本期借方发生额累计数
         s2 = helper.DebitCal("222100101", map);//“应交税费-应交增值税-进项税额”
         operating_activities[4] = s1 - s2;//1.5“支付的税费”
 
-        s1 = helper.Cal2(helper.specificSubject("57110", map)) - helper.Cal2("5711001", map);//营业外支出（-其中的非流动资产处置净损失）
-        s2 = helper.Cal2(helper.specificSubject("56020", map)) -  helper.Cal2("5602001", map) -
+        s1 = helper.Cal2(helper.specificSubject("57110", map))
+        		- helper.Cal2("5711001", map);//营业外支出（-其中的非流动资产处置净损失）
+        s2 = helper.Cal2(helper.specificSubject("56020", map))
+        		-  helper.Cal2("5602001", map) -
                  helper.Cal2("5602007", map);//管理费用(-其中的应付职工薪酬、折旧费)
-        temp3 = helper.Cal2(helper.specificSubject("56010", map)) -  helper.Cal2("5601001", map);//销售费用 (-其中的应付职工薪酬)
+        temp3 = helper.Cal2(helper.specificSubject("56010", map))
+        		-  helper.Cal2("5601001", map);//销售费用 (-其中的应付职工薪酬)
         temp4 = helper.DebitCal("1221", map);//其他应收款本期借方发生额
         temp5 = helper.DebitCal("2241", map);//其他应付款本期借方发生额
         temp6 = helper.Cal2("5603002", map);//财务费用——手续费
@@ -147,7 +156,15 @@ public class CashFlowTableSheetCal {
         double[] Net_cash_increase = new double[2];
         Net_cash_increase[0] = operating_activities[6]+Investment_activities[5]+Financing_activities[5];//“四、现金净增加额”
         CashflowSheet c=cfr.findByPeriodAndCompanyIdAndName(lastTime(time),company_id,"五、期末现金余额");
-        Net_cash_increase[1] =c!=null?c.getBalance():0 ;
+        
+        SubjectInitial su=sr.findByCompanyIdAndSubjectsId(company_id, "1001");
+        double tt=0;
+        if(su!=null)tt+=su.getBalance();
+        su=sr.findByCompanyIdAndSubjectsId(company_id, "1002");
+        if(su!=null)tt+=su.getBalance();
+        su=sr.findByCompanyIdAndSubjectsId(company_id, "1012");
+        if(su!=null)tt+=su.getBalance();
+        Net_cash_increase[1] =c!=null?c.getBalance():tt ;
 
         double Final_cash_balance = Net_cash_increase[0] + Net_cash_increase[1];//“五、期末现金余额”
 
@@ -174,6 +191,31 @@ public class CashFlowTableSheetCal {
         save(company_id, time, "加：期初现金余额", Net_cash_increase[1]);
         save(company_id, time, "五、期末现金余额", Final_cash_balance);
     }
+   /* 
+    private double getInitial(String s,Map<String,Double> m){
+    	if(m.containsKey(s))
+    		return m.get(s);
+    	return 0;
+    }
+    
+    private double getInitialspecific(String s,Map<String,Double> m){
+    	double res=0;
+    	for(Map.Entry<String, Double> e:m.entrySet()){
+    		if(e.getKey().startsWith(s))
+    			res+=e.getValue();
+    	}
+    	return res;
+    }
+    
+    private Map<String,Double> getInitial(long company_id){
+    	Map<String,Double> map=new HashMap<>();
+    	List<SubjectInitial> list=sr.findAllByCompanyId(company_id);
+    	
+    	for(SubjectInitial s:list)
+    		map.put(s.getSubjectsId(), s.getYearBalance());
+    	
+    	return map;
+    }*/
 
     private void save(Long companyId, String time, String name, Double value) {
         CashflowSheet item = cfr.findByPeriodAndCompanyIdAndName(time, companyId, name);

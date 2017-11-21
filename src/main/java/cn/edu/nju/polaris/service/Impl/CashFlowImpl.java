@@ -59,6 +59,8 @@ public class CashFlowImpl implements CashFlowService{
 					String project=p.getName();	
 					double period=p.getBalance();
 					double year=period;
+					if("加：期初现金余额".equals(project))
+						year=0;
 					res.add(new Pro_and_CashVo(project,i+1,year,period));
 				}
 			}else{
@@ -67,10 +69,15 @@ public class CashFlowImpl implements CashFlowService{
 					String project=p.getName();	
 					double period=p.getBalance();
 					double year=map.get(project)+period;
+					if("加：期初现金余额".equals(project))
+						year=0;
 					res.add(new Pro_and_CashVo(project,i+1,year,period));
 				}
 			}
 		}
+		
+		
+		
 		return res;
 	}
 
