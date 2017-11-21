@@ -6,20 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.edu.nju.polaris.entity.*;
+import cn.edu.nju.polaris.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.entity.SupplyChainFinancing.ConfirmingStorageFinancing;
 import cn.edu.nju.polaris.entity.SupplyChainFinancing.MovablePledgeFinancing;
 import cn.edu.nju.polaris.entity.SupplyChainFinancing.ReceivablesFinancing;
-import cn.edu.nju.polaris.repository.BalanceSheetRepository;
-import cn.edu.nju.polaris.repository.IndustryIndexRepository;
-import cn.edu.nju.polaris.repository.SafeInventoryRepository;
-import cn.edu.nju.polaris.repository.SubjectsRecordRepository;
-import cn.edu.nju.polaris.repository.SubjectsRepository;
-import cn.edu.nju.polaris.repository.VoucherItemRepository;
-import cn.edu.nju.polaris.repository.VoucherRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ConfirmingStorageFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.MovablePledgeFinancingRepository;
 import cn.edu.nju.polaris.repository.SupplyChainFinancing.ReceivablesFinancingRepository;
@@ -28,18 +22,8 @@ import cn.edu.nju.polaris.service.InventoryManagementService;
 import cn.edu.nju.polaris.service.SupplyChainService;
 import cn.edu.nju.polaris.vo.SupplyModuleOne;
 import cn.edu.nju.polaris.vo.Inventory.InventoryAppraisalVo;
-import cn.edu.nju.polaris.entity.Account;
-import cn.edu.nju.polaris.entity.BalanceSheet;
-import cn.edu.nju.polaris.entity.IndustryIndex;
-import cn.edu.nju.polaris.entity.SupplyChain;
-import cn.edu.nju.polaris.entity.SupportItem1;
-import cn.edu.nju.polaris.entity.SupportItem2;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
-import cn.edu.nju.polaris.repository.AccountRepository;
-import cn.edu.nju.polaris.repository.SupplyChainRepository;
-import cn.edu.nju.polaris.repository.SupportItem1Repository;
-import cn.edu.nju.polaris.repository.SupportItem2Repository;
 import cn.edu.nju.polaris.vo.AccountVO;
 import cn.edu.nju.polaris.vo.Financing1;
 import cn.edu.nju.polaris.vo.Financing2;
@@ -68,7 +52,7 @@ public class SupplyChainImpl implements SupplyChainService{
     private final SupportItem2Repository sir2;
     private final AccountRepository ar;
     private final IndustryIndexRepository ir;
-    
+
     private final ReceivablesFinancingRepository rfr;
     private final MovablePledgeFinancingRepository mpfr;
     private final ConfirmingStorageFinancingRepository csfr;
@@ -81,7 +65,7 @@ public class SupplyChainImpl implements SupplyChainService{
 			SupportItem1Repository sir,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
 			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr,
 			VoucherRepository voucherRepository,SubjectsRepository subjectsRepository,SubjectsRecordRepository subjectsRecordRepository,
-			SafeInventoryRepository safeInventoryRepository){
+			SafeInventoryRepository safeInventoryRepository,SubjectInitialRepository subjectInitialRepository){
 		this.bsr=bsr;
 		this.vir=vir;
 		this.helper=new TableHelper();
