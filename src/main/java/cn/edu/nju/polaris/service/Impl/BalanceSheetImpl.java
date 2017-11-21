@@ -99,7 +99,7 @@ public class BalanceSheetImpl implements BalanceSheetService {
      * @return
      */
     private String getLastYear(String phase){
-        int year = Integer.valueOf(phase.substring(0,4));
+        int year = Integer.valueOf(phase.substring(0,4))-1;
         return year+"-12";
     }
 
