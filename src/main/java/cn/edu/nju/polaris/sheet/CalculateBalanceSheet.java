@@ -1,14 +1,14 @@
 package cn.edu.nju.polaris.sheet;
 
 import cn.edu.nju.polaris.entity.BalanceSheet;
+import cn.edu.nju.polaris.entity.SubjectInitial;
 import cn.edu.nju.polaris.entity.SubjectsBalance;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
+import cn.edu.nju.polaris.repository.SubjectInitialRepository;
 import cn.edu.nju.polaris.repository.SubjectsBalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,13 +18,16 @@ import java.util.List;
 public class CalculateBalanceSheet {
     private final BalanceSheetRepository balanceSheetRepository;
     private final SubjectsBalanceRepository subjectsBalanceRepository;
+    private final SubjectInitialRepository subjectInitialRepository;
 
     private List<SubjectsBalance> list;
+    private List<SubjectInitial> list1;
 
     @Autowired
-    public CalculateBalanceSheet(BalanceSheetRepository balanceSheetRepository, SubjectsBalanceRepository subjectsBalanceRepository) {
+    public CalculateBalanceSheet(BalanceSheetRepository balanceSheetRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectInitialRepository subjectInitialRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.subjectsBalanceRepository = subjectsBalanceRepository;
+        this.subjectInitialRepository = subjectInitialRepository;
     }
 
     /**
@@ -34,6 +37,7 @@ public class CalculateBalanceSheet {
      */
     public void UpdateBalanceSheet(long company_id,String phase){
         list = subjectsBalanceRepository.findByCompanyIdAndDate(company_id,phase);
+        list1 = subjectInitialRepository.findAllByCompanyId(company_id);
 
         //1.1货币资金=其他货币资金+库存现金+银行存款
         double balance1_1 = getMoneyByCourseId("1012", true) + getMoneyByCourseId("1001", true) + getMoneyByCourseId("1002", true);
@@ -219,17 +223,26 @@ public class CalculateBalanceSheet {
      * @return
      */
     public double getMoneyByCourseId(String course_id, boolean IsDebit){
+        double result = 0.0;
         for(int i=0;i<list.size();i++){
             SubjectsBalance subjectsBalance = list.get(i);
             if(subjectsBalance.getSubjectsId().equals(course_id)){
                 if(IsDebit){
-                    return subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
+                    result = subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
                 }else {
-                    return subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
+                    result = subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
                 }
+                break;
             }
         }
-        return 0.0;
+        for(int i=0;i< list1.size();i++){
+            SubjectInitial subjectInitial = list1.get(i);
+            if(subjectInitial.getSubjectsId().equals(course_id)){
+                result = result+subjectInitial.getBalance();
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -250,28 +263,42 @@ public class CalculateBalanceSheet {
                 }
             }
         }
+        for(int i=0;i<list1.size();i++){
+            SubjectInitial subjectInitial = list1.get(i);
+            if(subjectInitial.getSubjectsId().substring(0,4).equals(course_id)){
+                result = result+subjectInitial.getBalance();
+            }
+        }
         return result;
     }
 
     public double getMoneyHasCourseId(String course_id, boolean IsDebit){
+        double result = 0.0;
         for(int i=0;i<list.size();i++){
             SubjectsBalance subjectsBalance = list.get(i);
             if(subjectsBalance.getSubjectsId().equals(course_id)){
                 if(IsDebit){
                     if(subjectsBalance.getDebitAmount()>0){
-                        return subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
+                        result = subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
                     }else{
-                        return 0.0;
+                        result = 0.0;
                     }
                 }else {
                     if(subjectsBalance.getCreditAmount()>0){
-                        return subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
+                        result = subjectsBalance.getCreditAmount()-subjectsBalance.getDebitAmount();
                     }else{
-                        return 0.0;
+                        result = 0.0;
                     }
                 }
             }
         }
-        return 0.0;
+        for(int i=0;i< list1.size();i++){
+            SubjectInitial subjectInitial = list1.get(i);
+            if(subjectInitial.getSubjectsId().equals(course_id)){
+                result = result+subjectInitial.getBalance();
+                break;
+            }
+        }
+        return result;
     }
 }
