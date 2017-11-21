@@ -86,9 +86,9 @@ public interface SupplyChainService {
 	 * @param Manufacturer_id 生产商
 	 * @param Distributor_id  分销商
 	 * @param time yyyy-mm
-	 * @return 模块三：供应链整体绩效评价(10个数据)
+	 * @return 模块三：供应链整体绩效评价(12*10)
 	 */
-	public double[] getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
+	public List<double[]> getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
 			long Supplier_id,long Manufacturer_id,long Distributor_id,String time);
 
 	/**

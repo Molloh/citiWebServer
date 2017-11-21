@@ -46,15 +46,17 @@ public class CashFlowTableSheetCal {
         temp3 = tool.get("应收票据")[0] - tool.get("应收票据")[1];//应收票据期初余额-应收票据期末余额
         temp4 = tool.get("应收账款")[0] - tool.get("应收账款")[1];//应收账款期初余额-应收账款期末余额
         temp5 = tool.get("预收账款")[0] - tool.get("预收账款")[1];//预收账款期初余额-预收账款期末余额
-        operating_activities[0] = s1 * (1 + 0.17) + s2 + temp3 + temp4 + temp5;//1.1“销售产成品、商品、提供劳务收到的现金”
+        operating_activities[0] = s1 + s2 + temp3 + temp4 + temp5+helper.CreditCal("222100105",map);//1.1“销售产成品、商品、提供劳务收到的现金”
 
         operating_activities[1]=helper.CreditCal("5301",map)+
                 helper.CreditCal("5051",map)+helper.CreditCal("2241",map)
                 +helper.CreditCal("1221",map);
         //s1 = helper.DebitCal("1403", map) +
                 //+helper.DebitCal("1405", map);//原材料、低值易耗品、包装物、库存商品的借方发生额
-
-        s1=tool.get("存货")[1] - tool.get("存货")[0]+helper.DebitCal("222100101",map);
+        
+        s1=getGivenVourchersDebitCal(time, "1403", "2202", company_id)+getGivenVourchersDebitCal(time, "1403", "1002", company_id)+
+        		getGivenVourchersDebitCal(time, "1405", "2202", company_id)+getGivenVourchersDebitCal(time, "1405", "1002", company_id)
+        +helper.DebitCal("222100101",map);
         s2 = tool.get("应付账款")[0] - tool.get("应付账款")[1];//购买原材料、商品、接受劳务的应付账款(期初 一期末)
         temp3 = tool.get("应付票据")[0] - tool.get("应付票据")[1];//购买原材料、商品、接受劳务的应付票据(期初一期末)
         temp4 = tool.get("预付账款")[1] - tool.get("预付账款")[0];//购买原材料、商品、接受劳务的预付账款 (期末一期初)
@@ -63,14 +65,14 @@ public class CashFlowTableSheetCal {
         s1 = helper.DebitCal("2211", map);//“应付职工薪酬”科目本期借方发生额累计数
         operating_activities[3] = s1;//“支付的职工薪酬”的本月金额
 
-        s1 = helper.DebitCal(helper.specificSubject("2221", map));//“应交税费”各明细账户本期借方发生额累计数
-        s2 = helper.Cal2("222100101", map);//“应交税费-应交增值税-进项税额”
+        s1 = helper.DebitCal(helper.specificSubject("222100", map))-helper.DebitCal("2221001",map);//“应交税费”各明细账户本期借方发生额累计数
+        s2 = helper.DebitCal("222100101", map);//“应交税费-应交增值税-进项税额”
         operating_activities[4] = s1 - s2;//1.5“支付的税费”
 
-        s1 = helper.Cal2(helper.specificSubject("5711", map)) - 2 * helper.Cal2("5711001", map);//营业外支出（-其中的非流动资产处置净损失）
-        s2 = helper.Cal2(helper.specificSubject("5602", map)) - 2 * helper.Cal2("5602001", map) -
-                2 * helper.Cal2("5602007", map);//管理费用(-其中的应付职工薪酬、折旧费)
-        temp3 = helper.Cal2(helper.specificSubject("5601", map)) - 2 * helper.Cal2("5601001", map);//销售费用 (-其中的应付职工薪酬)
+        s1 = helper.Cal2(helper.specificSubject("57110", map)) - helper.Cal2("5711001", map);//营业外支出（-其中的非流动资产处置净损失）
+        s2 = helper.Cal2(helper.specificSubject("56020", map)) -  helper.Cal2("5602001", map) -
+                 helper.Cal2("5602007", map);//管理费用(-其中的应付职工薪酬、折旧费)
+        temp3 = helper.Cal2(helper.specificSubject("56010", map)) -  helper.Cal2("5601001", map);//销售费用 (-其中的应付职工薪酬)
         temp4 = helper.DebitCal("1221", map);//其他应收款本期借方发生额
         temp5 = helper.DebitCal("2241", map);//其他应付款本期借方发生额
         temp6 = helper.Cal2("5603002", map);//财务费用——手续费
@@ -182,6 +184,17 @@ public class CashFlowTableSheetCal {
             item = new CashflowSheet(companyId, time, name, value);
             cfr.save(item);
         }
+    }
+    
+    private double getGivenVourchersDebitCal(String time, String sub1, String sub2, long company_id){
+    	List<VoucherItem> list1 = vir.getDebitVoucherItemByPeriod(time, sub1, company_id);
+    	
+    	double res=0;
+    	
+        for (VoucherItem v : list1) {
+            res+=v.getDebitAmount();
+        }
+    	return res;
     }
 
     private double getGivenVourchers(String time, String sub1, String sub2, long company_id) {

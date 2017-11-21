@@ -340,9 +340,33 @@ public class SupplyChainImpl implements SupplyChainService{
 		
 		return ims.getProductInventoryAppraisal(Manufacturer_id,Distributor_id, time,variety);
 	}
-
+	
 	@Override
-	public double[] getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
+	public List<double[]>  getSupplyChainTotal(String Supplier_name, String Manufacturer_name, String Distributor_name,
+			long Supplier_id, long Manufacturer_id, long Distributor_id, String time) {
+		List<double[]> res=new ArrayList<>();
+		
+		List<double[]>temp=new ArrayList<>();
+		
+		for(int i=0;i<12;i++){
+			temp.add(getSupplyChainTemp(Supplier_name,Manufacturer_name,Distributor_name,
+			Supplier_id,Manufacturer_id, Distributor_id,  time));
+			time=helper.lastTime(time);
+		}
+		for(int i=0;i<10;i++){
+			double r[]=new double[12];
+			for(int j=11;j>=0;j--){
+				r[j]=temp.get(j)[i];
+			}
+			res.add(r);
+		}
+		
+		
+		return res;
+	}
+
+	
+	private double[] getSupplyChainTemp(String Supplier_name, String Manufacturer_name, String Distributor_name,
 			long Supplier_id, long Manufacturer_id, long Distributor_id, String time) {
 		double []res=new double[10];
 		
@@ -350,7 +374,7 @@ public class SupplyChainImpl implements SupplyChainService{
 		
 		List<SupportItem1> t1=sir.findAllByCompanyIdAndEndSideAndDate(Supplier_id,Manufacturer_name,time);//供应商和生产商的交易
 		//double this_shouru=ShouruCal(t1);//供应商本期收入
-		Map<String,Integer> map1=GoodsNums(t1);
+		//Map<String,Integer> map1=GoodsNums(t1);
 		
 		List<SupportItem1> t2=sir.findAllByCompanyIdAndEndSideAndDate(Manufacturer_id,Distributor_name,time);
 		
@@ -360,7 +384,9 @@ public class SupplyChainImpl implements SupplyChainService{
 			map11=helper.tempCal(list11);
 		
 		List<VoucherItem> list12=vir.getListThroughPeriod(time, Manufacturer_id);
-		Map<String,double[]> map12=helper.tempCal(list12);
+		Map<String,double[]> map12=null;
+		if(list12.size()!=0)
+			map12=helper.tempCal(list12);
 		
 		List<VoucherItem> list21=vir.getListThroughPeriod(last, Distributor_id);
 		Map<String,double[]> map21=null;
@@ -368,7 +394,9 @@ public class SupplyChainImpl implements SupplyChainService{
 			map21=helper.tempCal(list21);
 		
 		List<VoucherItem> list22=vir.getListThroughPeriod(time, Supplier_id);
-		Map<String,double[]> map22=helper.tempCal(list22);
+		Map<String,double[]> map22=null;
+		if(list22.size()!=0)
+			map22=helper.tempCal(list22);
 		
 		List<VoucherItem> list31=vir.getListThroughPeriod(last, Manufacturer_id);
 		Map<String,double[]> map31=null;
@@ -376,7 +404,9 @@ public class SupplyChainImpl implements SupplyChainService{
 			map31=helper.tempCal(list31);
 		
 		List<VoucherItem> list32=vir.getListThroughPeriod(time, Distributor_id);
-		Map<String,double[]> map32=helper.tempCal(list32);
+		Map<String,double[]> map32=null;
+		if(list32.size()!=0)
+			map32=helper.tempCal(list32);
 		
 		
 		double last_zyshouru1=0;//上期主营业务收入
@@ -385,7 +415,7 @@ public class SupplyChainImpl implements SupplyChainService{
 		BalanceSheet b=null;
 		double last_cunhuo1=0;//上期期末存货
 		
-		if(map1.size()!=0){
+		if(map11.size()!=0){
 			last_zyshouru1=helper.Cal("5001", map11);
 			last_zychenben1=helper.Cal2("5401", map11);
 			
@@ -412,7 +442,7 @@ public class SupplyChainImpl implements SupplyChainService{
 		double last_zong2=0;//上期期末总资产
 		double last_cunhuo2=0;//上期期末存货
 		
-		if(map1.size()!=0){
+		if(map21.size()!=0){
 			last_zyshouru2=helper.Cal("5001", map21);
 			last_zychenben2=helper.Cal2("5401", map21);
 			
@@ -440,7 +470,7 @@ public class SupplyChainImpl implements SupplyChainService{
 		double last_zong3=0;//上期期末总资产
 		double last_cunhuo3=0;//上期期末存货
 		
-		if(map1.size()!=0){
+		if(map31.size()!=0){
 			last_zyshouru3=helper.Cal("5001", map31);
 			last_zychenben3=helper.Cal2("5401", map31);
 			
