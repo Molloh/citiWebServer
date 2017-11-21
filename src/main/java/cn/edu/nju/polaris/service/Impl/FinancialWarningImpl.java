@@ -82,7 +82,6 @@ public class FinancialWarningImpl implements FinancialWarningService {
         //资本积累率  （本期所有者权益－上一期所有者权益）／上一期所有者权益
         actual_value[11] = (data1[9] - data1[10]) / data1[10] * 100;
 
-
         double[] rate = new double[12];
         double[] average_value = new double[12];
         double[] unallowed_value = new double[12];
