@@ -30,9 +30,9 @@ public class SubjectBalanceServiceImpl implements SubjectBalanceService {
     public void initialSubjectBalance(Long companyId, String phase) {
         List<Subjects> subjectsList = subjectsRepository.findAll();
         String lastPhase = getLastPhase(phase);
-        List<SubjectsBalance> lastSubjects = subjectsBalanceRepository.findByCompanyIdAndDate(companyId,lastPhase);
-        if (lastSubjects != null || lastSubjects.size()!= 0){
-            for (SubjectsBalance balance : lastSubjects){
+        List<SubjectsBalance> lastSubjects = subjectsBalanceRepository.findByCompanyIdAndDate(companyId, lastPhase);
+        if (lastSubjects.size() != 0) {
+            for (SubjectsBalance balance : lastSubjects) {
                 SubjectsBalance temp = new SubjectsBalance();
                 temp.setDate(phase);
                 temp.setDebitAmount(balance.getDebitAmount());
@@ -42,10 +42,10 @@ public class SubjectBalanceServiceImpl implements SubjectBalanceService {
                 temp.setSubjectsId(balance.getSubjectsId());
                 subjectsBalanceRepository.save(temp);
             }
-        }else {
-            for (Subjects subject : subjectsList){
-                SubjectsBalance balance = subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(companyId,subject.getSubjectsId(),phase);
-                if (balance != null){
+        } else {
+            for (Subjects subject : subjectsList) {
+                SubjectsBalance balance = subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(companyId, subject.getSubjectsId(), phase);
+                if (balance != null) {
                     throw new ResourceConflictException("已进行过期初设置");
                 }
                 balance = new SubjectsBalance();
@@ -62,16 +62,16 @@ public class SubjectBalanceServiceImpl implements SubjectBalanceService {
 
     @Override
     public void saveOneSubjectBalance(SubjectBalanceVO vo) {
-        if (vo == null){
+        if (vo == null) {
             throw new ResourceNotFoundException("该科目余额信息为空");
         }
-        SubjectsBalance balance = subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(vo.companyId,vo.subjectId,vo.phase);
-        if (balance != null){
+        SubjectsBalance balance = subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(vo.companyId, vo.subjectId, vo.phase);
+        if (balance != null) {
             balance.setBalance(vo.balance);
             balance.setCreditAmount(vo.creditAmount);
             balance.setDebitAmount(vo.debitAmount);
             subjectsBalanceRepository.save(balance);
-        }else {
+        } else {
             balance = new SubjectsBalance();
             balance.setSubjectsId(vo.subjectId);
             balance.setCompanyId(vo.companyId);
@@ -83,19 +83,19 @@ public class SubjectBalanceServiceImpl implements SubjectBalanceService {
         }
     }
 
-    private String getLastPhase(String phase){
+    private String getLastPhase(String phase) {
         String[] time = phase.split("-");
         int year = Integer.valueOf(time[0]);
         int month = Integer.valueOf(time[1]);
-        if(month==1){
-            year = year-1;
+        if (month == 1) {
+            year = year - 1;
             month = 12;
-        }else {
+        } else {
             month--;
         }
-        if(month<10){
-            return year+"-0"+month;
+        if (month < 10) {
+            return year + "-0" + month;
         }
-        return year+"-"+month;
+        return year + "-" + month;
     }
 }

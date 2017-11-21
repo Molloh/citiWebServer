@@ -12,7 +12,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/supplychains")
 public class SupplyChainController {
 
     private final SupplyChainService supplyChainService;
@@ -169,7 +169,7 @@ public class SupplyChainController {
             @ApiImplicitParam(name = "time",value = "时间（yyyy-mm）",required = true,dataType = "String"),
     })
     @GetMapping("/evaluation/module3")
-    double[] getSupplyChainTotal(@RequestParam String supplierName,
+    List<double[]> getSupplyChainTotal(@RequestParam String supplierName,
                                  @RequestParam String manufacturerName,
                                  @RequestParam String distributorName,
                                  @RequestParam Long supplierId,
