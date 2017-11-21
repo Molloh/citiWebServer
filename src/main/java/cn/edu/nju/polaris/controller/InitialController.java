@@ -17,24 +17,13 @@ import java.util.List;
 public class InitialController {
 
 
-    private final SubjectBalanceService subjectBalanceService;
     private final SubjectInitialService subjectInitialService;
 
 
-    public InitialController(SubjectBalanceService subjectBalanceService, SubjectInitialService subjectInitialService) {
-        this.subjectBalanceService = subjectBalanceService;
+    public InitialController(SubjectInitialService subjectInitialService) {
         this.subjectInitialService = subjectInitialService;
     }
 
-    @ApiOperation(value = "期初设置")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long"),
-            @ApiImplicitParam(name = "phase",value = "期数",required = true,dataType = "String")
-    })
-    void initialSubjectBalance(@RequestParam Long companyId,
-                               @RequestParam String phase){
-        subjectBalanceService.initialSubjectBalance(companyId,phase);
-    }
 
     @ApiOperation(value = "期初设置")
     @ApiImplicitParam(name = "list",value = "期初设置的列表",required = true,dataType = "List")
