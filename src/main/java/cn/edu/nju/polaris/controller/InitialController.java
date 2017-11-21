@@ -39,10 +39,17 @@ public class InitialController {
     @ApiOperation(value = "期初设置")
     @ApiImplicitParam(name = "list",value = "期初设置的列表",required = true,dataType = "List")
     @PostMapping()
-    void subjectsInitial(List<SubjectInitial> list){
+    void subjectsInitial(@RequestBody List<SubjectInitial> list){
         subjectInitialService.saveSubjectInitials(list);
     }
 
+    @ApiOperation(value = "获得期初设置")
+    @ApiImplicitParam(name = "companyId",value = "公司ID",required = true,dataType = "Long")
+    @GetMapping()
+    List<SubjectInitial> getAllSubjectInitial(@RequestParam Long companyId){
+        return subjectInitialService.getAllSubjectInitialByCompanyId(companyId);
+    }
 }
+
 
 
