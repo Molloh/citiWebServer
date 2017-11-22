@@ -46,16 +46,20 @@ public class SubjectBalanceServiceImpl implements SubjectBalanceService {
             for (Subjects subject : subjectsList) {
                 SubjectsBalance balance = subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(companyId, subject.getSubjectsId(), phase);
                 if (balance != null) {
-                    throw new ResourceConflictException("已进行过期初设置");
+                    balance.setBalance(0.0);
+                    balance.setDebitAmount(0.0);
+                    balance.setCreditAmount(0.0);
+                    subjectsBalanceRepository.save(balance);
+                }else {
+                    balance = new SubjectsBalance();
+                    balance.setSubjectsId(subject.getSubjectsId());
+                    balance.setCompanyId(companyId);
+                    balance.setDate(phase);
+                    balance.setBalance(0.0);
+                    balance.setDebitAmount(0.0);
+                    balance.setCreditAmount(0.0);
+                    subjectsBalanceRepository.save(balance);
                 }
-                balance = new SubjectsBalance();
-                balance.setSubjectsId(subject.getSubjectsId());
-                balance.setCompanyId(companyId);
-                balance.setDate(phase);
-                balance.setBalance(0.0);
-                balance.setDebitAmount(0.0);
-                balance.setCreditAmount(0.0);
-                subjectsBalanceRepository.save(balance);
             }
         }
     }

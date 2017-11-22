@@ -1,5 +1,6 @@
 package cn.edu.nju.polaris.controller;
 
+import cn.edu.nju.polaris.entity.Voucher;
 import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.service.VoucherService;
 import cn.edu.nju.polaris.vo.SubjectVO;
@@ -33,6 +34,11 @@ public class VoucherController {
         voucherService.saveOneVoucher(vo);
     }
 
+
+    @PostMapping("/some")
+    public void addSomeVoucher(@RequestBody List<VoucherVO> list){
+        voucherService.saveSomeVoucher(list);
+    }
 
 
     @ApiOperation(value = "获得凭证信息",notes = "根据公司id和凭证号获得凭证信息")

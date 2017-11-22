@@ -7,6 +7,8 @@ import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
 
 import java.util.ArrayList;
+import java.util.List;
+
 public interface VoucherService {
 
 //    void saveVoucher(Voucher voucher);
@@ -42,6 +44,8 @@ public interface VoucherService {
      * @return
      */
     public boolean saveOneVoucher(VoucherVO voucherVO);
+
+    public boolean saveSomeVoucher(List<VoucherVO> list);
 
     /**
      * 获得当前凭证所有条目的合计

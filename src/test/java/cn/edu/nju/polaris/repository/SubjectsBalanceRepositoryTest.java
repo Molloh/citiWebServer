@@ -27,4 +27,12 @@ public class SubjectsBalanceRepositoryTest {
             System.out.println(subjectsBalance.toString());
         }
     }
+
+    @Test
+    public void testFindPeriod() throws Exception {
+        List<String> list = subjectsBalanceRepository.findPeriodAllByCompanyId(1L);
+        for (String s : list){
+            System.out.println(s);
+        }
+    }
 }

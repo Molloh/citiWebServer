@@ -7,6 +7,7 @@ import cn.edu.nju.polaris.entity.MultiKeysClass.VoucherMultiKeysClass;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
 import cn.edu.nju.polaris.repository.*;
+import cn.edu.nju.polaris.service.SubjectBalanceService;
 import cn.edu.nju.polaris.service.VoucherService;
 import cn.edu.nju.polaris.sheet.CalculateBalanceSheet;
 import cn.edu.nju.polaris.sheet.CashFlowTableSheetCal;
@@ -30,23 +31,26 @@ public class VoucherServiceImpl implements VoucherService{
     private final SubjectsRecordRepository subjectsRecordRepository;
     private final SupportItem1Repository supportItem1Repository;
     private final SupportItem2Repository supportItem2Repository;
+    private final SubjectBalanceService subjectBalanceService;
     private final CalculateBalanceSheet calculateBalanceSheet;
     private final CashFlowTableSheetCal cashFlowTableSheetCal;
     private final ProfitTableSheetCal profitTableSheetCal;
 
     @Autowired
-    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository, CalculateBalanceSheet calculateBalanceSheet, CashFlowTableSheetCal cashFlowTableSheetCal, ProfitTableSheetCal profitTableSheetCal) {
+    public VoucherServiceImpl(VoucherRepository voucherRepository, VoucherItemRepository voucherItemRepository, SubjectsRepository subjectsRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository, SubjectBalanceService subjectBalanceService, CalculateBalanceSheet calculateBalanceSheet, CashFlowTableSheetCal cashFlowTableSheetCal, ProfitTableSheetCal profitTableSheetCal) {
         this.voucherRepository = voucherRepository;
         this.voucherItemRepository = voucherItemRepository;
-        this.subjectsRepository=subjectsRepository;
-        this.subjectsBalanceRepository=subjectsBalanceRepository;
-        this.subjectsRecordRepository=subjectsRecordRepository;
-        this.supportItem1Repository=supportItem1Repository;
-        this.supportItem2Repository=supportItem2Repository;
-        this.calculateBalanceSheet=calculateBalanceSheet;
-        this.cashFlowTableSheetCal=cashFlowTableSheetCal;
-        this.profitTableSheetCal=profitTableSheetCal;
+        this.subjectsRepository = subjectsRepository;
+        this.subjectsBalanceRepository = subjectsBalanceRepository;
+        this.subjectsRecordRepository = subjectsRecordRepository;
+        this.supportItem1Repository = supportItem1Repository;
+        this.supportItem2Repository = supportItem2Repository;
+        this.subjectBalanceService = subjectBalanceService;
+        this.calculateBalanceSheet = calculateBalanceSheet;
+        this.cashFlowTableSheetCal = cashFlowTableSheetCal;
+        this.profitTableSheetCal = profitTableSheetCal;
     }
+
 
     private boolean addVoucher(Voucher voucher) {
         if (voucher == null){
@@ -427,6 +431,14 @@ public class VoucherServiceImpl implements VoucherService{
 
         return result;
 
+    }
+
+    @Override
+    public boolean saveSomeVoucher(List<VoucherVO> list) {
+        for (VoucherVO voucherVO : list){
+            saveOneVoucher(voucherVO);
+        }
+        return true;
     }
 
     private VoucherItem ItemVoToItem(VoucherItemVo itemVo){

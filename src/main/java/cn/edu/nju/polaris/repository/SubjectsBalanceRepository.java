@@ -23,4 +23,7 @@ public interface SubjectsBalanceRepository extends JpaRepository<SubjectsBalance
      * @return
      */
     SubjectsBalance findByCompanyIdAndSubjectsIdAndDate(Long companyId,String subjectId,String period);
+
+    @Query(value = "select distinct date from subjects_balance where company_id=?1" ,nativeQuery = true)
+    List<String> findPeriodAllByCompanyId(Long companyId);
 }

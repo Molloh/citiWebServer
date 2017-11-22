@@ -1,9 +1,13 @@
 package cn.edu.nju.polaris.service.Impl;
 
 import cn.edu.nju.polaris.entity.Account;
+import cn.edu.nju.polaris.entity.SubjectInitial;
+import cn.edu.nju.polaris.entity.Subjects;
 import cn.edu.nju.polaris.exception.ResourceConflictException;
 import cn.edu.nju.polaris.exception.ResourceNotFoundException;
 import cn.edu.nju.polaris.repository.AccountRepository;
+import cn.edu.nju.polaris.repository.SubjectInitialRepository;
+import cn.edu.nju.polaris.repository.SubjectsRepository;
 import cn.edu.nju.polaris.service.AccountService;
 import cn.edu.nju.polaris.service.SubjectBalanceService;
 import cn.edu.nju.polaris.util.DateHelper;
@@ -12,20 +16,22 @@ import cn.edu.nju.polaris.vo.AccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final SubjectBalanceService subjectBalanceService;
+    private final SubjectInitialRepository subjectInitialRepository;
+    private final SubjectsRepository subjectsRepository;
 
-    @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, SubjectBalanceService subjectBalanceService) {
+    public AccountServiceImpl(AccountRepository accountRepository, SubjectBalanceService subjectBalanceService, SubjectInitialRepository subjectInitialRepository, SubjectsRepository subjectsRepository) {
         this.accountRepository = accountRepository;
         this.subjectBalanceService = subjectBalanceService;
+        this.subjectInitialRepository = subjectInitialRepository;
+        this.subjectsRepository = subjectsRepository;
     }
-
-
-
 
     @Override
     public void saveAccount(Long companyId,AccountInfoVO vo) {
@@ -51,8 +57,21 @@ public class AccountServiceImpl implements AccountService {
             throw new ResourceConflictException("该公司已被注册");
         }
         accountRepository.save(vo2Entity(vo));
+
         Account account = accountRepository.findByCompanyName(vo.getCompanyName());
         subjectBalanceService.initialSubjectBalance(account.getId(), vo.getActiveTime().toString().substring(0,7));
+
+        List<Subjects> subjects = subjectsRepository.findAll();
+        for (Subjects subject : subjects){
+            SubjectInitial initial = new SubjectInitial();
+            initial.setSubjectsId(subject.getSubjectsId());
+            initial.setCompanyId(account.getId());
+            initial.setBalance(0.0);
+            initial.setDebitAmount(0.0);
+            initial.setCreditAmount(0.0);
+            initial.setYearBalance(0.0);
+            subjectInitialRepository.save(initial);
+        }
     }
 
     @Override

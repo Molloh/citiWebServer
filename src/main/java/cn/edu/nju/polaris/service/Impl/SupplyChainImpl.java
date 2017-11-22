@@ -8,6 +8,7 @@ import java.util.Map;
 
 import cn.edu.nju.polaris.entity.*;
 import cn.edu.nju.polaris.repository.*;
+import cn.edu.nju.polaris.service.SubjectBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +66,7 @@ public class SupplyChainImpl implements SupplyChainService{
 			SupportItem1Repository sir,AccountRepository ar,IndustryIndexRepository ir,SupportItem2Repository sir2,
 			ReceivablesFinancingRepository rfr,MovablePledgeFinancingRepository mpfr,ConfirmingStorageFinancingRepository csfr,
 			VoucherRepository voucherRepository,SubjectsRepository subjectsRepository,SubjectsRecordRepository subjectsRecordRepository,
-			SafeInventoryRepository safeInventoryRepository,SubjectInitialRepository subjectInitialRepository){
+			SafeInventoryRepository safeInventoryRepository,SubjectInitialRepository subjectInitialRepository,SubjectsBalanceRepository subjectsBalanceRepository){
 		this.bsr=bsr;
 		this.vir=vir;
 		this.helper=new TableHelper();
@@ -79,7 +80,7 @@ public class SupplyChainImpl implements SupplyChainService{
         this.mpfr=mpfr;
         this.csfr=csfr;
         this.ims=new InventoryManagementImpl(sir,safeInventoryRepository,ar);
-        this.abs=new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository,sir,sir2, subjectInitialRepository);
+        this.abs=new AccountBooksServiceImpl(voucherRepository,subjectsRepository,subjectsRecordRepository,sir,sir2, subjectInitialRepository,subjectsBalanceRepository);
 	}
 
 	@Override

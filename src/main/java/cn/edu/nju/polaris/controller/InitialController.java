@@ -1,6 +1,7 @@
 package cn.edu.nju.polaris.controller;
 
 import cn.edu.nju.polaris.entity.SubjectInitial;
+import cn.edu.nju.polaris.schedule.ScheduledTask;
 import cn.edu.nju.polaris.service.SubjectBalanceService;
 import cn.edu.nju.polaris.service.SubjectInitialService;
 import cn.edu.nju.polaris.vo.SubjectBalanceVO;
@@ -18,12 +19,12 @@ public class InitialController {
 
 
     private final SubjectInitialService subjectInitialService;
+    private final SubjectBalanceService subjectBalanceService;
 
-
-    public InitialController(SubjectInitialService subjectInitialService) {
+    public InitialController(SubjectInitialService subjectInitialService, SubjectBalanceService subjectBalanceService) {
         this.subjectInitialService = subjectInitialService;
+        this.subjectBalanceService = subjectBalanceService;
     }
-
 
     @ApiOperation(value = "期初设置")
     @ApiImplicitParam(name = "list",value = "期初设置的列表",required = true,dataType = "List")
@@ -37,6 +38,13 @@ public class InitialController {
     @GetMapping()
     List<SubjectInitial> getAllSubjectInitial(@RequestParam Long companyId){
         return subjectInitialService.getAllSubjectInitialByCompanyId(companyId);
+    }
+
+
+    @PostMapping("/updateBalance")
+    void updateBalance(@RequestParam Long companyId,
+                       @RequestParam String phase){
+        subjectBalanceService.initialSubjectBalance(companyId,phase);
     }
 }
 
