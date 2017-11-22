@@ -408,11 +408,11 @@ public class DateConvert {
 
 //        System.out.println(monthToPeriod("2010-09"));
 
-        System.out.println(getBetweenMonthList("2017-10","2017-10"));
-
-        for(int count=0;count<=0;count++){
-            System.out.println("1");
-        }
+//        System.out.println(getBetweenMonthList("2017-10","2017-10"));
+//
+//        for(int count=0;count<=0;count++){
+//            System.out.println("1");
+//        }
 
 //        String date="2010-04-10";
 //        System.out.println(date.substring(0,date.lastIndexOf("-")));
@@ -436,7 +436,7 @@ public class DateConvert {
 //        System.out.println(minusOneMonth("2017-07"));
 //        System.out.println(minusNMonth("2018-05",10));
 
-//        System.out.println(isCurrentMonthBeforeMonth("2017-10","2017-10"));
+        System.out.println(isCurrentMonthBeforeMonth("2017-10","2017-10"));
 
 //        ArrayList<String> monthList=new ArrayList<>();
 //        monthList.add("2017-10");
@@ -457,7 +457,7 @@ public class DateConvert {
 
 //        System.out.println(getMonthBetween("2008-10","2009-09"));
 
-        System.out.println(getPeriodSection("2016-01","2017-10"));
+//        System.out.println(getPeriodSection("2016-01","2017-10"));
     }
 
     public static List<String> getPeriodSection(String beginPeriod,String endPeriod) throws ParseException {

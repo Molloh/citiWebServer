@@ -116,5 +116,10 @@ public interface AccountBooksBlService {
      */
     public double netAccountInventory(long factoryId,String startMonth,String endMonth) throws ParseException;
 
+    /**
+     * 在修改科目的期初设置之后对科目余额表进行修改
+     * @param factoryId
+     */
+    public void updateSubjectBalanceTable(long factoryId);
 
 }

@@ -4,6 +4,7 @@ import cn.edu.nju.polaris.entity.*;
 import cn.edu.nju.polaris.repository.*;
 import cn.edu.nju.polaris.service.AccountBooksBlService;
 import cn.edu.nju.polaris.util.DateConvert;
+import cn.edu.nju.polaris.util.DateHelper;
 import cn.edu.nju.polaris.util.SubjectBalanceHelper;
 import cn.edu.nju.polaris.vo.accountBook.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,17 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
     private final SupportItem1Repository supportItem1Repository;
     private final SupportItem2Repository supportItem2Repository;
     private final SubjectInitialRepository subjectInitialRepository;
+    private final SubjectsBalanceRepository subjectsBalanceRepository;
 
     @Autowired
-    public AccountBooksServiceImpl(VoucherRepository voucherRepository, SubjectsRepository subjectsRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository, SubjectInitialRepository subjectInitialRepository) {
+    public AccountBooksServiceImpl(VoucherRepository voucherRepository, SubjectsRepository subjectsRepository, SubjectsRecordRepository subjectsRecordRepository, SupportItem1Repository supportItem1Repository, SupportItem2Repository supportItem2Repository, SubjectInitialRepository subjectInitialRepository, SubjectsBalanceRepository subjectsBalanceRepository) {
         this.voucherRepository=voucherRepository;
         this.subjectsRepository=subjectsRepository;
         this.subjectsRecordRepository=subjectsRecordRepository;
         this.supportItem1Repository=supportItem1Repository;
         this.supportItem2Repository=supportItem2Repository;
         this.subjectInitialRepository=subjectInitialRepository;
+        this.subjectsBalanceRepository=subjectsBalanceRepository;
     }
 
 
@@ -585,6 +588,87 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
         }
         return result;
+    }
+
+    @Override
+    public void updateSubjectBalanceTable(long factoryId) {
+        List<SubjectInitial> allSubjectInitial=subjectInitialRepository.findAllByCompanyId(factoryId);
+        HashMap<String,Double> subjectIdToFirstNumberMap=new HashMap<>();
+        for(int count=0;count<allSubjectInitial.size();count++){
+            //TODO 这里只考虑了余额 而没有考虑借款金额贷款金额可能会有问题
+            subjectIdToFirstNumberMap.put(allSubjectInitial.get(count).getSubjectsId(),allSubjectInitial.get(count).getBalance());
+        }
+
+        HashMap<String,List<SubjectsRecord>> subjectIdToRecordListMap=new HashMap<>();
+        //      科目编号  科目记录列表
+        HashMap<String,List<String>> subjectIdToMonthListMap=new HashMap<>();
+        //      科目编号  月份列表
+        List<SubjectsRecord> allRecordList=subjectsRecordRepository.findAllByCompanyId(factoryId);
+
+        for(int count=0;count<allRecordList.size();count++){
+            String oneSubjectId=allRecordList.get(count).getSubjectsId();
+            String oneMonth=String.valueOf(allRecordList.get(count).getDate()).substring(0,7);
+            if(!subjectIdToMonthListMap.containsKey(oneSubjectId)){
+                List<String> newList=new ArrayList<>();
+                newList.add(oneMonth);
+                subjectIdToMonthListMap.put(oneSubjectId,newList);
+            }else{
+                if(!subjectIdToMonthListMap.get(oneSubjectId).contains(oneMonth)){
+                    subjectIdToMonthListMap.get(oneSubjectId).add(oneMonth);
+                }
+
+            }
+
+            if(!subjectIdToRecordListMap.containsKey(oneSubjectId)){
+                List<SubjectsRecord> newList=new ArrayList<>();
+                newList.add(allRecordList.get(count));
+                subjectIdToRecordListMap.put(oneSubjectId,newList);
+            }else{
+                subjectIdToRecordListMap.get(oneSubjectId).add(allRecordList.get(count));
+            }
+        }
+
+
+
+        Iterator iter=subjectIdToMonthListMap.entrySet().iterator();
+        while(iter.hasNext()){
+            Map.Entry entry=(Map.Entry) iter.next();
+            String oneSubjectId=(String) entry.getKey();
+            List<String> monthList=(List<String>) entry.getValue();
+
+            //对月份进行遍历 然后把更新后的值在数据库中更新
+            for(int count=0;count<monthList.size();count++){
+                String oneMonth=monthList.get(count);
+                List<SubjectsRecord> recordList=subjectIdToRecordListMap.get(oneMonth);
+                double debitAmount=0.0;
+                double creditAmount=0.0;
+                double balance=subjectIdToFirstNumberMap.get(oneSubjectId);
+                for(int i=0;i<recordList.size();i++){
+                    SubjectsRecord oneRecord=recordList.get(i);
+
+                    if(DateConvert.isCurrentMonthBeforeMonth(String.valueOf(oneRecord.getDate()).substring(0,7),oneMonth)||(String.valueOf(oneRecord.getDate()).substring(0,7).equals(oneMonth))){
+                        debitAmount=debitAmount+oneRecord.getDebitAmount();
+                        creditAmount=creditAmount+oneRecord.getCreditAmount();
+                        balance=balance+SubjectBalanceHelper.getDirection(oneSubjectId)*(oneRecord.getDebitAmount()-oneRecord.getCreditAmount());
+                    }
+
+                }
+                SubjectsBalance oldBalance=subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(factoryId,oneSubjectId,oneMonth);
+                SubjectsBalance newBalance=new SubjectsBalance();
+                newBalance.setId(oldBalance.getId());
+                newBalance.setCompanyId(factoryId);
+                newBalance.setSubjectsId(oneSubjectId);
+                newBalance.setDate(oneMonth);
+                newBalance.setDebitAmount(debitAmount);
+                newBalance.setCreditAmount(creditAmount);
+                newBalance.setBalance(balance);
+
+                subjectsBalanceRepository.save(newBalance);
+            }
+
+        }
+
+
     }
 
 
