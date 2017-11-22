@@ -82,6 +82,10 @@ public class FinancialWarningImpl implements FinancialWarningService {
         //资本积累率  （本期所有者权益－上一期所有者权益）／上一期所有者权益
         actual_value[11] = (data1[9] - data1[10]) / data1[10] * 100;
 
+        for(int i=0;i<12;i++){
+            actual_value[i] = getNumber(actual_value[i]);
+        }
+
         double[] rate = new double[12];
         double[] average_value = new double[12];
         double[] unallowed_value = new double[12];
@@ -279,5 +283,19 @@ public class FinancialWarningImpl implements FinancialWarningService {
             }
         }
         return 0;
+    }
+
+    /**
+     * 取两位小数
+     * @param num
+     * @return
+     */
+    private double getNumber(double num){
+        if(Double.isNaN(num)||Double.isInfinite(num)){
+            return num;
+        }else{
+            DecimalFormat df = new DecimalFormat("0.00");
+            return Double.valueOf(df.format(num));
+        }
     }
 }

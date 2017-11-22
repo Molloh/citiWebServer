@@ -52,13 +52,11 @@ public class CashPoolImpl implements CashPoolService {
         //经营现金净流量
         double data3 = service3.getNetcashflow(time, company_id);
 
-        DecimalFormat df = new DecimalFormat("0.00");
-
         ArrayList<Double> temp = new ArrayList<>();
-        temp.add(data3/data2);
-        temp.add(data3/data1[0]*100);
-        temp.add(data3/data1[2]*100);
-        temp.add((data1[3]+data1[4])/data1[1]*100);
+        temp.add(getNumber(data3/data2));
+        temp.add(getNumber(data3/data1[0]*100));
+        temp.add(getNumber(data3/data1[2]*100));
+        temp.add(getNumber((data1[3]+data1[4])/data1[1]*100));
 
         Account account = accountRepository.findById(company_id);
 
@@ -91,6 +89,20 @@ public class CashPoolImpl implements CashPoolService {
                 temp.add(industryIndex.getExcellentIndex());
             }
             break;
+        }
+    }
+
+    /**
+     * 取两位小数
+     * @param num
+     * @return
+     */
+    private double getNumber(double num){
+        if(Double.isNaN(num)||Double.isInfinite(num)){
+            return num;
+        }else{
+            DecimalFormat df = new DecimalFormat("0.00");
+            return Double.valueOf(df.format(num));
         }
     }
 }
