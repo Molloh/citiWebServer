@@ -79,7 +79,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
         for(int count=0;count<allSubjectList.size();count++){
             Subjects oneSubject=allSubjectList.get(count);
             subjectIdToNameMap.put(oneSubject.getSubjectsId(),oneSubject.getSubjectsName());
-        }
+        } 
         //subjectIdToNameMap赋值完成
 
         resultvo.setSubjectId(subjectId);
@@ -639,7 +639,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
             //对月份进行遍历 然后把更新后的值在数据库中更新
             for(int count=0;count<monthList.size();count++){
                 String oneMonth=monthList.get(count);
-                List<SubjectsRecord> recordList=subjectIdToRecordListMap.get(oneMonth);
+                List<SubjectsRecord> recordList=subjectIdToRecordListMap.get(oneSubjectId);
                 double debitAmount=0.0;
                 double creditAmount=0.0;
                 double balance=subjectIdToFirstNumberMap.get(oneSubjectId);
