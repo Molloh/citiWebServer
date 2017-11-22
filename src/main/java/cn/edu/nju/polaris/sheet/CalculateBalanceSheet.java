@@ -255,7 +255,7 @@ public class CalculateBalanceSheet {
         double result = 0.0;
         for(int i=0;i<list.size();i++){
             SubjectsBalance subjectsBalance = list.get(i);
-            if(subjectsBalance.getSubjectsId().substring(0,4).equals(course_id)){
+            if(subjectsBalance.getSubjectsId().length()>4&&subjectsBalance.getSubjectsId().substring(0,4).equals(course_id)){
                 if(IsDebit){
                     result = result+subjectsBalance.getDebitAmount()-subjectsBalance.getCreditAmount();
                 }else {
