@@ -643,6 +643,10 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
                 double debitAmount=0.0;
                 double creditAmount=0.0;
                 double balance=subjectIdToFirstNumberMap.get(oneSubjectId);
+
+                if(recordList.size()==0||recordList==null){
+                    continue;
+                }
                 for(int i=0;i<recordList.size();i++){
                     SubjectsRecord oneRecord=recordList.get(i);
 
