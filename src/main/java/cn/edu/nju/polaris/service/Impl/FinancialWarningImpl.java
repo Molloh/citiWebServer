@@ -62,23 +62,51 @@ public class FinancialWarningImpl implements FinancialWarningService {
         //总资产报酬率  利润总额*12／［（上一期期末的总资产＋本期期末总资产）／2］
         actual_value[1] = data2[1] / ((data1[0] + data1[1]) / 2) * 100;
         //盈余现金保障倍数  经营现金净流量／净利润
-        actual_value[2] = data3 / data2[0];
+        if(data2[0]==0){
+            actual_value[2] = 1;
+        }else{
+            actual_value[2] = data3 / data2[0];
+        }
         //成本费用利润率  利润总额／（主营业务成本＋销售费用＋管理费用＋财务费用）
-        actual_value[3] = data2[1] / (data2[2] + data2[3] + data2[4] + data2[5]) * 100;
+        if((data2[2] + data2[3] + data2[4] + data2[5])==0){
+            actual_value[3] = 1;
+        }else{
+            actual_value[3] = data2[1] / (data2[2] + data2[3] + data2[4] + data2[5]) * 100;
+        }
         //资产负债率  总负债／总资产
         actual_value[4] = data1[2] / data1[1] * 100;
         //速动比率  （流动资产－存货）／流动负债
-        actual_value[5] = (data1[3] - data1[8]) / data1[4] * 100;
+        if(data1[4]==0){
+            actual_value[5] = 1;
+        }else{
+            actual_value[5] = (data1[3] - data1[8]) / data1[4] * 100;
+        }
         //现金流动负债比率  经营现金净流量*12／流动负债
-        actual_value[6] = data3 / data1[4] * 100;
+        if(data1[4]==0){
+            actual_value[6] = 1;
+        }else{
+            actual_value[6] = data3 / data1[4] * 100;
+        }
         //总资产周转率  （主营业务收入＋其他业务收入）*12／［（上一期期末的总资产＋本期期末总资产）／2］
         actual_value[7] = (data2[8] + data2[7]) / ((data1[0] + data1[1]) / 2);
         //应收账款周转率  （主营业务收入＋其他业务收入）*12／［（上一期期末应收帐款＋本期期末应收帐款）／2］
-        actual_value[8] = (data2[8] + data2[7])/ ((data1[5] + data1[6]) / 2);
+        if(((data1[5] + data1[6]) / 2)==0){
+            actual_value[8] = 1;
+        }else{
+            actual_value[8] = (data2[8] + data2[7])/ ((data1[5] + data1[6]) / 2);
+        }
         //存货周转率  营业成本*12／［（上一期期末存货＋本期期末存货）／2］
-        actual_value[9] = data2[6] / ((data1[7] + data1[8]) / 2);
+        if(((data1[7] + data1[8]) / 2)==0){
+            actual_value[9] = 1;
+        }else{
+            actual_value[9] = data2[6] / ((data1[7] + data1[8]) / 2);
+        }
         //销售增长率  （本期主营业务收入－上一期主营业务收入）／上一期主营业务收入
-        actual_value[10] = (data2[8] - data2[9]) / data2[9] * 100;
+        if(data2[9]==0){
+            actual_value[10] = 1;
+        }else{
+            actual_value[10] = (data2[8] - data2[9]) / data2[9] * 100;
+        }
         //资本积累率  （本期所有者权益－上一期所有者权益）／上一期所有者权益
         actual_value[11] = (data1[9] - data1[10]) / data1[10] * 100;
 
