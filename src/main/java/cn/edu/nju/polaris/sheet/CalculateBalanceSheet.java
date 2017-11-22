@@ -52,7 +52,7 @@ public class CalculateBalanceSheet {
         double balance1_4 = getMoneyByCourseId( "1122", true) + getMoneyHasCourseId( "2203", true);
         save(company_id,phase,"应收账款",balance1_4);
         //1.5预付账款=预付账款+应付账款（*余额在借方时）
-        double balance1_5 = getMoneyByCourseId( "1123", true) + getMoneyHasCourseId( "2202", true);
+        double balance1_5 = getMoneyByCourseId( "1123", true) + getMoneyHasCourseId( "2202", false);
         save(company_id,phase,"预付账款",balance1_5);
         //1.6应收股利
         double balance1_6 = getMoneyByCourseId( "1131", true);
@@ -144,7 +144,7 @@ public class CalculateBalanceSheet {
         double balance4_3 = getMoneyByCourseId( "2202", false) + getMoneyHasCourseId( "1123", false);
         save(company_id,phase,"应付账款",balance4_3);
         //4.4预收账款=预收账款+应收账款（*余额在贷方时）
-        double balance4_4 = getMoneyByCourseId( "2203", false) + getMoneyHasCourseId( "1122", false);
+        double balance4_4 = getMoneyByCourseId( "2203", false) + getMoneyHasCourseId( "1122", true);
         save(company_id,phase,"预收账款",balance4_4);
         //4.5应付职工薪酬
         double balance4_5 = getMoneyByCourseId( "2211", false);
