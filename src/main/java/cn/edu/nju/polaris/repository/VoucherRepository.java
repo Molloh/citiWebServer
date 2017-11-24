@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 public interface VoucherRepository extends JpaRepository<Voucher,VoucherMultiKeysClass>{
 
     /**

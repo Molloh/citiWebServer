@@ -1,11 +1,14 @@
 package cn.edu.nju.polaris.repository;
 
 import cn.edu.nju.polaris.entity.CashflowSheet;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CacheConfig(cacheNames = "cashflow_sheet")
 public interface CashflowSheetRepository extends JpaRepository<CashflowSheet,Long>{
 
     /**
@@ -15,6 +18,7 @@ public interface CashflowSheetRepository extends JpaRepository<CashflowSheet,Lon
      * @param name
      * @return
      */
+    @Cacheable
     CashflowSheet findByPeriodAndCompanyIdAndName(String peroid,Long companyId,String name);
 
     /**

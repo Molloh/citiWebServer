@@ -1,10 +1,13 @@
 package cn.edu.nju.polaris.repository;
 
 import cn.edu.nju.polaris.entity.ProfitSheet;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+@CacheConfig(cacheNames = "profit_sheet")
 public interface ProfitSheetRepository extends JpaRepository<ProfitSheet,Long>{
 
     /**
@@ -14,6 +17,7 @@ public interface ProfitSheetRepository extends JpaRepository<ProfitSheet,Long>{
      * @param name
      * @return
      */
+    @Cacheable
     ProfitSheet findByCompanyIdAndPeriodAndName(Long companyId,String period,String name);
 
     /**

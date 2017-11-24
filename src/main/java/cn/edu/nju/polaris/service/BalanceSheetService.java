@@ -1,6 +1,8 @@
 package cn.edu.nju.polaris.service;
 
 import cn.edu.nju.polaris.vo.BalanceSheetItemVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Map;
  * Created by 费慧通 on 2017/8/7.
  *
  */
+@CacheConfig(cacheNames = "balance_table")
 public interface BalanceSheetService {
     /**
      * 得到资产负债表数据
@@ -16,6 +19,7 @@ public interface BalanceSheetService {
      * @param phase 时期 YYYY-MM
      * @return
      */
+    @Cacheable
     public ArrayList<BalanceSheetItemVo> getBalanceSheet(long company_id, String phase);
 
     /**

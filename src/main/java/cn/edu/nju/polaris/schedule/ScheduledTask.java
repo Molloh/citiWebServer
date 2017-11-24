@@ -36,7 +36,7 @@ public class ScheduledTask {
         this.profitTableSheetUpdate = profitTableSheetUpdate;
     }
 
-    //    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void updateSheet() throws ParseException {
         List<Account> accounts = accountRepository.findAll();
         for (Account account : accounts) {
@@ -57,7 +57,7 @@ public class ScheduledTask {
     }
 
 
-//    @Scheduled(cron = "0 0 1 * *")//每月第一天0点
+    @Scheduled(cron = "0 0 1 * *")//每月第一天0点
     public void updateBalance() {
         List<Account> accounts = accountRepository.findAll();
         for (Account account : accounts){

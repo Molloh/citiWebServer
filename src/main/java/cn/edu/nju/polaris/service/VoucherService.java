@@ -5,36 +5,16 @@ import cn.edu.nju.polaris.entity.VoucherItem;
 import cn.edu.nju.polaris.vo.voucher.ItemTotalVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherSearchVo;
 import cn.edu.nju.polaris.vo.voucher.VoucherVO;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CacheConfig(cacheNames = "vouchers")
 public interface VoucherService {
 
-//    void saveVoucher(Voucher voucher);
-//
-//    //voucher相关的操作
-//    boolean addVoucher(Voucher voucher);
-//
-//    boolean deleteOneVoucher(String voucherId,long factoryId);
-//
-//    boolean deleteOneFactoryAllVoucher(long factoryId);
-//
-//    //只能修改 个公司id下的凭证  能改成其他公司的id号 然后需要判断修改后的voucherId是否已经被使
-//    boolean modifyOneVoucher(Voucher voucher,String beforeVoucherId);
-//
-//    //voucherItem相关的操作
-//    boolean addOneItem(VoucherItem voucherItem);
-//
-//    boolean addSeveralItems(ArrayList<VoucherItem> itemList);
-//
-//    boolean deleteOneVoucherItems(String voucherId,long factoryId);
-//
-//    boolean deleteOneItem(String voucherId,long factoryId,int line);
-//
-//
-//    // 更改一个凭证的全部的item
-//    boolean modifyOneAmountAllItems(String voucherId,long factoryId,ArrayList<VoucherItem> itemList);
 
     //下面是逻辑层的接口
 
@@ -43,8 +23,10 @@ public interface VoucherService {
      * @param voucherVO
      * @return
      */
+    @CachePut
     public boolean saveOneVoucher(VoucherVO voucherVO);
 
+    @CachePut
     public boolean saveSomeVoucher(List<VoucherVO> list);
 
     /**
@@ -52,6 +34,7 @@ public interface VoucherService {
      * @param itemList
      * @return
      */
+    @Cacheable
     public ItemTotalVo getVoucherTotal(ArrayList<VoucherItem> itemList);
 
     /**
@@ -68,6 +51,7 @@ public interface VoucherService {
      * @param factoryId
      * @return
      */
+    @Cacheable
     public ArrayList<VoucherVO> getCurrentPeriodAllVoucher(long factoryId);
 
     /**
@@ -76,6 +60,7 @@ public interface VoucherService {
      * @param factoryId
      * @return
      */
+    @Cacheable
     public VoucherVO getOneVoucher(String voucherId,long factoryId);
 
     /**
@@ -96,6 +81,7 @@ public interface VoucherService {
      * @param factoryId
      * @return
      */
+    @CachePut
     public boolean deleteOneVoucherVo(String voucherId,long factoryId);
 
     /**
@@ -104,6 +90,7 @@ public interface VoucherService {
      * @param factoryId
      * @return
      */
+    @CachePut
     public boolean deleteSelectedVoucher(ArrayList<String> voucherIdList,long factoryId);
 
     //TODO excel的环节交给前端处理
@@ -114,6 +101,7 @@ public interface VoucherService {
      * @param beforeVoucherId
      * @return
      */
+    @CachePut
     public boolean amendOneVoucher(VoucherVO voucherVO,String beforeVoucherId);
 
     /**

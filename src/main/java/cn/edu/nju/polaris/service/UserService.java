@@ -3,13 +3,18 @@ package cn.edu.nju.polaris.service;
 import cn.edu.nju.polaris.entity.User;
 import cn.edu.nju.polaris.vo.UserInfoVO;
 import cn.edu.nju.polaris.vo.UserVO;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 
+@CacheConfig(cacheNames = "users")
 public interface UserService {
 
     /**
      * 添加新用户
      * @param vo
      */
+    @CachePut
     void addUser(UserVO vo);
 
     /**
@@ -32,6 +37,7 @@ public interface UserService {
      * @param oldPassword
      * @param newPassword
      */
+    @CachePut
     void modifyPassword(String userName,String oldPassword,String newPassword);
 
 
@@ -40,6 +46,7 @@ public interface UserService {
      * @param userName
      * @return
      */
+    @Cacheable
     UserInfoVO getUserInfo(String userName);
 
 

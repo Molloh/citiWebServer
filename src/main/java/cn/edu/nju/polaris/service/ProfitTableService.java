@@ -3,12 +3,15 @@ package cn.edu.nju.polaris.service;
 import java.util.List;
 
 import cn.edu.nju.polaris.vo.Pro_and_CashVo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  * 
  * @author hyf
  *
  */
+@CacheConfig(cacheNames = "profit_table")
 public interface ProfitTableService {
 	
 	/**
@@ -17,6 +20,7 @@ public interface ProfitTableService {
 	 * @param company_id 公司id
 	 * @return           该期对应利润表信息
 	 */
+	@Cacheable
 	public List<Pro_and_CashVo> ProfitTable_Info(String time,long company_id);
 	
 	/**

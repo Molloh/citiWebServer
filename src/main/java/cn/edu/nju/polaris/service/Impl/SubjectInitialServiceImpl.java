@@ -2,6 +2,7 @@ package cn.edu.nju.polaris.service.Impl;
 
 import cn.edu.nju.polaris.entity.Account;
 import cn.edu.nju.polaris.entity.SubjectInitial;
+import cn.edu.nju.polaris.entity.Subjects;
 import cn.edu.nju.polaris.entity.SubjectsBalance;
 import cn.edu.nju.polaris.repository.AccountRepository;
 import cn.edu.nju.polaris.repository.SubjectInitialRepository;
@@ -54,13 +55,20 @@ public class SubjectInitialServiceImpl implements SubjectInitialService{
 
         List<String> tempPeriods = subjectsBalanceRepository.findPeriodAllByCompanyId(companyId);
         String tempPeriod = tempPeriods.get(0);
-        System.out.println(tempPeriod);
-        subjectBalanceService.initialSubjectBalance(companyId,tempPeriod);
+        List<SubjectInitial> initials = subjectInitialRepository.findAllByCompanyId(companyId);
+        for (SubjectInitial initial : initials){
+            SubjectsBalance balance = subjectsBalanceRepository.findByCompanyIdAndSubjectsIdAndDate(companyId,initial.getSubjectsId(),tempPeriod);
+            balance.setBalance(initial.getBalance());
+            balance.setCreditAmount(initial.getCreditAmount());
+            balance.setDebitAmount(initial.getDebitAmount());
+            subjectsBalanceRepository.save(balance);
+        }
 
         accountBooksBlService.updateSubjectBalanceTable(companyId);
 
         List<String> periods = voucherService.getAllExistedPeriod(companyId);
         for (String period : periods){
+            System.out.println(period);
             calculateBalanceSheet.UpdateBalanceSheet(companyId, DateConvert.periodToMonth(period));
             profitTableSheetCal.UpdateProfitTable(DateConvert.periodToMonth(period),companyId);
             cashFlowTableSheetCal.UpdateCashFlowTable(DateConvert.periodToMonth(period),companyId);

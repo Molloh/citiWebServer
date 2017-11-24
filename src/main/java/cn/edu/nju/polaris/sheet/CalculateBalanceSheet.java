@@ -2,10 +2,12 @@ package cn.edu.nju.polaris.sheet;
 
 import cn.edu.nju.polaris.entity.BalanceSheet;
 import cn.edu.nju.polaris.entity.SubjectInitial;
+import cn.edu.nju.polaris.entity.Subjects;
 import cn.edu.nju.polaris.entity.SubjectsBalance;
 import cn.edu.nju.polaris.repository.BalanceSheetRepository;
 import cn.edu.nju.polaris.repository.SubjectInitialRepository;
 import cn.edu.nju.polaris.repository.SubjectsBalanceRepository;
+import cn.edu.nju.polaris.repository.SubjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,16 +21,21 @@ public class CalculateBalanceSheet {
     private final BalanceSheetRepository balanceSheetRepository;
     private final SubjectsBalanceRepository subjectsBalanceRepository;
     private final SubjectInitialRepository subjectInitialRepository;
+    private final SubjectsRepository subjectsRepository;
 
     private List<SubjectsBalance> list;
     private List<SubjectInitial> list1;
 
     @Autowired
-    public CalculateBalanceSheet(BalanceSheetRepository balanceSheetRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectInitialRepository subjectInitialRepository) {
+    public CalculateBalanceSheet(BalanceSheetRepository balanceSheetRepository, SubjectsBalanceRepository subjectsBalanceRepository, SubjectInitialRepository subjectInitialRepository, SubjectsRepository subjectsRepository) {
         this.balanceSheetRepository = balanceSheetRepository;
         this.subjectsBalanceRepository = subjectsBalanceRepository;
         this.subjectInitialRepository = subjectInitialRepository;
+        this.subjectsRepository = subjectsRepository;
     }
+
+
+
 
     /**
      * 向数据库保存/更新资产负债表的数据
@@ -52,7 +59,9 @@ public class CalculateBalanceSheet {
         double balance1_4 = getMoneyByCourseId( "1122", true) + getMoneyHasCourseId( "2203", true);
         save(company_id,phase,"应收账款",balance1_4);
         //1.5预付账款=预付账款+应付账款（*余额在借方时）
-        double balance1_5 = getMoneyByCourseId( "1123", true) + getMoneyHasCourseId( "2202", false);
+        System.out.println(getMoneyByCourseId( "1123", true));
+        System.out.println(getMoneyHasCourseId( "2202", true));
+        double balance1_5 = getMoneyByCourseId( "1123", true) + getMoneyHasCourseId( "2202", true);
         save(company_id,phase,"预付账款",balance1_5);
         //1.6应收股利
         double balance1_6 = getMoneyByCourseId( "1131", true);
@@ -144,7 +153,7 @@ public class CalculateBalanceSheet {
         double balance4_3 = getMoneyByCourseId( "2202", false) + getMoneyHasCourseId( "1123", false);
         save(company_id,phase,"应付账款",balance4_3);
         //4.4预收账款=预收账款+应收账款（*余额在贷方时）
-        double balance4_4 = getMoneyByCourseId( "2203", false) + getMoneyHasCourseId( "1122", true);
+        double balance4_4 = getMoneyByCourseId( "2203", false) + getMoneyHasCourseId( "1122", false);
         save(company_id,phase,"预收账款",balance4_4);
         //4.5应付职工薪酬
         double balance4_5 = getMoneyByCourseId( "2211", false);
@@ -192,7 +201,7 @@ public class CalculateBalanceSheet {
         double balance7_2 = getMoneyByCourseId( "3002", false);
         save(company_id,phase,"资本公积",balance7_2);
         //7.3盈余公积
-        double balance7_3 = getMoneyLikeCourseId( "3101", false);
+        double balance7_3 = getMoneyByCourseId( "3101", false);
         save(company_id,phase,"盈余公积",balance7_3);
         //7.4未分配利润=利润分配+本年利润
         double balance7_4 = getMoneyByCourseId( "3103", false)+getMoneyLikeCourseId("3104",false);
@@ -238,8 +247,11 @@ public class CalculateBalanceSheet {
         for(int i=0;i< list1.size();i++){
             SubjectInitial subjectInitial = list1.get(i);
             if(subjectInitial.getSubjectsId().equals(course_id)){
-                result = result+subjectInitial.getBalance();
-                break;
+                Subjects subjects = subjectsRepository.findBySubjectsId(subjectInitial.getSubjectsId());
+                if ((subjects.getDirection().equals("借") && IsDebit) || (subjects.getDirection().equals("贷") && !IsDebit)){
+                    result = result+subjectInitial.getBalance();
+                    break;
+                }
             }
         }
         return result;
@@ -263,10 +275,14 @@ public class CalculateBalanceSheet {
                 }
             }
         }
+
         for(int i=0;i<list1.size();i++){
             SubjectInitial subjectInitial = list1.get(i);
             if(subjectInitial.getSubjectsId().substring(0,4).equals(course_id)){
-                result = result+subjectInitial.getBalance();
+                Subjects subjects = subjectsRepository.findBySubjectsId(subjectInitial.getSubjectsId());
+                if ((subjects.getDirection().equals("借") && IsDebit) || (subjects.getDirection().equals("贷") && !IsDebit)){
+                    result = result+subjectInitial.getBalance();
+                }
             }
         }
         return result;
@@ -295,8 +311,11 @@ public class CalculateBalanceSheet {
         for(int i=0;i< list1.size();i++){
             SubjectInitial subjectInitial = list1.get(i);
             if(subjectInitial.getSubjectsId().equals(course_id)){
-                result = result+subjectInitial.getBalance();
-                break;
+                Subjects subjects = subjectsRepository.findBySubjectsId(subjectInitial.getSubjectsId());
+                if ((subjects.getDirection().equals("借") && IsDebit) || (subjects.getDirection().equals("贷") && !IsDebit)){
+                    result = result+subjectInitial.getBalance();
+                    break;
+                }
             }
         }
         return result;

@@ -343,7 +343,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
 
         DetailAccountVo detailVo=getOneSubjectDetail(subjectId,searchVo,factoryId);
-
+        System.out.println(detailVo);
         ArrayList<DetailAccountAmountVo> detailAmountList=detailVo.getAmountVoArrayList();
 
         for(int count=0;count<detailAmountList.size();count++){
@@ -592,6 +592,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
 
     @Override
     public void updateSubjectBalanceTable(long factoryId) {
+
         List<SubjectInitial> allSubjectInitial=subjectInitialRepository.findAllByCompanyId(factoryId);
         HashMap<String,Double> subjectIdToFirstNumberMap=new HashMap<>();
         for(int count=0;count<allSubjectInitial.size();count++){
@@ -636,7 +637,9 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
             String oneSubjectId=(String) entry.getKey();
             List<String> monthList=(List<String>) entry.getValue();
 
+
             //对月份进行遍历 然后把更新后的值在数据库中更新
+            System.out.println(monthList.size());
             for(int count=0;count<monthList.size();count++){
                 String oneMonth=monthList.get(count);
                 List<SubjectsRecord> recordList=subjectIdToRecordListMap.get(oneSubjectId);
@@ -644,7 +647,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
                 double creditAmount=0.0;
                 double balance=subjectIdToFirstNumberMap.get(oneSubjectId);
 
-                if(recordList.size()==0||recordList==null){
+                if(recordList==null || recordList.size()==0){
                     continue;
                 }
                 for(int i=0;i<recordList.size();i++){
@@ -671,6 +674,7 @@ public class AccountBooksServiceImpl implements AccountBooksBlService{
             }
 
         }
+
 
 
     }
